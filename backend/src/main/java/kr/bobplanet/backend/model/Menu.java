@@ -1,4 +1,4 @@
-package kr.bobplanet.backend;
+package kr.bobplanet.backend.model;
 
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;

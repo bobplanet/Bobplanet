@@ -13,7 +13,7 @@
         <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
         <init-param>
             <param-name>services</param-name>
-            <param-value>kr.bobplanet.backend.DailyEndpoint, kr.bobplanet.backend.MenuEndpoint</param-value>
+            <param-value>kr.bobplanet.backend.api.DailyEndpoint</param-value>
         </init-param>
     </servlet>
     <servlet-mapping>

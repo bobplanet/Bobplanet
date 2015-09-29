@@ -1,4 +1,4 @@
-package kr.bobplanet;
+package kr.bobplanet.android;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

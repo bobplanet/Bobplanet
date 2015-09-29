@@ -1,6 +1,7 @@
-package kr.bobplanet.backend;
+package kr.bobplanet.backend.api;
 
 import com.google.api.server.spi.config.Api;
+import com.google.api.server.spi.config.ApiClass;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.response.CollectionResponse;
@@ -17,24 +18,34 @@ import java.util.logging.Logger;
 import javax.annotation.Nullable;
 import javax.inject.Named;
 
+import kr.bobplanet.backend.BackendConstants;
+import kr.bobplanet.backend.model.Daily;
+
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
-/**
- * WARNING: This generated code is intended as a sample or starting point for using a
- * Google Cloud Endpoints RESTful API with an Objectify entity. It provides no data access
- * restrictions and no data validation.
- * <p/>
- * DO NOT deploy this code unchanged as part of a real application to real users.
- */
 @Api(
-        name = "dailyApi",
+        name = "bobplanetApi",
         version = "v1",
-        resource = "daily",
+        description = "Bobplanet Server API",
         namespace = @ApiNamespace(
-                ownerDomain = "backend.bobplanet.kr",
-                ownerName = "backend.bobplanet.kr",
+                ownerDomain = BackendConstants.API_OWNER,
+                ownerName = BackendConstants.API_OWNER,
                 packagePath = ""
-        )
+        ),
+        scopes = {
+                BackendConstants.EMAIL_SCOPE
+        },
+        clientIds = {
+                BackendConstants.ANDROID_CLIENT_ID_RELEASE,
+                BackendConstants.ANDROID_CLIENT_ID_DEV,
+                BackendConstants.WEB_CLIENT_ID
+        },
+        audiences = {
+                BackendConstants.ANDROID_AUDIENCE
+        }
+)
+@ApiClass(
+        resource = "daily"
 )
 public class DailyEndpoint {
 
@@ -56,9 +67,9 @@ public class DailyEndpoint {
      */
     @ApiMethod(
             name = "get",
-            path = "daily/{ID}",
+//            path = "daily/{ID}",
             httpMethod = ApiMethod.HttpMethod.GET)
-    public Daily get(@Named("ID") Long ID) throws NotFoundException {
+    public Daily getDaily(@Named("ID") Long ID) throws NotFoundException {
         logger.info("Getting Daily with ID: " + ID);
         Daily daily = ofy().load().type(Daily.class).id(ID).now();
         if (daily == null) {
@@ -67,61 +78,15 @@ public class DailyEndpoint {
         return daily;
     }
 
-    /**
-     * Inserts a new {@code Daily}.
-     */
     @ApiMethod(
-            name = "insert",
-            path = "daily",
-            httpMethod = ApiMethod.HttpMethod.POST)
-    public Daily insert(Daily daily) {
-        // Typically in a RESTful API a POST does not have a known ID (assuming the ID is used in the resource path).
-        // You should validate that daily.ID has not been set. If the ID type is not supported by the
-        // Objectify ID generator, e.g. long or String, then you should generate the unique ID yourself prior to saving.
-        //
-        // If your client provides the ID then you should probably use PUT instead.
-        ofy().save().entity(daily).now();
-        logger.info("Created Daily with ID: " + daily.getID());
-
-        return ofy().load().entity(daily).now();
-    }
-
-    /**
-     * Updates an existing {@code Daily}.
-     *
-     * @param ID    the ID of the entity to be updated
-     * @param daily the desired state of the entity
-     * @return the updated version of the entity
-     * @throws NotFoundException if the {@code ID} does not correspond to an existing
-     *                           {@code Daily}
-     */
-    @ApiMethod(
-            name = "update",
-            path = "daily/{ID}",
-            httpMethod = ApiMethod.HttpMethod.PUT)
-    public Daily update(@Named("ID") Long ID, Daily daily) throws NotFoundException {
-        // TODO: You should validate your ID parameter against your resource's ID here.
-        checkExists(ID);
-        ofy().save().entity(daily).now();
-        logger.info("Updated Daily: " + daily);
-        return ofy().load().entity(daily).now();
-    }
-
-    /**
-     * Deletes the specified {@code Daily}.
-     *
-     * @param ID the ID of the entity to delete
-     * @throws NotFoundException if the {@code ID} does not correspond to an existing
-     *                           {@code Daily}
-     */
-    @ApiMethod(
-            name = "remove",
-            path = "daily/{ID}",
-            httpMethod = ApiMethod.HttpMethod.DELETE)
-    public void remove(@Named("ID") Long ID) throws NotFoundException {
-        checkExists(ID);
-        ofy().delete().type(Daily.class).id(ID).now();
-        logger.info("Deleted Daily with ID: " + ID);
+            name = "listDailyForDate",
+            path = "listDailyForDate/{date}"
+    )
+    public List<Daily> listDailyForDate(@Named("date") String date) {
+        logger.info("Executing listForDate() for " + date);
+        List<Daily> list = ofy().load().type(Daily.class).filter("date", date).list();
+        logger.info("Name of 1st: " + list.get(0).getName());
+        return list;
     }
 
     /**
