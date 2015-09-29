@@ -10,6 +10,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -86,7 +89,7 @@ public class DailyListFragment extends ListFragment {
 
         DailyAsyncRetriever retriever = new DailyAsyncRetriever();
 
-        retriever.execute("2015-09-30");
+        retriever.execute("2015-10-02");
     }
 
     @Override
@@ -166,6 +169,7 @@ public class DailyListFragment extends ListFragment {
             BobplanetApi api = EndpointHelper.getAPI();
             try {
                 Log.d(TAG, "before execute()");
+
                 List<Daily> dailyList = api.listDailyForDate(params[0]).execute().getItems();
                 Log.d(TAG, "after execute()");
                 return dailyList;

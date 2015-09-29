@@ -20,6 +20,7 @@ import javax.inject.Named;
 
 import kr.bobplanet.backend.BackendConstants;
 import kr.bobplanet.backend.model.Daily;
+import kr.bobplanet.backend.model.Menu;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
@@ -56,6 +57,7 @@ public class DailyEndpoint {
     static {
         // Typically you would register this inside an OfyServive wrapper. See: https://code.google.com/p/objectify-appengine/wiki/BestPractices
         ObjectifyService.register(Daily.class);
+        ObjectifyService.register(Menu.class);
     }
 
     /**
@@ -85,7 +87,6 @@ public class DailyEndpoint {
     public List<Daily> listDailyForDate(@Named("date") String date) {
         logger.info("Executing listForDate() for " + date);
         List<Daily> list = ofy().load().type(Daily.class).filter("date", date).list();
-        logger.info("Name of 1st: " + list.get(0).getName());
         return list;
     }
 

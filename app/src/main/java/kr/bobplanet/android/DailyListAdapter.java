@@ -54,8 +54,7 @@ public class DailyListAdapter extends BaseAdapter {
 
         Daily daily = dailies.get(position);
 
-        // TODO image
-        //icon.setImageUrl(daily.)
+        icon.setImageUrl(daily.getMenu().getIconURL(), imageLoader);
         name.setText(daily.getName());
         sub.setText(daily.getDate());
         calories.setText(String.valueOf(daily.getCalories()));
