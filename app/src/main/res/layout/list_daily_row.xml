@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/list_row_selector"
     android:padding="8dp" >
+
+    <!-- Header -->
 
     <!-- Thumbnail Image -->
     <com.android.volley.toolbox.NetworkImageView
@@ -13,22 +17,25 @@
         android:layout_alignParentLeft="true"
         android:layout_marginRight="8dp" />
 
-    <!-- Name -->
+    <!-- Title -->
     <TextView
-        android:id="@+id/name"
+        android:id="@+id/title"
+        tools:text="Menu title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/icon"
         android:layout_toRightOf="@id/icon"
         android:textSize="@dimen/daily_name"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:autoText="false" />
 
     <!-- Sub -->
     <TextView
-        android:id="@+id/sub"
+        android:id="@+id/submenu"
+        tools:text="Submenus 1, Submenus 2"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/name"
+        android:layout_below="@id/title"
         android:layout_marginTop="1dip"
         android:layout_toRightOf="@id/icon"
         android:textSize="@dimen/daily_sub" />
@@ -36,9 +43,10 @@
     <!-- Calories -->
     <TextView
         android:id="@+id/calories"
+        tools:text="860 KCal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/sub"
+        android:layout_below="@id/submenu"
         android:layout_marginTop="5dp"
         android:layout_toRightOf="@id/icon"
         android:textColor="@color/calories"

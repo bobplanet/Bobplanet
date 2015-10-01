@@ -1,6 +1,7 @@
 package kr.bobplanet.android;
 
 import android.app.Activity;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,19 +11,21 @@ import android.widget.TextView;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import kr.bobplanet.backend.bobplanetApi.model.Daily;
+import kr.bobplanet.backend.bobplanetApi.model.DailySub;
 
 /**
  * Created by hkjinlee on 15. 9. 29..
  */
-public class DailyListAdapter extends BaseAdapter {
+public class DailyViewAdapter extends BaseAdapter {
     private Activity activity;
     private List<Daily> dailies;
     private ImageLoader imageLoader = MainApplication.getInstance().getImageLoader();
 
-    public DailyListAdapter(Activity activity) {
+    public DailyViewAdapter(Activity activity) {
         this.activity = activity;
     }
 
@@ -44,20 +47,25 @@ public class DailyListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = activity.getLayoutInflater();
+
+        Daily daily = dailies.get(position);
+
         if (convertView == null)
             convertView = inflater.inflate(R.layout.list_daily_row, null);
 
         NetworkImageView icon = (NetworkImageView) convertView.findViewById(R.id.icon);
-        TextView name = (TextView) convertView.findViewById(R.id.name);
-        TextView sub = (TextView) convertView.findViewById(R.id.sub);
+        TextView title = (TextView) convertView.findViewById(R.id.title);
+        TextView submenu = (TextView) convertView.findViewById(R.id.submenu);
         TextView calories = (TextView) convertView.findViewById(R.id.calories);
 
-        Daily daily = dailies.get(position);
-
         icon.setImageUrl(daily.getMenu().getIconURL(), imageLoader);
-        name.setText(daily.getName());
-        sub.setText(daily.getDate());
-        calories.setText(String.valueOf(daily.getCalories()));
+        title.setText(daily.getMenu().getId());
+        List<String> subs = new ArrayList<String>();
+        for (DailySub sub : daily.getSubList()) {
+            subs.add(sub.getMenu().getId());
+        }
+        submenu.setText(TextUtils.join(", ", subs));
+        calories.setText(new StringBuilder().append(daily.getCalories()).append("KCal"));
 
         return convertView;
     }

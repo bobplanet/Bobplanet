@@ -1,36 +1,28 @@
 package kr.bobplanet.android;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.text.Layout;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
+import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.extensions.android.json.AndroidJsonFactory;
-
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
+import de.greenrobot.event.EventBus;
 import kr.bobplanet.android.dummy.DummyContent;
 import kr.bobplanet.backend.bobplanetApi.BobplanetApi;
 import kr.bobplanet.backend.bobplanetApi.model.Daily;
 
-/**
- * A list fragment representing a list of Dailies. This fragment
- * also supports tablet devices by allowing list items to be given an
- * 'activated' state upon selection. This helps indicate which item is
- * currently being viewed in a {@link DailyDetailFragment}.
- * <p/>
- * Activities containing this fragment MUST implement the {@link Callbacks}
- * interface.
- */
-public class DailyListFragment extends ListFragment {
-    private static final String TAG = DailyListFragment.class.getSimpleName();
+public class DailyViewFragment extends ListFragment {
+    private static final String TAG = DailyViewFragment.class.getSimpleName();
 
     /**
      * The serialization (saved instance state) Bundle key representing the
@@ -49,7 +41,9 @@ public class DailyListFragment extends ListFragment {
      */
     private int mActivatedPosition = ListView.INVALID_POSITION;
 
-    private DailyListAdapter adapter;
+    private String currentDate;
+
+    private DailyViewAdapter adapter;
 
     /**
      * A callback interface that all activities containing this fragment must
@@ -77,19 +71,19 @@ public class DailyListFragment extends ListFragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public DailyListFragment() {
+    public DailyViewFragment() {
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
 
-        adapter = new DailyListAdapter(getActivity());
-        setListAdapter(adapter);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
 
-        DailyAsyncRetriever retriever = new DailyAsyncRetriever();
-
-        retriever.execute("2015-10-02");
+        return inflater.inflate(R.layout.fragment_daily_view, container, false);
     }
 
     @Override
@@ -101,6 +95,12 @@ public class DailyListFragment extends ListFragment {
                 && savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
             setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION));
         }
+
+        View header = getLayoutInflater(savedInstanceState).inflate(R.layout.list_daily_header, null, false);
+        getListView().addHeaderView(header);
+
+        adapter = new DailyViewAdapter(getActivity());
+        setListAdapter(adapter);
     }
 
     @Override
@@ -121,6 +121,21 @@ public class DailyListFragment extends ListFragment {
 
         // Reset the active callbacks interface to the dummy implementation.
         mCallbacks = sDummyCallbacks;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        Intent i = getActivity().getIntent();
+        String date = i.getStringExtra(AndroidConstants.KEY_CURRENT_DATE);
+        if (date == null) {
+            date = AndroidConstants.DATEFORMAT_YMD.format(new Date());
+        }
+        currentDate = date;
+
+        DailyAsyncRetriever retriever = new DailyAsyncRetriever();
+        retriever.execute(currentDate);
     }
 
     @Override
