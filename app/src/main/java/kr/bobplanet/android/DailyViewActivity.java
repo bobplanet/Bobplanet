@@ -19,7 +19,7 @@ import java.util.List;
 import de.greenrobot.event.EventBus;
 import kr.bobplanet.backend.bobplanetApi.model.DailyMenu;
 
-public class DailyViewActivity extends AppCompatActivity implements AppConstants {
+public class DailyViewActivity extends ActivitySkeleton {
     private static final String TAG = DailyViewActivity.class.getSimpleName();
     private static final String FRAGMENT_TAG_PREFIX = "DailyViewFragment-";
 
@@ -58,28 +58,6 @@ public class DailyViewActivity extends AppCompatActivity implements AppConstants
 
     private PageDescriptor newPageDescriptor(String date) {
         return new SimplePageDescriptor(FRAGMENT_TAG_PREFIX + date, date);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_daily_view, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     public void onEvent(DailyViewFragment.DataLoadCompleteEvent e) {

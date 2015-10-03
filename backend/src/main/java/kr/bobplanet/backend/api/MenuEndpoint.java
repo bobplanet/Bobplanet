@@ -8,7 +8,10 @@ import com.google.api.server.spi.response.CollectionResponse;
 import com.google.api.server.spi.response.NotFoundException;
 import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.api.datastore.QueryResultIterator;
+//import com.google.appengine.api.users.User;
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
+import com.googlecode.objectify.VoidWork;
 import com.googlecode.objectify.cmd.LoadType;
 import com.googlecode.objectify.cmd.Query;
 
@@ -20,16 +23,20 @@ import javax.annotation.Nullable;
 import javax.inject.Named;
 
 import kr.bobplanet.backend.BackendConstants;
+import kr.bobplanet.backend.model.ItemScore;
 import kr.bobplanet.backend.model.Menu;
 import kr.bobplanet.backend.model.Item;
 import kr.bobplanet.backend.model.DailyMenu;
+import kr.bobplanet.backend.model.User;
+import kr.bobplanet.backend.model.Vote;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
 @Api(
         name = "bobplanetApi",
         version = "v1",
-        description = "Bobplanet Server API",
+        title = "Bobplanet Server API",
+        description = "These API sets provide serverside APIs for Bobplanet project",
         namespace = @ApiNamespace(
                 ownerDomain = BackendConstants.API_OWNER,
                 ownerName = BackendConstants.API_OWNER,
@@ -60,6 +67,9 @@ public class MenuEndpoint {
         // Typically you would register this inside an OfyServive wrapper. See: https://code.google.com/p/objectify-appengine/wiki/BestPractices
         ObjectifyService.register(Menu.class);
         ObjectifyService.register(Item.class);
+        ObjectifyService.register(User.class);
+        ObjectifyService.register(Vote.class);
+        ObjectifyService.register(ItemScore.class);
     }
 
     @ApiMethod(
@@ -67,7 +77,7 @@ public class MenuEndpoint {
             path = "menuOfDate/{date}"
     )
     public DailyMenu menuOfDate(@Named("date") String date) {
-        logger.info("Executing menuOfDate() for " + date);
+        logger.info("Executing menuOfDate() : date = " + date);
 
         LoadType<Menu> menubase = ofy().load().type(Menu.class);
         List<Menu> menu = menubase.filter("date", date).list();
@@ -81,36 +91,29 @@ public class MenuEndpoint {
         return new DailyMenu(date, menu, previous_date, next_date);
     }
 
-    /**
-     * List all entities.
-     *
-     * @param cursor used for pagination to determine which page to return
-     * @param limit  the maximum number of entries to return
-     * @return a response that encapsulates the result list and the next page token/cursor
-     */
     @ApiMethod(
-            name = "list",
-            path = "daily",
-            httpMethod = ApiMethod.HttpMethod.GET)
-    public CollectionResponse<Menu> list(@Nullable @Named("cursor") String cursor, @Nullable @Named("limit") Integer limit) {
-        limit = limit == null ? DEFAULT_LIST_LIMIT : limit;
-        Query<Menu> query = ofy().load().type(Menu.class).limit(limit);
-        if (cursor != null) {
-            query = query.startAt(Cursor.fromWebSafeString(cursor));
-        }
-        QueryResultIterator<Menu> queryIterator = query.iterator();
-        List<Menu> dailyList = new ArrayList<Menu>(limit);
-        while (queryIterator.hasNext()) {
-            dailyList.add(queryIterator.next());
-        }
-        return CollectionResponse.<Menu>builder().setItems(dailyList).setNextPageToken(queryIterator.getCursor().toWebSafeString()).build();
-    }
+            name = "vote"
+    )
+    public void vote(@Named("itemName") final String itemName, @Named("menuId") final Long menuId,
+                     @Named("score") final int score) {
+        logger.info("Executing vote() : { itemName, menuId, score }  = {" + new StringBuilder().append(itemName)
+                .append(", ").append(menuId).append(", ").append(score).append(" }"));
 
-    private void checkExists(Long ID) throws NotFoundException {
-        try {
-            ofy().load().type(Menu.class).id(ID).safe();
-        } catch (com.googlecode.objectify.NotFoundException e) {
-            throw new NotFoundException("Could not find Menu with ID: " + ID);
-        }
+        Item item = new Item(itemName);
+        final Vote vote = new Vote(new User("1234"), item, new Menu(menuId));
+        vote.setScore(score);
+
+        final ItemScore iscore = ofy().load().type(ItemScore.class).filterKey(item).count() > 0 ?
+                ofy().load().type(ItemScore.class).filterKey(item).first().now() :
+                new ItemScore(item);
+        iscore.addScore(score);
+
+        ofy().transact(new VoidWork() {
+            @Override
+            public void vrun() {
+                ofy().save().entity(vote);
+                ofy().save().entity(iscore);
+            }
+        });
     }
 }

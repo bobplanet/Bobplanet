@@ -9,10 +9,8 @@ import kr.bobplanet.backend.bobplanetApi.BobplanetApi;
  * Created by hkjinlee on 15. 9. 29..
  */
 public class EndpointHelper {
-    private static BobplanetApi api;
-
     public synchronized static BobplanetApi getAPI() {
-        if (api == null) {  // Only do this once
+        // Only do this once
    /*         DailyApi.Builder builder = new DailyApi.Builder(AndroidHttp.newCompatibleTransport(),
                     new AndroidJsonFactory(), null)
                     // options for running against local devappserver
@@ -25,14 +23,11 @@ public class EndpointHelper {
                             abstractGoogleClientRequest.setDisableGZipContent(true);
                         }
                     });*/
-            // end options for devappserver
-            BobplanetApi.Builder builder = new BobplanetApi.Builder(
-                    AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
-                    .setRootUrl("https://kr-bobplanet.appspot.com/_ah/api/");
+        // end options for devappserver
+        BobplanetApi.Builder builder = new BobplanetApi.Builder(
+                AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                .setRootUrl("https://kr-bobplanet.appspot.com/_ah/api/");
 
-            api = builder.build();
-        }
-
-        return api;
+        return builder.build();
     }
 }

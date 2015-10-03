@@ -19,7 +19,7 @@ import kr.bobplanet.android.gcm.GcmServices;
 /**
  *
  */
-public class StartActivity extends AppCompatActivity implements AppConstants {
+public class StartActivity extends ActivitySkeleton {
     private static final String TAG = StartActivity.class.getSimpleName();
 
     @Override
@@ -41,6 +41,12 @@ public class StartActivity extends AppCompatActivity implements AppConstants {
         finish();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
     void onFirstRun() {
         new InitTask().execute();
     }
@@ -54,21 +60,6 @@ public class StartActivity extends AppCompatActivity implements AppConstants {
                 Log.d(TAG, "gcm register failed");
                 break;
         }
-    }
-
-    private boolean checkPlayServices() {
-        GoogleApiAvailability availability = GoogleApiAvailability.getInstance();
-        int result = availability.isGooglePlayServicesAvailable(this);
-        if (result != ConnectionResult.SUCCESS) {
-            if (availability.isUserResolvableError(result)) {
-                availability.getErrorDialog(this, result, PLAY_SERVICES_RESOLUTION_REQUEST).show();
-            } else {
-                Log.i(TAG, "This device needs Google Play Services");
-                finish();
-            }
-            return false;
-        }
-        return true;
     }
 
     private class InitTask extends AsyncTask<Void, Integer, Void> {

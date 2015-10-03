@@ -2,11 +2,14 @@ package kr.bobplanet.android;
 
 import android.app.Application;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.iid.InstanceID;
+import com.google.android.gms.plus.model.people.Person;
 
 /**
  * Created by hkjinlee on 15. 9. 29..
@@ -16,6 +19,7 @@ public class MainApplication extends Application {
 
     private RequestQueue requestQueue;
     private ImageLoader imageLoader;
+    //private User currentUser;
 
     private static MainApplication instance;
 
@@ -25,8 +29,15 @@ public class MainApplication extends Application {
         instance = this;
     }
 
-    public static synchronized MainApplication getInstance() {
+    protected static synchronized MainApplication getInstance() {
         return instance;
+    }
+
+    protected void setCurrentUser(Person person) {
+        String iid = InstanceID.getInstance(this).getId();
+        Log.d(TAG, "iid = " + iid);
+
+        Log.d(TAG, "ID = " + person.getId());
     }
 
     public RequestQueue getRequestQueue() {

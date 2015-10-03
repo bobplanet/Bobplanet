@@ -23,6 +23,10 @@ public class Menu {
 
     private List<Submenu> submenu;
 
+    public Menu(Long ID) {
+        this.ID = ID;
+    }
+
     public Long getID() {
         return ID;
     }
