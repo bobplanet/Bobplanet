@@ -14,15 +14,16 @@ import com.android.volley.toolbox.NetworkImageView;
 import java.util.ArrayList;
 import java.util.List;
 
-import kr.bobplanet.backend.bobplanetApi.model.Daily;
-import kr.bobplanet.backend.bobplanetApi.model.DailySub;
+import kr.bobplanet.backend.bobplanetApi.model.Menu;
+import kr.bobplanet.backend.bobplanetApi.model.Item;
+import kr.bobplanet.backend.bobplanetApi.model.Submenu;
 
 /**
  * Created by hkjinlee on 15. 9. 29..
  */
 public class DailyViewAdapter extends BaseAdapter {
     private Activity activity;
-    private List<Daily> dailies;
+    private List<Menu> menuList;
     private ImageLoader imageLoader = MainApplication.getInstance().getImageLoader();
 
     public DailyViewAdapter(Activity activity) {
@@ -31,12 +32,12 @@ public class DailyViewAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return dailies == null ? 0 : dailies.size();
+        return menuList == null ? 0 : menuList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return dailies.get(position);
+        return menuList.get(position);
     }
 
     @Override
@@ -48,7 +49,7 @@ public class DailyViewAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = activity.getLayoutInflater();
 
-        Daily daily = dailies.get(position);
+        Menu menu = menuList.get(position);
 
         if (convertView == null)
             convertView = inflater.inflate(R.layout.list_daily_row, null);
@@ -58,19 +59,22 @@ public class DailyViewAdapter extends BaseAdapter {
         TextView submenu = (TextView) convertView.findViewById(R.id.submenu);
         TextView calories = (TextView) convertView.findViewById(R.id.calories);
 
-        icon.setImageUrl(daily.getMenu().getIconURL(), imageLoader);
-        title.setText(daily.getMenu().getId());
-        List<String> subs = new ArrayList<String>();
-        for (DailySub sub : daily.getSubList()) {
-            subs.add(sub.getMenu().getId());
+        icon.setImageUrl(menu.getItem().getIconURL(), imageLoader);
+        title.setText(menu.getItem().getId());
+        List<Submenu> submenus = menu.getSubmenu();
+        if (submenus != null) {
+            List<String> subs = new ArrayList<String>();
+            for (Submenu sub : submenus) {
+                subs.add(sub.getItem().getId());
+            }
+            submenu.setText(TextUtils.join(", ", subs));
         }
-        submenu.setText(TextUtils.join(", ", subs));
-        calories.setText(new StringBuilder().append(daily.getCalories()).append("KCal"));
+        calories.setText(new StringBuilder().append(menu.getCalories()).append("KCal"));
 
         return convertView;
     }
 
-    public void setDailies(List<Daily> dailyList) {
-        this.dailies = dailyList;
+    public void setMenuList(List<Menu> menuList) {
+        this.menuList = menuList;
     }
 }

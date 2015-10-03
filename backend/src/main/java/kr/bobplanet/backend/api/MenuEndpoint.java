@@ -9,6 +9,7 @@ import com.google.api.server.spi.response.NotFoundException;
 import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.api.datastore.QueryResultIterator;
 import com.googlecode.objectify.ObjectifyService;
+import com.googlecode.objectify.cmd.LoadType;
 import com.googlecode.objectify.cmd.Query;
 
 import java.util.ArrayList;
@@ -19,8 +20,9 @@ import javax.annotation.Nullable;
 import javax.inject.Named;
 
 import kr.bobplanet.backend.BackendConstants;
-import kr.bobplanet.backend.model.Daily;
 import kr.bobplanet.backend.model.Menu;
+import kr.bobplanet.backend.model.Item;
+import kr.bobplanet.backend.model.DailyMenu;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
@@ -46,48 +48,37 @@ import static com.googlecode.objectify.ObjectifyService.ofy;
         }
 )
 @ApiClass(
-        resource = "daily"
+        resource = "menu"
 )
-public class DailyEndpoint {
+public class MenuEndpoint {
 
-    private static final Logger logger = Logger.getLogger(DailyEndpoint.class.getName());
+    private static final Logger logger = Logger.getLogger(MenuEndpoint.class.getName());
 
     private static final int DEFAULT_LIST_LIMIT = 20;
 
     static {
         // Typically you would register this inside an OfyServive wrapper. See: https://code.google.com/p/objectify-appengine/wiki/BestPractices
-        ObjectifyService.register(Daily.class);
         ObjectifyService.register(Menu.class);
-    }
-
-    /**
-     * Returns the {@link Daily} with the corresponding ID.
-     *
-     * @param ID the ID of the entity to be retrieved
-     * @return the entity with the corresponding ID
-     * @throws NotFoundException if there is no {@code Daily} with the provided ID.
-     */
-    @ApiMethod(
-            name = "get",
-//            path = "daily/{ID}",
-            httpMethod = ApiMethod.HttpMethod.GET)
-    public Daily getDaily(@Named("ID") Long ID) throws NotFoundException {
-        logger.info("Getting Daily with ID: " + ID);
-        Daily daily = ofy().load().type(Daily.class).id(ID).now();
-        if (daily == null) {
-            throw new NotFoundException("Could not find Daily with ID: " + ID);
-        }
-        return daily;
+        ObjectifyService.register(Item.class);
     }
 
     @ApiMethod(
-            name = "listDailyForDate",
-            path = "listDailyForDate/{date}"
+            name = "menuOfDate",
+            path = "menuOfDate/{date}"
     )
-    public List<Daily> listDailyForDate(@Named("date") String date) {
-        logger.info("Executing listForDate() for " + date);
-        List<Daily> list = ofy().load().type(Daily.class).filter("date", date).list();
-        return list;
+    public DailyMenu menuOfDate(@Named("date") String date) {
+        logger.info("Executing menuOfDate() for " + date);
+
+        LoadType<Menu> menubase = ofy().load().type(Menu.class);
+        List<Menu> menu = menubase.filter("date", date).list();
+
+        List<Menu> previous = menubase.filter("date <", date).order("-date").limit(1).list();
+        String previous_date = previous.size() > 0 ? previous.get(0).getDate() : null;
+
+        List<Menu> next = menubase.filter("date >", date).order("date").limit(1).list();
+        String next_date = next.size() > 0 ? next.get(0).getDate() : null;
+
+        return new DailyMenu(date, menu, previous_date, next_date);
     }
 
     /**
@@ -101,25 +92,25 @@ public class DailyEndpoint {
             name = "list",
             path = "daily",
             httpMethod = ApiMethod.HttpMethod.GET)
-    public CollectionResponse<Daily> list(@Nullable @Named("cursor") String cursor, @Nullable @Named("limit") Integer limit) {
+    public CollectionResponse<Menu> list(@Nullable @Named("cursor") String cursor, @Nullable @Named("limit") Integer limit) {
         limit = limit == null ? DEFAULT_LIST_LIMIT : limit;
-        Query<Daily> query = ofy().load().type(Daily.class).limit(limit);
+        Query<Menu> query = ofy().load().type(Menu.class).limit(limit);
         if (cursor != null) {
             query = query.startAt(Cursor.fromWebSafeString(cursor));
         }
-        QueryResultIterator<Daily> queryIterator = query.iterator();
-        List<Daily> dailyList = new ArrayList<Daily>(limit);
+        QueryResultIterator<Menu> queryIterator = query.iterator();
+        List<Menu> dailyList = new ArrayList<Menu>(limit);
         while (queryIterator.hasNext()) {
             dailyList.add(queryIterator.next());
         }
-        return CollectionResponse.<Daily>builder().setItems(dailyList).setNextPageToken(queryIterator.getCursor().toWebSafeString()).build();
+        return CollectionResponse.<Menu>builder().setItems(dailyList).setNextPageToken(queryIterator.getCursor().toWebSafeString()).build();
     }
 
     private void checkExists(Long ID) throws NotFoundException {
         try {
-            ofy().load().type(Daily.class).id(ID).safe();
+            ofy().load().type(Menu.class).id(ID).safe();
         } catch (com.googlecode.objectify.NotFoundException e) {
-            throw new NotFoundException("Could not find Daily with ID: " + ID);
+            throw new NotFoundException("Could not find Menu with ID: " + ID);
         }
     }
 }

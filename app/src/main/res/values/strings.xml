@@ -11,4 +11,8 @@
     <string name="title_daily_list">Dailies</string>
     <string name="title_daily_detail">Daily Detail</string>
     <string name="title_activity_daily_view">DailyViewActivity</string>
+
+    <string name="notification_title">Menu notification</string>
+    <string name="action_thumb_up">좋아요</string>
+    <string name="action_thumb_down">싫어요</string>
 </resources>
