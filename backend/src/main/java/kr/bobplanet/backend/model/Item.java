@@ -20,6 +20,9 @@ public class Item {
     @Load
     Ref<ItemScore> score;
 
+    public Item() {
+    }
+
     public Item(String ID) {
         this.ID = ID;
     }

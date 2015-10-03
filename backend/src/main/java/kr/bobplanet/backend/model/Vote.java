@@ -24,6 +24,9 @@ public class Vote {
 
     protected int score;
 
+    public Vote() {
+    }
+
     public Vote(User user, Item item, Menu menu) {
         this.user = Ref.create(user);
         this.item = Ref.create(item);

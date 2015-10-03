@@ -23,6 +23,9 @@ public class Menu {
 
     private List<Submenu> submenu;
 
+    public Menu() {
+    }
+
     public Menu(Long ID) {
         this.ID = ID;
     }
@@ -60,6 +63,9 @@ class Submenu {
     @Load
     private Ref<Item> item;
     private String origin;
+
+    public Submenu() {
+    }
 
     public Item getItem() {
         return item != null ? item.get() : null;

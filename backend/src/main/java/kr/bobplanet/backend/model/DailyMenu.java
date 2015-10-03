@@ -11,6 +11,9 @@ public class DailyMenu {
     protected String previousDate;
     protected String nextDate;
 
+    public DailyMenu() {
+    }
+
     public DailyMenu(String date, List<Menu> menu, String previousDate, String nextDate) {
         this.date = date;
         this.menu = menu;

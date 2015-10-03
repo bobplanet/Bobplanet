@@ -13,6 +13,9 @@ public class User {
 
     String nickName;
 
+    public User() {
+    }
+
     public User(String id) {
         this.id = id;
     }

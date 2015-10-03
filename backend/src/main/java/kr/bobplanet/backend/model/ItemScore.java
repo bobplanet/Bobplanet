@@ -22,6 +22,9 @@ public class ItemScore {
 
     protected int[] numVotesPerScore = new int[5];
 
+    public ItemScore() {
+    }
+
     public ItemScore(Item item) {
         this.item = Ref.create(item);
     }
