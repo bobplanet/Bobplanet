@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
@@ -56,11 +57,13 @@ public class DailyViewAdapter extends BaseAdapter {
 
         NetworkImageView icon = (NetworkImageView) convertView.findViewById(R.id.icon);
         TextView title = (TextView) convertView.findViewById(R.id.title);
+        RatingBar rating = (RatingBar) convertView.findViewById(R.id.rating);
         TextView submenu = (TextView) convertView.findViewById(R.id.submenu);
         TextView calories = (TextView) convertView.findViewById(R.id.calories);
 
         icon.setImageUrl(menu.getItem().getIconURL(), imageLoader);
         title.setText(menu.getItem().getId());
+        rating.setRating(menu.getItem().getAverageScore());
         List<Submenu> submenus = menu.getSubmenu();
         if (submenus != null) {
             List<String> subs = new ArrayList<String>();
@@ -69,7 +72,8 @@ public class DailyViewAdapter extends BaseAdapter {
             }
             submenu.setText(TextUtils.join(", ", subs));
         }
-        calories.setText(new StringBuilder().append(menu.getCalories()).append("KCal"));
+        String cal = menu.getCalories() == 0 ? "-" : String.valueOf(menu.getCalories());
+        calories.setText(new StringBuilder().append(cal).append(" KCal"));
 
         return convertView;
     }

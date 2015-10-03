@@ -35,6 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/title"
+        android:paddingTop="2dp"
         android:paddingLeft="10dp"
         android:numStars="5"
         style="?android:attr/ratingBarStyleSmall" />

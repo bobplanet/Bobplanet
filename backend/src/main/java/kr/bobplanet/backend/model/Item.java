@@ -17,8 +17,9 @@ public class Item {
 
     private String iconURL;
 
-    @Load
-    Ref<ItemScore> score;
+    protected float averageScore;
+
+    protected int[] numVotesPerScore = new int[5];
 
     public Item() {
     }
@@ -29,8 +30,26 @@ public class Item {
     public String getID() {
         return ID;
     }
-
     public String getIconURL() {
         return iconURL;
     }
-  }
+
+    public float getAverageScore() {
+        return averageScore;
+    }
+
+    public int[] getNumVotesPerScore() {
+        return numVotesPerScore;
+    }
+
+    public void addScore(int score) {
+        numVotesPerScore[score - 1]++;
+        long totalVotes = 0;
+        long totalScore = 0;
+        for (int i = 0; i < 5; i++) {
+            totalVotes += numVotesPerScore[i];
+            totalScore += (i + 1) * numVotesPerScore[i];
+        }
+        averageScore = totalScore / totalVotes;
+    }
+}

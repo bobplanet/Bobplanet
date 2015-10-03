@@ -74,10 +74,8 @@ public class DailyViewFragment extends ListFragment implements AppConstants {
             setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION));
         }
 
-        View header = getLayoutInflater(savedInstanceState).inflate(R.layout.list_daily_header, null, false);
-        TextView t = (TextView) header.findViewById(R.id.daily_view_date_header);
+        TextView t = (TextView) view.findViewById(R.id.daily_view_date_header);
         t.setText(getDate(true));
-        getListView().addHeaderView(header);
 
         adapter = new DailyViewAdapter(getActivity());
         setListAdapter(adapter);

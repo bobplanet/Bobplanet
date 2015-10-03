@@ -15,6 +15,16 @@
         android:max="100"
         android:progress="0" />
 
+    <TextView
+        android:id="@+id/daily_view_date_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="2015-10-02"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
     <ListView
         android:id="@id/android:list"
         android:layout_width="match_parent"

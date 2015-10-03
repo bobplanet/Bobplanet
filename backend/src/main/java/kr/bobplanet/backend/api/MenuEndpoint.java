@@ -11,19 +11,16 @@ import com.google.appengine.api.datastore.QueryResultIterator;
 //import com.google.appengine.api.users.User;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
+import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.VoidWork;
 import com.googlecode.objectify.cmd.LoadType;
-import com.googlecode.objectify.cmd.Query;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import javax.annotation.Nullable;
 import javax.inject.Named;
 
 import kr.bobplanet.backend.BackendConstants;
-import kr.bobplanet.backend.model.ItemScore;
 import kr.bobplanet.backend.model.Menu;
 import kr.bobplanet.backend.model.Item;
 import kr.bobplanet.backend.model.DailyMenu;
@@ -69,7 +66,6 @@ public class MenuEndpoint {
         ObjectifyService.register(Item.class);
         ObjectifyService.register(User.class);
         ObjectifyService.register(Vote.class);
-        ObjectifyService.register(ItemScore.class);
     }
 
     @ApiMethod(
@@ -99,20 +95,18 @@ public class MenuEndpoint {
         logger.info("Executing vote() : { itemName, menuId, score }  = {" + new StringBuilder().append(itemName)
                 .append(", ").append(menuId).append(", ").append(score).append(" }"));
 
-        Item item = new Item(itemName);
+        final Item item = ofy().load().entity(new Item(itemName)).now();
+        item.addScore(score);
+
         final Vote vote = new Vote(new User("1234"), item, new Menu(menuId));
         vote.setScore(score);
 
-        final ItemScore iscore = ofy().load().type(ItemScore.class).filterKey(item).count() > 0 ?
-                ofy().load().type(ItemScore.class).filterKey(item).first().now() :
-                new ItemScore(item);
-        iscore.addScore(score);
 
         ofy().transact(new VoidWork() {
             @Override
             public void vrun() {
                 ofy().save().entity(vote);
-                ofy().save().entity(iscore);
+                ofy().save().entity(item);
             }
         });
     }
