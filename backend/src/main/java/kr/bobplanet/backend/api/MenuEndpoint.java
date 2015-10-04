@@ -73,7 +73,8 @@ public class MenuEndpoint {
     }
 
     @ApiMethod(
-            name = "vote"
+            name = "vote",
+            httpMethod = "POST"
     )
     public void vote(@Named("itemName") final String itemName, @Named("menuId") final Long menuId,
                      @Named("score") final int score) {
@@ -94,5 +95,13 @@ public class MenuEndpoint {
                 ofy().save().entity(item);
             }
         });
+    }
+
+    @ApiMethod(
+            name = "menu",
+            path = "menu/{id}"
+    )
+    public void menu(@Named("id") Long id) {
+        Menu m = ofy().load().type(Menu.class).id(id).now();
     }
 }

@@ -62,21 +62,6 @@
                 <action android:name="com.google.android.gms.iid.InstanceID" />
             </intent-filter>
         </service>
-
-        <activity
-            android:name=".dummyListActivity"
-            android:label="@string/title_dummy_list"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
-        <activity
-            android:name=".dummyDetailActivity"
-            android:label="@string/title_dummy_detail"
-            android:parentActivityName=".dummyListActivity"
-            android:theme="@style/AppTheme.NoActionBar" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="kr.bobplanet.android.dummyListActivity" />
-        </activity>
     </application>
 
 </manifest>

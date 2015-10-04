@@ -11,19 +11,24 @@ import android.view.animation.AccelerateInterpolator;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import java.io.IOException;
 
 import de.greenrobot.event.EventBus;
 import fr.castorflex.android.smoothprogressbar.SmoothProgressDrawable;
+import kr.bobplanet.android.event.NetworkExceptionEvent;
 import kr.bobplanet.backend.bobplanetApi.BobplanetApi;
 import kr.bobplanet.backend.bobplanetApi.model.DailyMenu;
 
 public class DailyViewFragment extends ListFragment implements AppConstants {
     private static final String TAG = DailyViewFragment.class.getSimpleName();
     private static final String ARGUMENT_DATE = "ARGUMENT_DATE";
+    private static final String STATE_DAILYMENU = "STATE_DAILYMENU";
 
+    private static final DailyMenu INVALID_DAILY_MENU = new DailyMenu();
+    private DailyMenu dailyMenu;
     private ProgressBar progressBar;
 
     /**
@@ -64,6 +69,7 @@ public class DailyViewFragment extends ListFragment implements AppConstants {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+
         return inflater.inflate(R.layout.fragment_daily_view, container, false);
     }
 
@@ -72,9 +78,10 @@ public class DailyViewFragment extends ListFragment implements AppConstants {
         super.onViewCreated(view, savedInstanceState);
 
         // Restore the previously serialized activated item position.
-        if (savedInstanceState != null
-                && savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
-            setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION));
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
+                setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION));
+            }
         }
 
         progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
@@ -92,6 +99,8 @@ public class DailyViewFragment extends ListFragment implements AppConstants {
     public void onStart() {
         super.onStart();
 
+        if (dailyMenu != null) return;
+
         new AsyncTask<String, Integer, DailyMenu>() {
             @Override
             protected DailyMenu doInBackground(String... params) {
@@ -102,10 +111,13 @@ public class DailyViewFragment extends ListFragment implements AppConstants {
                     Log.i(TAG, "fetching menuOfDate() = " + params[0]);
                     DailyMenu dailyMenu = api.menuOfDate(params[0]).execute();
                     Log.d(TAG, "dailyMenu = " + dailyMenu);
+                    Log.d(TAG, "factory = " + dailyMenu.getFactory());
 
                     return dailyMenu;
                 } catch (IOException e) {
                     Log.d(TAG, "error", e);
+                    dailyMenu = INVALID_DAILY_MENU;
+                    EventBus.getDefault().post(new NetworkExceptionEvent("Daily menu fetch error", e));
                     return null;
                 }
             }
@@ -113,6 +125,8 @@ public class DailyViewFragment extends ListFragment implements AppConstants {
             @Override
             protected void onPostExecute(DailyMenu dailyMenu) {
                 if (dailyMenu == null) return;
+
+                DailyViewFragment.this.dailyMenu = dailyMenu;
 
                 adapter.setMenuList(dailyMenu.getMenu());
                 adapter.notifyDataSetChanged();
@@ -123,6 +137,11 @@ public class DailyViewFragment extends ListFragment implements AppConstants {
                 EventBus.getDefault().post(new DataLoadCompleteEvent(DailyViewFragment.this, dailyMenu));
             }
         }.execute(getDate(false));
+    }
+
+    @SuppressWarnings("unused")
+    public void onEventMainThread(NetworkExceptionEvent e) {
+        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -138,6 +157,10 @@ public class DailyViewFragment extends ListFragment implements AppConstants {
         if (mActivatedPosition != ListView.INVALID_POSITION) {
             // Serialize and persist the activated item position.
             outState.putInt(STATE_ACTIVATED_POSITION, mActivatedPosition);
+        }
+
+        if (dailyMenu != null) {
+            outState.putString(STATE_DAILYMENU, dailyMenu.toString());
         }
     }
 

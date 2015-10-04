@@ -33,7 +33,7 @@ public class StartActivity extends ActivitySkeleton {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         if (prefs.getBoolean(HAS_LAUNCHED_BEFORE, false)) {
-            onFirstRun();
+  //          onFirstRun();
             prefs.edit().putBoolean(HAS_LAUNCHED_BEFORE, true).commit();
         }
 
@@ -47,10 +47,7 @@ public class StartActivity extends ActivitySkeleton {
         EventBus.getDefault().unregister(this);
     }
 
-    void onFirstRun() {
-        new InitTask().execute();
-    }
-
+    @SuppressWarnings("unused")
     public void onEvent(GcmEvent event) {
         switch (event.getType()) {
             case GcmEvent.REGISTER_SUCCESS:
@@ -59,39 +56,6 @@ public class StartActivity extends ActivitySkeleton {
             case GcmEvent.REGISTER_FAILURE:
                 Log.d(TAG, "gcm register failed");
                 break;
-        }
-    }
-
-    private class InitTask extends AsyncTask<Void, Integer, Void> {
-        private ProgressDialog progressDialog;
-
-        @Override
-        protected void onPreExecute() {
-            progressDialog = new ProgressDialog(StartActivity.this);
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progressDialog.setTitle("Loading...");
-            progressDialog.setMessage("Loading in progress");
-            progressDialog.setCancelable(false);
-            progressDialog.setIndeterminate(false);
-            progressDialog.setMax(100);
-            progressDialog.setProgressStyle(0);
-            progressDialog.show();
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            publishProgress(10);
-            return null;
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            progressDialog.setProgress(values[0]);
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            progressDialog.dismiss();
         }
     }
 }
