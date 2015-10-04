@@ -19,6 +19,7 @@ public class Menu {
     private String date;
     private String when;
     private String origin;
+    private String type;
     private int calories;
 
     private List<Submenu> submenu;
@@ -40,6 +41,10 @@ public class Menu {
 
     public String getWhen() {
         return when;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public int getCalories() {

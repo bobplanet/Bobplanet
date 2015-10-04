@@ -24,6 +24,8 @@ public class Vote {
 
     protected int score;
 
+    protected String comment;
+
     public Vote() {
     }
 
@@ -33,7 +35,19 @@ public class Vote {
         this.menu = Ref.create(menu);
     }
 
+    public int getScore() {
+        return score;
+    }
+
     public void setScore(int score) {
         this.score = score;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }

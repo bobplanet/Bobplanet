@@ -1,12 +1,6 @@
 <resources>
     <string name="app_name">Bobplanet</string>
 
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
-
-    <string name="hello_world">Hello world!</string>
-
     <string name="action_settings">Settings</string>
     <string name="title_daily_list">Dailies</string>
     <string name="title_daily_detail">Daily Detail</string>
@@ -15,4 +9,8 @@
     <string name="notification_title">Menu notification</string>
     <string name="action_thumb_up">좋아요</string>
     <string name="action_thumb_down">싫어요</string>
+
+    <string name="when_breakfast">아침</string>
+    <string name="when_lunch">점심</string>
+    <string name="when_dinner">저녁</string>
 </resources>

@@ -4,14 +4,7 @@ import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiClass;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
-import com.google.api.server.spi.response.CollectionResponse;
-import com.google.api.server.spi.response.NotFoundException;
-import com.google.appengine.api.datastore.Cursor;
-import com.google.appengine.api.datastore.QueryResultIterator;
 //import com.google.appengine.api.users.User;
-import com.googlecode.objectify.Key;
-import com.googlecode.objectify.ObjectifyService;
-import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.VoidWork;
 import com.googlecode.objectify.cmd.LoadType;
 
@@ -27,7 +20,7 @@ import kr.bobplanet.backend.model.DailyMenu;
 import kr.bobplanet.backend.model.User;
 import kr.bobplanet.backend.model.Vote;
 
-import static com.googlecode.objectify.ObjectifyService.ofy;
+import static kr.bobplanet.backend.api.ObjectifyRegister.ofy;
 
 @Api(
         name = "bobplanetApi",
@@ -59,14 +52,6 @@ public class MenuEndpoint {
     private static final Logger logger = Logger.getLogger(MenuEndpoint.class.getName());
 
     private static final int DEFAULT_LIST_LIMIT = 20;
-
-    static {
-        // Typically you would register this inside an OfyServive wrapper. See: https://code.google.com/p/objectify-appengine/wiki/BestPractices
-        ObjectifyService.register(Menu.class);
-        ObjectifyService.register(Item.class);
-        ObjectifyService.register(User.class);
-        ObjectifyService.register(Vote.class);
-    }
 
     @ApiMethod(
             name = "menuOfDate",
