@@ -2,11 +2,11 @@ package kr.bobplanet.android;
 
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.widget.ProgressBar;
 
 import com.commonsware.cwac.pager.PageDescriptor;
 import com.commonsware.cwac.pager.SimplePageDescriptor;
@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.List;
 
 import de.greenrobot.event.EventBus;
+import fr.castorflex.android.smoothprogressbar.SmoothProgressDrawable;
 import kr.bobplanet.backend.bobplanetApi.model.DailyMenu;
 
 public class DailyViewActivity extends ActivitySkeleton {
@@ -48,6 +49,7 @@ public class DailyViewActivity extends ActivitySkeleton {
 
         pager = (ViewPager) findViewById(R.id.daily_view_pager);
         pager.setAdapter(adapter);
+
     }
 
     @Override
@@ -60,6 +62,7 @@ public class DailyViewActivity extends ActivitySkeleton {
         return new SimplePageDescriptor(FRAGMENT_TAG_PREFIX + date, date);
     }
 
+    @SuppressWarnings("unused")
     public void onEvent(DailyViewFragment.DataLoadCompleteEvent e) {
         DailyMenu d = e.getDailyMenu();
         Log.d(TAG, "Data load complete: " + d.toString());

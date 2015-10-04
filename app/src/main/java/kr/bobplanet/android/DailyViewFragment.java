@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -15,12 +16,14 @@ import android.widget.TextView;
 import java.io.IOException;
 
 import de.greenrobot.event.EventBus;
+import fr.castorflex.android.smoothprogressbar.SmoothProgressDrawable;
 import kr.bobplanet.backend.bobplanetApi.BobplanetApi;
 import kr.bobplanet.backend.bobplanetApi.model.DailyMenu;
 
 public class DailyViewFragment extends ListFragment implements AppConstants {
     private static final String TAG = DailyViewFragment.class.getSimpleName();
     private static final String ARGUMENT_DATE = "ARGUMENT_DATE";
+
     private ProgressBar progressBar;
 
     /**
@@ -74,19 +77,52 @@ public class DailyViewFragment extends ListFragment implements AppConstants {
             setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION));
         }
 
+        progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
+        progressBar.setIndeterminateDrawable(new SmoothProgressDrawable.Builder(getActivity()).
+                interpolator(new AccelerateInterpolator()).build());
+
         TextView t = (TextView) view.findViewById(R.id.daily_view_date_header);
         t.setText(getDate(true));
 
         adapter = new DailyViewAdapter(getActivity());
         setListAdapter(adapter);
-
-        progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        new DailyMenuAsyncRetriever().execute(getDate(false));
+
+        new AsyncTask<String, Integer, DailyMenu>() {
+            @Override
+            protected DailyMenu doInBackground(String... params) {
+
+                BobplanetApi api = EndpointHelper.getAPI();
+
+                try {
+                    Log.i(TAG, "fetching menuOfDate() = " + params[0]);
+                    DailyMenu dailyMenu = api.menuOfDate(params[0]).execute();
+                    Log.d(TAG, "dailyMenu = " + dailyMenu);
+
+                    return dailyMenu;
+                } catch (IOException e) {
+                    Log.d(TAG, "error", e);
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(DailyMenu dailyMenu) {
+                if (dailyMenu == null) return;
+
+                adapter.setMenuList(dailyMenu.getMenu());
+                adapter.notifyDataSetChanged();
+
+                progressBar.setIndeterminate(false);
+                progressBar.setVisibility(View.INVISIBLE);
+
+                EventBus.getDefault().post(new DataLoadCompleteEvent(DailyViewFragment.this, dailyMenu));
+            }
+        }.execute(getDate(false));
     }
 
     @Override
@@ -129,50 +165,21 @@ public class DailyViewFragment extends ListFragment implements AppConstants {
         }
     }
 
-    private class DailyMenuAsyncRetriever extends AsyncTask<String, Integer, DailyMenu> {
-        @Override
-        protected DailyMenu doInBackground(String... params) {
-            publishProgress(0);
-            BobplanetApi api = EndpointHelper.getAPI();
-            publishProgress(10);
-
-            try {
-                Log.i(TAG, "fetching menuOfDate() = " + params[0]);
-                DailyMenu dailyMenu = api.menuOfDate(params[0]).execute();
-                publishProgress(100);
-                Log.d(TAG, "dailyMenu = " + dailyMenu);
-
-                return dailyMenu;
-            } catch (IOException e) {
-                Log.d(TAG, "error", e);
-                return null;
-            }
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... progress) {
-            progressBar.setProgress(progress[0]);
-        }
-
-        @Override
-        protected void onPostExecute(DailyMenu dailyMenu) {
-            if (dailyMenu == null) return;
-
-            adapter.setMenuList(dailyMenu.getMenu());
-            adapter.notifyDataSetChanged();
-
-            EventBus.getDefault().post(new DataLoadCompleteEvent(dailyMenu));
-        }
-    }
-
     static class DataLoadCompleteEvent {
         private DailyMenu dailyMenu;
 
-        DataLoadCompleteEvent(DailyMenu dailyMenu) {
+        private DailyViewFragment fragment;
+
+        protected DataLoadCompleteEvent(DailyViewFragment fragment, DailyMenu dailyMenu) {
+            this.fragment = fragment;
             this.dailyMenu = dailyMenu;
         }
 
-        public DailyMenu getDailyMenu() {
+        protected DailyViewFragment getFragment() {
+            return fragment;
+        }
+
+        protected DailyMenu getDailyMenu() {
             return dailyMenu;
         }
     }

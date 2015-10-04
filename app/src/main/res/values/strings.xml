@@ -13,4 +13,8 @@
     <string name="when_breakfast">아침</string>
     <string name="when_lunch">점심</string>
     <string name="when_dinner">저녁</string>
+    <string name="title_dummyitem_list">DummyItems</string>
+    <string name="title_dummyitem_detail">DummyItem Detail</string>
+    <string name="title_dummy_list">Items</string>
+    <string name="title_dummy_detail">dummy Detail</string>
 </resources>

@@ -84,7 +84,7 @@ public class DailyViewAdapter extends BaseAdapter {
         }
         when.setText(new StringBuilder().append(activity.getResources().getString(rid)).append(
                 menu.getType() == null ? "" : menu.getType()));
-        when.setBackgroundColor(activity.getResources().getColor(color, activity.getTheme()));
+        when.setBackgroundColor(activity.getResources().getColor(color));
 
         NetworkImageView iconimage = (NetworkImageView) convertView.findViewById(R.id.icon_image);
         iconimage.setImageUrl(menu.getItem().getIconURL(), imageLoader);
