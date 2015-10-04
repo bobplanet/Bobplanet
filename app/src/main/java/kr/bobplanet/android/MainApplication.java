@@ -9,6 +9,9 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Logger;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.iid.InstanceID;
 import com.google.android.gms.plus.model.people.Person;
 
@@ -18,6 +21,7 @@ import com.google.android.gms.plus.model.people.Person;
 public class MainApplication extends Application {
     public static final String TAG = MainApplication.class.getSimpleName();
 
+    private Tracker tracker;
     private RequestQueue requestQueue;
     private ImageLoader imageLoader;
     //private User currentUser;
@@ -28,10 +32,22 @@ public class MainApplication extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+
+        if (tracker == null) {
+            Log.i(TAG, "Initializing Google Analytics");
+            GoogleAnalytics ga = GoogleAnalytics.getInstance(this);
+            tracker = ga.newTracker(R.xml.ga_config);
+            ga.enableAutoActivityReports(this);
+            ga.getLogger().setLogLevel(Logger.LogLevel.VERBOSE);
+        }
     }
 
     protected static synchronized MainApplication getInstance() {
         return instance;
+    }
+
+    protected Tracker getTracker() {
+        return tracker;
     }
 
     protected void setCurrentUser(Person person) {

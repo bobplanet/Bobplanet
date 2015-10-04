@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ga_trackingId">UA-68096153-1</string>
+    <bool name="ga_autoActivityTracking">true</bool>
+    <int name="ga_sampleFrequency">100</int>
+</resources>
