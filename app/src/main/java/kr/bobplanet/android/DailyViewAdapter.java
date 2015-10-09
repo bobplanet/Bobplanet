@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+import android.support.v4.app.Fragment;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.text.TextUtils;
 import android.util.Log;
@@ -28,17 +29,22 @@ import kr.bobplanet.backend.bobplanetApi.model.Item;
 import kr.bobplanet.backend.bobplanetApi.model.Submenu;
 
 /**
- * Created by hkjinlee on 15. 9. 29..
+ * DailyViewFragment에서 사용되는 ListAdapter.
+ *
+ * - setMenuList()를 통해 fragment로부터 메뉴 데이터를 전달받음
+ * - 메뉴 썸네일은 Volley에서 제공하는 <code>NetworkImageView</code>를 이용하여 async로 가져옴
+ *
+ * @author hkjinlee on 15. 9. 29
  */
 public class DailyViewAdapter extends BaseAdapter {
     private static final String TAG = DailyViewAdapter.class.getSimpleName();
 
-    private Activity activity;
+    private Fragment fragment;
     private List<Menu> menuList;
     private ImageLoader imageLoader = MainApplication.getInstance().getImageLoader();
 
-    public DailyViewAdapter(Activity activity) {
-        this.activity = activity;
+    public DailyViewAdapter(Fragment fragment) {
+        this.fragment = fragment;
     }
 
     @Override
@@ -58,7 +64,7 @@ public class DailyViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = activity.getLayoutInflater();
+        LayoutInflater inflater = fragment.getLayoutInflater(null);
 
         Menu menu = menuList.get(position);
 
@@ -82,9 +88,9 @@ public class DailyViewAdapter extends BaseAdapter {
                 color = R.color.when_dinner_bg;
                 break;
         }
-        when.setText(new StringBuilder().append(activity.getResources().getString(rid)).append(
+        when.setText(new StringBuilder().append(fragment.getString(rid)).append(
                 menu.getType() == null ? "" : menu.getType()));
-        when.setBackgroundColor(activity.getResources().getColor(color));
+        when.setBackgroundColor(fragment.getResources().getColor(color));
 
         NetworkImageView iconimage = (NetworkImageView) convertView.findViewById(R.id.icon_image);
         iconimage.setImageUrl(menu.getItem().getIconURL(), imageLoader);
@@ -97,6 +103,7 @@ public class DailyViewAdapter extends BaseAdapter {
         LayerDrawable progress = (LayerDrawable) rating.getProgressDrawable();
         DrawableCompat.setTint(progress.getDrawable(2), Color.MAGENTA);
 
+		// 서브메뉴는 ','로 concatenate
         TextView submenu = (TextView) convertView.findViewById(R.id.submenu);
         List<Submenu> submenus = menu.getSubmenu();
         if (submenus != null) {
@@ -107,6 +114,7 @@ public class DailyViewAdapter extends BaseAdapter {
             submenu.setText(TextUtils.join(", ", subs));
         }
 
+		// 아침 메뉴는 칼로리 데이터가 없으므로 비워서 보여줌
         TextView calories = (TextView) convertView.findViewById(R.id.calories);
         int cal = menu.getCalories();
         calories.setText(menu.getCalories() == 0 ? "" : new StringBuilder().append(cal).append(" KCal"));

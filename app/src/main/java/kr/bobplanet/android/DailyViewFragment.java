@@ -21,6 +21,15 @@ import fr.castorflex.android.smoothprogressbar.SmoothProgressDrawable;
 import kr.bobplanet.android.event.NetworkExceptionEvent;
 import kr.bobplanet.backend.bobplanetApi.model.DailyMenu;
 
+/**
+ * 특정 일자의 아침-점심-저녁 메뉴를 보여주는 fragment.
+ * DailyViewActivity에 삽입되어 실제 메뉴를 화면에 보여주는 역할을 담당함.
+ * 
+ * - 날짜 parameter는 fragment 생성시에 bundle로 전달되어 <code>getArguments()</code>를 통해 조회
+ * - 서버로부터 메뉴 데이터를 가져오면 activity에도 알려줌 (좌우 fragment를 미리 만들어둘 수 있도록)
+ * - 화면은 listview로 구성하고 DailyViewAdapter를 이용해 UI 구성.
+ *
+ */
 public class DailyViewFragment extends ListFragment implements AppConstants {
     private static final String TAG = DailyViewFragment.class.getSimpleName();
     private static final String ARGUMENT_DATE = "ARGUMENT_DATE";
@@ -90,14 +99,20 @@ public class DailyViewFragment extends ListFragment implements AppConstants {
         TextView t = (TextView) view.findViewById(R.id.daily_view_date_header);
         t.setText(getDate(true));
 
-        adapter = new DailyViewAdapter(getActivity());
+        adapter = new DailyViewAdapter(this);
         setListAdapter(adapter);
     }
 
+	/**
+	 * 구동되자마자 서버에서 일간메뉴데이터를 가져옴.
+	 * 데이터 캐싱을 위해 <code>EntityVault</code>를 이용함.
+	 *
+	 */
     @Override
     public void onStart() {
         super.onStart();
 
+		// 데이터 로딩이 끝나면 그에 맞게 UI 업데이트하고 activity에도 데이터로딩 끝났음을 전달
         EntityVault.OnEntityLoadListener listener = new EntityVault.OnEntityLoadListener<DailyMenu>() {
             @Override
             public void onEntityLoad(DailyMenu dailyMenu) {
@@ -115,7 +130,7 @@ public class DailyViewFragment extends ListFragment implements AppConstants {
             }
         };
 
-        EntityVault.getInstance().loadMenuOfDate(getDate(false), listener);
+        MainApplication.getInstance().getEntityVault().loadMenuOfDate(getDate(false), listener);
     }
 
     @SuppressWarnings("unused")
@@ -137,10 +152,6 @@ public class DailyViewFragment extends ListFragment implements AppConstants {
             // Serialize and persist the activated item position.
             outState.putInt(STATE_ACTIVATED_POSITION, mActivatedPosition);
         }
-
-        if (dailyMenu != null) {
-            outState.putString(STATE_DAILYMENU, dailyMenu.toString());
-        }
     }
 
     private void setActivatedPosition(int position) {
@@ -153,6 +164,12 @@ public class DailyViewFragment extends ListFragment implements AppConstants {
         mActivatedPosition = position;
     }
 
+	/**
+	 * <code>getArguments()</code>를 이용하여 이 fragment가 보여주는 메뉴데이터의 날짜를 조회.
+	 * true는 헤더용 텍스트, false는 서버 API에 전달할 parameter값으로 사용.
+	 * 
+	 * @argument isForTitle true면 "2015/10/09(금)"처럼 포맷, false면 "2015-10-09"
+	 */
     private String getDate(boolean isForTitle) {
         String date = getArguments().getString(ARGUMENT_DATE);
 
@@ -168,7 +185,7 @@ public class DailyViewFragment extends ListFragment implements AppConstants {
     }
 
     /**
-     *
+     * 해당 일자의 메뉴데이터 로딩이 끝날 경우 DailyViewActivity로 전달되는 이벤트 클래스.
      */
     static class DataLoadCompleteEvent {
         private DailyMenu dailyMenu;

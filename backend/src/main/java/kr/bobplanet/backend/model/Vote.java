@@ -8,22 +8,41 @@ import com.googlecode.objectify.annotation.Load;
 import com.googlecode.objectify.annotation.Parent;
 
 /**
- * Created by hkjinlee on 2015. 10. 3..
+ * 사용자가 평점을 매길 때마다 하나씩 생성되는 투표 객체.
+ *
+ * @author heonkyu.jin
+ * @version 2015. 10. 3
  */
 @Entity
 public class Vote {
-    @Id
-    private Long ID;
+	/**
+	 * 투표번호. 별도로 지정하지 않으며 서버에서 자동으로 채번되는 인조key.
+	 */
+    @Id private Long ID;
 
-    @Load @Index
-    protected Ref<Item> item;
-    @Load @Index
-    protected Ref<User> user;
-    @Load
-    protected Ref<Menu> menu;
+	/**
+	 * 투표자
+	 */
+    @Load @Index protected Ref<User> user;
+	
+	/**
+	 * 투표대상 메뉴항목
+	 */
+    @Load @Index protected Ref<Item> item;
+    
+	/**
+	 * 투표대상 메뉴번호
+	 */
+	@Load protected Ref<Menu> menu;
 
+	/**
+	 * 점수. 5점 만점.
+	 */
     protected int score;
 
+	/**
+	 * 코멘트.
+	 */
     protected String comment;
 
     public Vote() {

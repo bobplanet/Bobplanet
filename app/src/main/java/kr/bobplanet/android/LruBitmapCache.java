@@ -7,7 +7,10 @@ import android.support.v4.util.LruCache;
 
 
 /**
- * Created by hkjinlee on 15. 9. 29..
+ * Volley의 NetworkImageView에서 사용하는 이미지 캐쉬.
+ * 그냥 어딘가에 있던 코드를 복붙했음.
+ *
+ * @author hkjinlee on 15. 9. 29
  */
 public class LruBitmapCache extends LruCache<String, Bitmap> implements
         ImageCache {

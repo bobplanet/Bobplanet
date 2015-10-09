@@ -1,6 +1,8 @@
 package kr.bobplanet.android;
 
+import android.content.Intent;
 import android.content.IntentSender;
+import android.media.audiofx.BassBoost;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -16,7 +18,13 @@ import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 
 /**
- * Created by hkjinlee on 2015. 10. 3..
+ * Bobplanet 앱에서 사용하는 모든 Activity들의 엄마클래스.
+ * 
+ * - Google OAuth 기능 사용을 위한 Google Api Client 관리
+ * - 공용 옵션메뉴(ActionBar 오른쪽에 나오는) 관리
+ *
+ * @author heonkyu.jin
+ * @version 2015. 10. 3
  */
 public class ActivitySkeleton extends AppCompatActivity implements AppConstants,
         GoogleApiClient.ConnectionCallbacks,
@@ -90,21 +98,6 @@ public class ActivitySkeleton extends AppCompatActivity implements AppConstants,
         }
     }
 
-    protected boolean checkPlayServices() {
-        GoogleApiAvailability availability = GoogleApiAvailability.getInstance();
-        int result = availability.isGooglePlayServicesAvailable(this);
-        if (result != ConnectionResult.SUCCESS) {
-            if (availability.isUserResolvableError(result)) {
-                availability.getErrorDialog(this, result, PLAY_SERVICES_RESOLUTION_REQUEST).show();
-            } else {
-                Log.i(TAG, "This device needs Google Play Services");
-                finish();
-            }
-            return false;
-        }
-        return true;
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -117,6 +110,7 @@ public class ActivitySkeleton extends AppCompatActivity implements AppConstants,
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
 
