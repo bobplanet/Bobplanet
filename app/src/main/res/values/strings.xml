@@ -10,13 +10,11 @@
     <string name="action_thumb_up">좋아요</string>
     <string name="action_thumb_down">싫어요</string>
 
-    <string name="when_breakfast">아침</string>
-    <string name="when_lunch">점심</string>
-    <string name="when_dinner">저녁</string>
-    <string name="title_dummyitem_list">DummyItems</string>
-    <string name="title_dummyitem_detail">DummyItem Detail</string>
-    <string name="title_dummy_list">Items</string>
-    <string name="title_dummy_detail">dummy Detail</string>
+    <string-array name="when_titles">
+        <item name="when_breakfast">아침</item>
+        <item name="when_lunch">점심</item>
+        <item name="when_dinner">저녁</item>
+    </string-array>
     <string name="title_activity_settings">Settings</string>
 
     <!-- Strings related to Settings -->

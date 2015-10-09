@@ -1,6 +1,7 @@
 package kr.bobplanet.android;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.LayerDrawable;
 import android.support.v4.graphics.drawable.DrawableCompat;
@@ -17,6 +18,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
@@ -36,6 +38,8 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuVi
     private Context context;
     private List<Menu> menuList = new ArrayList<Menu>();
     private ImageLoader imageLoader = MainApplication.getInstance().getImageLoader();
+
+    private static final String[] WHEN_ARRAY = { "08:00", "12:00", "18:00" };
 
     public MenuListAdapter(Context context, List<Menu> menuList) {
         this.context = context;
@@ -58,25 +62,15 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuVi
         Menu menu = menuList.get(position);
         if (menu == null) return;
 
-        int rid = 0;
-        int color = 0;
-        switch (menu.getWhen()) {
-            case "08:00":
-                rid = R.string.when_breakfast;
-                color = R.color.when_breakfast_bg;
-                break;
-            case "12:00":
-                rid = R.string.when_lunch;
-                color = R.color.when_lunch_bg;
-                break;
-            case "18:00":
-                rid = R.string.when_dinner;
-                color = R.color.when_dinner_bg;
-                break;
-        }
-        viewHolder.when.setText(new StringBuilder().append(context.getString(rid)).append(
-                menu.getType() == null ? "" : menu.getType()));
-        viewHolder.when.setBackgroundColor(context.getResources().getColor(color));
+        Resources resources = context.getResources();
+
+        int index = Arrays.binarySearch(WHEN_ARRAY, menu.getWhen());
+        viewHolder.when.setText(new StringBuilder()
+                .append(resources.getStringArray(R.array.when_titles)[index])
+                .append(menu.getType() == null ? "" : menu.getType())
+        );
+        viewHolder.when.setBackgroundColor(
+                resources.obtainTypedArray(R.array.when_background_color).getColor(index, Color.BLACK));
 
         viewHolder.icon.setImageUrl(menu.getItem().getIconURL(), imageLoader);
 

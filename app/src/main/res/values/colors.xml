@@ -7,7 +7,9 @@
     <color name="list_row_hover_start_color">#ebeef0</color>
     <color name="list_row_hover_end_color">#ebeef0</color>
 
-    <color name="when_breakfast_bg">#aa3939</color>
-    <color name="when_lunch_bg">#7b9f35</color>
-    <color name="when_dinner_bg">#226666</color>
+    <array name="when_background_color">
+        <item>#aa3939</item>
+        <item>#7b9f35</item>
+        <item>#226666</item>
+    </array>
 </resources>
