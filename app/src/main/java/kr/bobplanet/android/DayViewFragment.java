@@ -1,6 +1,5 @@
 package kr.bobplanet.android;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
@@ -14,8 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import java.io.IOException;
-
 import de.greenrobot.event.EventBus;
 import fr.castorflex.android.smoothprogressbar.SmoothProgressDrawable;
 import kr.bobplanet.android.event.NetworkExceptionEvent;
@@ -23,15 +20,15 @@ import kr.bobplanet.backend.bobplanetApi.model.DailyMenu;
 
 /**
  * 특정 일자의 아침-점심-저녁 메뉴를 보여주는 fragment.
- * DailyViewActivity에 삽입되어 실제 메뉴를 화면에 보여주는 역할을 담당함.
+ * DayViewActivity에 삽입되어 실제 메뉴를 화면에 보여주는 역할을 담당함.
  * 
  * - 날짜 parameter는 fragment 생성시에 bundle로 전달되어 <code>getArguments()</code>를 통해 조회
  * - 서버로부터 메뉴 데이터를 가져오면 activity에도 알려줌 (좌우 fragment를 미리 만들어둘 수 있도록)
- * - 화면은 listview로 구성하고 DailyViewAdapter를 이용해 UI 구성.
+ * - 화면은 listview로 구성하고 DayViewAdapter를 이용해 UI 구성.
  *
  */
-public class DailyViewFragment extends ListFragment implements AppConstants {
-    private static final String TAG = DailyViewFragment.class.getSimpleName();
+public class DayViewFragment extends ListFragment implements AppConstants {
+    private static final String TAG = DayViewFragment.class.getSimpleName();
     private static final String ARGUMENT_DATE = "ARGUMENT_DATE";
     private static final String STATE_DAILYMENU = "STATE_DAILYMENU";
 
@@ -50,17 +47,17 @@ public class DailyViewFragment extends ListFragment implements AppConstants {
      */
     private int mActivatedPosition = ListView.INVALID_POSITION;
 
-    private DailyViewAdapter adapter;
+    private DayViewListAdapter adapter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public DailyViewFragment() {
+    public DayViewFragment() {
     }
 
-    public static DailyViewFragment newInstance(String date) {
-        DailyViewFragment f = new DailyViewFragment();
+    public static DayViewFragment newInstance(String date) {
+        DayViewFragment f = new DayViewFragment();
 
         Bundle args = new Bundle();
         args.putString(ARGUMENT_DATE, date);
@@ -99,7 +96,7 @@ public class DailyViewFragment extends ListFragment implements AppConstants {
         TextView t = (TextView) view.findViewById(R.id.daily_view_date_header);
         t.setText(getDate(true));
 
-        adapter = new DailyViewAdapter(this);
+        adapter = new DayViewListAdapter(this);
         setListAdapter(adapter);
     }
 
@@ -118,7 +115,7 @@ public class DailyViewFragment extends ListFragment implements AppConstants {
             public void onEntityLoad(DailyMenu dailyMenu) {
                 if (dailyMenu == null) return;
 
-                DailyViewFragment.this.dailyMenu = dailyMenu;
+                DayViewFragment.this.dailyMenu = dailyMenu;
 
                 adapter.setMenuList(dailyMenu.getMenu());
                 adapter.notifyDataSetChanged();
@@ -126,7 +123,7 @@ public class DailyViewFragment extends ListFragment implements AppConstants {
                 progressBar.setIndeterminate(false);
                 progressBar.setVisibility(View.INVISIBLE);
 
-                EventBus.getDefault().post(new DataLoadCompleteEvent(DailyViewFragment.this, dailyMenu));
+                EventBus.getDefault().post(new DataLoadCompleteEvent(DayViewFragment.this, dailyMenu));
             }
         };
 
@@ -190,14 +187,14 @@ public class DailyViewFragment extends ListFragment implements AppConstants {
     static class DataLoadCompleteEvent {
         private DailyMenu dailyMenu;
 
-        private DailyViewFragment fragment;
+        private DayViewFragment fragment;
 
-        protected DataLoadCompleteEvent(DailyViewFragment fragment, DailyMenu dailyMenu) {
+        protected DataLoadCompleteEvent(DayViewFragment fragment, DailyMenu dailyMenu) {
             this.fragment = fragment;
             this.dailyMenu = dailyMenu;
         }
 
-        protected DailyViewFragment getFragment() {
+        protected DayViewFragment getFragment() {
             return fragment;
         }
 

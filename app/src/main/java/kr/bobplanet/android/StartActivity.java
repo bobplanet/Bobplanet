@@ -1,16 +1,10 @@
 package kr.bobplanet.android;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 
 import de.greenrobot.event.EventBus;
 import kr.bobplanet.android.gcm.GcmEvent;
@@ -49,7 +43,7 @@ public class StartActivity extends ActivitySkeleton {
         }
 
 		// 기본화면인 DailyViewActivity를 화면에 띄움.
-        startActivity(new Intent(this, DailyViewActivity.class));
+        startActivity(new Intent(this, DayViewActivity.class));
         finish();
     }
 

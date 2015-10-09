@@ -3,13 +3,11 @@ package kr.bobplanet.android.gcm;
 import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -21,7 +19,7 @@ import com.google.android.gms.iid.InstanceIDListenerService;
 
 import de.greenrobot.event.EventBus;
 import kr.bobplanet.android.AppConstants;
-import kr.bobplanet.android.DailyViewActivity;
+import kr.bobplanet.android.DayViewActivity;
 import kr.bobplanet.android.R;
 
 /**
@@ -84,7 +82,7 @@ public class GcmServices implements AppConstants {
         }
 
         private void sendNotification(String message) {
-            Intent intent = new Intent(this, DailyViewActivity.class);
+            Intent intent = new Intent(this, DayViewActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
             PendingIntent pending = PendingIntent.getActivity(this, 0 /* Request code */, intent,

@@ -1,14 +1,10 @@
 package kr.bobplanet.android;
 
-import android.app.Activity;
-import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,30 +16,27 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
-import kr.bobplanet.backend.bobplanetApi.model.Item;
 import kr.bobplanet.backend.bobplanetApi.model.Submenu;
 
 /**
- * DailyViewFragment에서 사용되는 ListAdapter.
+ * DayViewFragment에서 사용되는 ListAdapter.
  *
  * - setMenuList()를 통해 fragment로부터 메뉴 데이터를 전달받음
  * - 메뉴 썸네일은 Volley에서 제공하는 <code>NetworkImageView</code>를 이용하여 async로 가져옴
  *
  * @author hkjinlee on 15. 9. 29
  */
-public class DailyViewAdapter extends BaseAdapter {
-    private static final String TAG = DailyViewAdapter.class.getSimpleName();
+public class DayViewListAdapter extends BaseAdapter {
+    private static final String TAG = DayViewListAdapter.class.getSimpleName();
 
     private Fragment fragment;
     private List<Menu> menuList;
     private ImageLoader imageLoader = MainApplication.getInstance().getImageLoader();
 
-    public DailyViewAdapter(Fragment fragment) {
+    public DayViewListAdapter(Fragment fragment) {
         this.fragment = fragment;
     }
 

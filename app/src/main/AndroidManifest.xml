@@ -35,7 +35,7 @@
 
         <!-- 일간메뉴 조회 Acivity -->
         <activity
-            android:name=".DailyViewActivity"
+            android:name=".DayViewActivity"
             android:label="@string/app_name" />
 
         <!-- 설정화면 Activity -->

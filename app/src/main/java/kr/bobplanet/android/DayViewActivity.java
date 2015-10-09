@@ -4,9 +4,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.view.animation.AccelerateInterpolator;
-import android.widget.ProgressBar;
 
 import com.commonsware.cwac.pager.PageDescriptor;
 import com.commonsware.cwac.pager.SimplePageDescriptor;
@@ -17,7 +14,6 @@ import java.util.Date;
 import java.util.List;
 
 import de.greenrobot.event.EventBus;
-import fr.castorflex.android.smoothprogressbar.SmoothProgressDrawable;
 import kr.bobplanet.backend.bobplanetApi.model.DailyMenu;
 
 /**
@@ -28,16 +24,16 @@ import kr.bobplanet.backend.bobplanetApi.model.DailyMenu;
  * 
  * - Fragment와의 통신을 위해 EventBus 이용 (@see https://github.com/greenrobot/EventBus/)
  * - Fragment의 동적 추가를 위해 ArrayPagerAdapter 이용 (@see https://github.com/commonsguy/cwac-pager)
- * - ViewPager를 이용하여 DailyViewFragment를 좌우 swipe로 넘겨볼 수 있음
- * - 체감속도 향상을 위해 DailyViewFragment는 좌우 1개씩 미리 생성
+ * - ViewPager를 이용하여 DayViewFragment를 좌우 swipe로 넘겨볼 수 있음
+ * - 체감속도 향상을 위해 DayViewFragment는 좌우 1개씩 미리 생성
  * - Fragment가 데이터 로딩을 끝내면 PagerAdapter에 추가
  */
-public class DailyViewActivity extends ActivitySkeleton {
-    private static final String TAG = DailyViewActivity.class.getSimpleName();
-    private static final String FRAGMENT_TAG_PREFIX = "DailyViewFragment-";
+public class DayViewActivity extends ActivitySkeleton {
+    private static final String TAG = DayViewActivity.class.getSimpleName();
+    private static final String FRAGMENT_TAG_PREFIX = "DayViewFragment-";
 
     private ViewPager pager;
-    private DailyPagerAdapter adapter;
+    private DayPagerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +55,7 @@ public class DailyViewActivity extends ActivitySkeleton {
         List<PageDescriptor> descriptors = Arrays.asList((PageDescriptor)
                 newPageDescriptor(DATEFORMAT_YMD.format(start_date))
         );
-        adapter = new DailyPagerAdapter(getSupportFragmentManager(), descriptors);
+        adapter = new DayPagerAdapter(getSupportFragmentManager(), descriptors);
 
         pager = (ViewPager) findViewById(R.id.daily_view_pager);
         pager.setAdapter(adapter);
@@ -84,7 +80,7 @@ public class DailyViewActivity extends ActivitySkeleton {
 	 * 일단 메뉴가 있을 경우 PagerAdapter에 추가해서 swipe scroll이 가능하게 함
 	 */
     @SuppressWarnings("unused")
-    public void onEvent(DailyViewFragment.DataLoadCompleteEvent e) {
+    public void onEvent(DayViewFragment.DataLoadCompleteEvent e) {
         DailyMenu d = e.getDailyMenu();
         Log.d(TAG, "Data load complete: " + d.toString());
 
@@ -103,18 +99,18 @@ public class DailyViewActivity extends ActivitySkeleton {
     }
 
 	/**
-	 * DailyViewFragment를 동적으로 추가하기 위해 ArrayPagerAdapter를 이용
+	 * DayViewFragment를 동적으로 추가하기 위해 ArrayPagerAdapter를 이용
 	 * 
 	 * @see {https://github.com/commonsguy/cwac-pager}
 	 */
-    private class DailyPagerAdapter extends ArrayPagerAdapter<DailyViewFragment> {
-        public DailyPagerAdapter(FragmentManager fragmentManager, List<PageDescriptor> descriptors) {
+    private class DayPagerAdapter extends ArrayPagerAdapter<DayViewFragment> {
+        public DayPagerAdapter(FragmentManager fragmentManager, List<PageDescriptor> descriptors) {
             super(fragmentManager, descriptors);
         }
 
         @Override
-        protected DailyViewFragment createFragment(PageDescriptor pageDescriptor) {
-            return DailyViewFragment.newInstance(pageDescriptor.getTitle());
+        protected DayViewFragment createFragment(PageDescriptor pageDescriptor) {
+            return DayViewFragment.newInstance(pageDescriptor.getTitle());
         }
     }
 

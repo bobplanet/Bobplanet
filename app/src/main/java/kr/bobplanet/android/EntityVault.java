@@ -77,7 +77,7 @@ public class EntityVault implements AppConstants {
 	/**
 	 * 특정 일자의 메뉴리스트를 로드한다. 로딩이 끝나면 listener의 onEntityLoad() 메소드를 호출.
 	 */
-    public void loadMenuOfDate(final String date, OnEntityLoadListener listener) {
+    public void loadMenuOfDate(final String date, OnEntityLoadListener<DailyMenu> listener) {
         RemoteApiLoader<DailyMenu> remote = new RemoteApiLoader<DailyMenu>() {
             @Override
             public DailyMenu fromRemoteApi() throws IOException {
