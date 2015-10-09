@@ -17,6 +17,7 @@ import kr.bobplanet.backend.BackendConstants;
 import kr.bobplanet.backend.model.Menu;
 import kr.bobplanet.backend.model.Item;
 import kr.bobplanet.backend.model.DailyMenu;
+import kr.bobplanet.backend.model.StringHolder;
 import kr.bobplanet.backend.model.User;
 import kr.bobplanet.backend.model.Vote;
 
@@ -87,7 +88,6 @@ public class MenuEndpoint {
         final Vote vote = new Vote(new User("1234"), item, new Menu(menuId));
         vote.setScore(score);
 
-
         ofy().transact(new VoidWork() {
             @Override
             public void vrun() {
@@ -101,7 +101,15 @@ public class MenuEndpoint {
             name = "menu",
             path = "menu/{id}"
     )
-    public void menu(@Named("id") Long id) {
+    public Menu menu(@Named("id") Long id) {
         Menu m = ofy().load().type(Menu.class).id(id).now();
+        return m;
+    }
+
+    @ApiMethod(
+            name = "helloworld"
+    )
+    public StringHolder helloworld() {
+        return new StringHolder("Hello, world!");
     }
 }

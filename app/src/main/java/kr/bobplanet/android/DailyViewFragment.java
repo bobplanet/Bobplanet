@@ -19,7 +19,6 @@ import java.io.IOException;
 import de.greenrobot.event.EventBus;
 import fr.castorflex.android.smoothprogressbar.SmoothProgressDrawable;
 import kr.bobplanet.android.event.NetworkExceptionEvent;
-import kr.bobplanet.backend.bobplanetApi.BobplanetApi;
 import kr.bobplanet.backend.bobplanetApi.model.DailyMenu;
 
 public class DailyViewFragment extends ListFragment implements AppConstants {
@@ -99,31 +98,9 @@ public class DailyViewFragment extends ListFragment implements AppConstants {
     public void onStart() {
         super.onStart();
 
-        if (dailyMenu != null) return;
-
-        new AsyncTask<String, Integer, DailyMenu>() {
+        EntityVault.OnEntityLoadListener listener = new EntityVault.OnEntityLoadListener<DailyMenu>() {
             @Override
-            protected DailyMenu doInBackground(String... params) {
-
-                BobplanetApi api = EndpointHelper.getAPI();
-
-                try {
-                    Log.i(TAG, "fetching menuOfDate() = " + params[0]);
-                    DailyMenu dailyMenu = api.menuOfDate(params[0]).execute();
-                    Log.d(TAG, "dailyMenu = " + dailyMenu);
-                    Log.d(TAG, "factory = " + dailyMenu.getFactory());
-
-                    return dailyMenu;
-                } catch (IOException e) {
-                    Log.d(TAG, "error", e);
-                    dailyMenu = INVALID_DAILY_MENU;
-                    EventBus.getDefault().post(new NetworkExceptionEvent("Daily menu fetch error", e));
-                    return null;
-                }
-            }
-
-            @Override
-            protected void onPostExecute(DailyMenu dailyMenu) {
+            public void onEntityLoad(DailyMenu dailyMenu) {
                 if (dailyMenu == null) return;
 
                 DailyViewFragment.this.dailyMenu = dailyMenu;
@@ -136,7 +113,9 @@ public class DailyViewFragment extends ListFragment implements AppConstants {
 
                 EventBus.getDefault().post(new DataLoadCompleteEvent(DailyViewFragment.this, dailyMenu));
             }
-        }.execute(getDate(false));
+        };
+
+        EntityVault.getInstance().loadMenuOfDate(getDate(false), listener);
     }
 
     @SuppressWarnings("unused")
@@ -180,7 +159,7 @@ public class DailyViewFragment extends ListFragment implements AppConstants {
         if (isForTitle) {
             try {
                 return DATEFORMAT_YMDE.format(DATEFORMAT_YMD.parse(date));
-            } catch (Exception e){
+            } catch (Exception e) {
                 return date;
             }
         } else {
@@ -188,6 +167,9 @@ public class DailyViewFragment extends ListFragment implements AppConstants {
         }
     }
 
+    /**
+     *
+     */
     static class DataLoadCompleteEvent {
         private DailyMenu dailyMenu;
 

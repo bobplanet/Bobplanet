@@ -14,6 +14,7 @@ public interface AppConstants {
     String ANDROID_CLIENT_ID = BuildConfig.DEV_VERSION ?
             ANDROID_CLIENT_ID_DEV : ANDROID_CLIENT_ID_RELEASE;
 
+    String BACKEND_ROOT_URL = "https://kr-bobplanet.appspot.com/_ah/api/";
     String GCM_SENDER_ID = "603054087850";
 
 
