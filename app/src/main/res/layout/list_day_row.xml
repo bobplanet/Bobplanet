@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="2dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/list_row_selector">
+
+        <!-- Thumbnail Image -->
+        <FrameLayout
+            android:id="@+id/icon_holder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <com.android.volley.toolbox.NetworkImageView
+                android:id="@+id/icon"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginRight="8dp"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:id="@+id/when"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:textColor="@android:color/white"
+                android:textSize="12dp"
+                tools:text="아침" />
+
+        </FrameLayout>
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/icon_holder"
+            android:layout_toRightOf="@id/icon_holder"
+            android:autoText="false"
+            android:textSize="@dimen/daily_name"
+            android:textStyle="bold"
+            tools:text="Menu title" />
+
+        <!-- RatingBar -->
+        <RatingBar
+            android:id="@+id/rating"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_toRightOf="@id/title"
+            android:numStars="5"
+            android:paddingTop="4dp" />
+
+        <!-- Sub -->
+        <TextView
+            android:id="@+id/submenu"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/title"
+            android:layout_marginTop="1dip"
+            android:layout_toRightOf="@id/icon_holder"
+            android:textSize="@dimen/daily_sub"
+            tools:text="Submenus 1, Submenus 2" />
+
+        <!-- Calories -->
+        <TextView
+            android:id="@+id/calories"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/submenu"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@id/icon_holder"
+            android:textColor="@color/calories"
+            android:textSize="@dimen/daily_calories"
+            tools:text="860 KCal" />
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

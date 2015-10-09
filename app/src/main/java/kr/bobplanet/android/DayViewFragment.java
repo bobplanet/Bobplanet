@@ -1,7 +1,10 @@
 package kr.bobplanet.android;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,27 +30,14 @@ import kr.bobplanet.backend.bobplanetApi.model.DailyMenu;
  * - 화면은 listview로 구성하고 DayViewAdapter를 이용해 UI 구성.
  *
  */
-public class DayViewFragment extends ListFragment implements AppConstants {
+public class DayViewFragment extends Fragment implements AppConstants {
     private static final String TAG = DayViewFragment.class.getSimpleName();
     private static final String ARGUMENT_DATE = "ARGUMENT_DATE";
     private static final String STATE_DAILYMENU = "STATE_DAILYMENU";
 
-    private static final DailyMenu INVALID_DAILY_MENU = new DailyMenu();
-    private DailyMenu dailyMenu;
     private ProgressBar progressBar;
 
-    /**
-     * The serialization (saved instance state) Bundle key representing the
-     * activated item position. Only used on tablets.
-     */
-    private static final String STATE_ACTIVATED_POSITION = "activated_position";
-
-    /**
-     * The current activated item position. Only used on tablets.
-     */
-    private int mActivatedPosition = ListView.INVALID_POSITION;
-
-    private DayViewListAdapter adapter;
+    private RecyclerView recyclerView;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -75,19 +65,12 @@ public class DayViewFragment extends ListFragment implements AppConstants {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        return inflater.inflate(R.layout.fragment_daily_view, container, false);
+        return inflater.inflate(R.layout.fragment_day_view, container, false);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        // Restore the previously serialized activated item position.
-        if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
-                setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION));
-            }
-        }
 
         progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
         progressBar.setIndeterminateDrawable(new SmoothProgressDrawable.Builder(getActivity()).
@@ -96,8 +79,8 @@ public class DayViewFragment extends ListFragment implements AppConstants {
         TextView t = (TextView) view.findViewById(R.id.daily_view_date_header);
         t.setText(getDate(true));
 
-        adapter = new DayViewListAdapter(this);
-        setListAdapter(adapter);
+        recyclerView = (RecyclerView) view.findViewById(R.id.menu_recyler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
     }
 
 	/**
@@ -115,10 +98,9 @@ public class DayViewFragment extends ListFragment implements AppConstants {
             public void onEntityLoad(DailyMenu dailyMenu) {
                 if (dailyMenu == null) return;
 
-                DayViewFragment.this.dailyMenu = dailyMenu;
-
-                adapter.setMenuList(dailyMenu.getMenu());
-                adapter.notifyDataSetChanged();
+                MenuListAdapter adapter = new MenuListAdapter(DayViewFragment.this.getContext(),
+                        dailyMenu.getMenu());
+                recyclerView.setAdapter(adapter);
 
                 progressBar.setIndeterminate(false);
                 progressBar.setVisibility(View.INVISIBLE);
@@ -136,29 +118,10 @@ public class DayViewFragment extends ListFragment implements AppConstants {
     }
 
     @Override
-    public void onListItemClick(ListView listView, View view, int position, long id) {
-        super.onListItemClick(listView, view, position, id);
-    }
-
-    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         Log.d(TAG, "onSaveInstanceState");
 
-        if (mActivatedPosition != ListView.INVALID_POSITION) {
-            // Serialize and persist the activated item position.
-            outState.putInt(STATE_ACTIVATED_POSITION, mActivatedPosition);
-        }
-    }
-
-    private void setActivatedPosition(int position) {
-        if (position == ListView.INVALID_POSITION) {
-            getListView().setItemChecked(mActivatedPosition, false);
-        } else {
-            getListView().setItemChecked(position, true);
-        }
-
-        mActivatedPosition = position;
     }
 
 	/**

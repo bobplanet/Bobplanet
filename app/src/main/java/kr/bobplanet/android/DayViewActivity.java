@@ -38,7 +38,7 @@ public class DayViewActivity extends ActivitySkeleton {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_daily_view);
+        setContentView(R.layout.activity_day_view);
 
 		// DailyViewFragment가 보내주는 데이터로딩완료 메시지 수신을 위해 EventBus 등록
         EventBus.getDefault().register(this);

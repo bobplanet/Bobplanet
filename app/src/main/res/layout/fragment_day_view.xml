@@ -35,8 +35,8 @@
             android:text="2015-10-02"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
-        <ListView
-            android:id="@id/android:list"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/menu_recyler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:listitem="list_content" />

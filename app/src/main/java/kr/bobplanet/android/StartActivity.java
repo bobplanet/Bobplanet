@@ -16,7 +16,7 @@ import kr.bobplanet.android.gcm.GcmServices;
  *
  * - GCM 등록로직 수행 (등록결과를 받아오기 위해 EventBus를 이용함)
  * - 한번이라도 실행되면 SharedPreferences에 관련 정보 저장
- * - 본 앱의 기본화면인 DailyViewActivity를 실행
+ * - 본 앱의 기본화면인 DayViewActivity를 실행
  *
  * @author heonkyu.jin
  * @version 2015. 9. 30
@@ -42,7 +42,7 @@ public class StartActivity extends ActivitySkeleton {
             prefs.edit().putBoolean(HAS_LAUNCHED_BEFORE, true).commit();
         }
 
-		// 기본화면인 DailyViewActivity를 화면에 띄움.
+		// 기본화면인 DayViewActivity를 화면에 띄움.
         startActivity(new Intent(this, DayViewActivity.class));
         finish();
     }

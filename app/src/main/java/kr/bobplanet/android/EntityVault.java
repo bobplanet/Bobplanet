@@ -1,6 +1,7 @@
 package kr.bobplanet.android;
 
 import android.os.AsyncTask;
+import android.support.annotation.Nullable;
 import android.support.v4.util.LruCache;
 import android.support.v4.util.Pair;
 import android.util.Log;
@@ -16,6 +17,7 @@ import de.greenrobot.event.EventBus;
 import kr.bobplanet.android.event.NetworkExceptionEvent;
 import kr.bobplanet.backend.bobplanetApi.BobplanetApi;
 import kr.bobplanet.backend.bobplanetApi.model.DailyMenu;
+import kr.bobplanet.backend.bobplanetApi.model.Menu;
 
 /**
  * Google AppEngine으로부터 가져오는 데이터를 LruCache를 이용해 한차례 caching하는 객체저장소.
@@ -89,6 +91,17 @@ public class EntityVault implements AppConstants {
         loader.execute(new Pair<Class, Object>(DailyMenu.class, date));
     }
 
+    public void loadMenu(final long id, OnEntityLoadListener<Menu> listener) {
+        RemoteApiLoader<Menu> remote = new RemoteApiLoader<Menu>() {
+            @Override
+            public Menu fromRemoteApi() throws IOException {
+                return api.menu(id).execute();
+            }
+        };
+
+        EntityLoader<Menu> loader = new EntityLoader<Menu>(remote, listener);
+    }
+
 	/**
 	 * 캐쉬 조회 및 네트웤API 호출을 담당하는 AsyncTask.
 	 * 
@@ -101,7 +114,12 @@ public class EntityVault implements AppConstants {
         private RemoteApiLoader<Entity> remote;
         private OnEntityLoadListener<Entity> listener;
 
-        EntityLoader(RemoteApiLoader<Entity> remote, OnEntityLoadListener<Entity> listener) {
+        /**
+         *
+         * @param remote
+         * @param listener
+         */
+        EntityLoader(RemoteApiLoader<Entity> remote, @Nullable OnEntityLoadListener<Entity> listener) {
             this.remote = remote;
             this.listener = listener;
         }
@@ -139,7 +157,9 @@ public class EntityVault implements AppConstants {
 
         @Override
         protected void onPostExecute(Entity entity) {
-            listener.onEntityLoad(entity);
+            if (listener != null) {
+                listener.onEntityLoad(entity);
+            }
         }
     }
 
