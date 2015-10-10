@@ -1,12 +1,9 @@
 package kr.bobplanet.android;
 
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.util.Pair;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,7 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
+import java.util.ArrayList;
 import java.util.List;
 
 import de.greenrobot.event.EventBus;
@@ -39,10 +36,12 @@ public class DayViewFragment extends Fragment implements AppConstants {
     private static final String TAG = DayViewFragment.class.getSimpleName();
     private static final String ARGUMENT_DATE = "ARGUMENT_DATE";
 
-    private List<Menu> menuList;
+    private static final List<Menu> EMPTY_MENU_LIST = new ArrayList<Menu>();
+    private List<Menu> menuList = EMPTY_MENU_LIST;
     private ProgressBar progressBar;
 
     private RecyclerView recyclerView;
+    private View emptyView;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -62,18 +61,6 @@ public class DayViewFragment extends Fragment implements AppConstants {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
@@ -87,15 +74,18 @@ public class DayViewFragment extends Fragment implements AppConstants {
         progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
         Drawable d = new SmoothProgressDrawable.Builder(getActivity())
                 .interpolator(new AccelerateInterpolator()).build();
-        d.setColorFilter(getResources().getColor(R.color.progress),
+        d.setColorFilter(ContextCompat.getColor(getContext(), R.color.progress),
                 android.graphics.PorterDuff.Mode.SRC_IN);
         progressBar.setIndeterminateDrawable(d);
 
         TextView t = (TextView) view.findViewById(R.id.daily_view_date_header);
         t.setText(getDate(true));
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.menu_recyler);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recylerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        recyclerView.setHasFixedSize(true);
+
+        emptyView = view.findViewById(R.id.empty);
     }
 
 	/**
@@ -115,9 +105,14 @@ public class DayViewFragment extends Fragment implements AppConstants {
 
                 menuList = dailyMenu.getMenu();
 
-                MenuListAdapter adapter = new MenuListAdapter(DayViewFragment.this.getContext(),
-                        menuList);
-                recyclerView.setAdapter(adapter);
+                if (menuList != null) {
+                    MenuListAdapter adapter = new MenuListAdapter(DayViewFragment.this.getContext(),
+                            menuList);
+                    recyclerView.setAdapter(adapter);
+                } else {
+                    recyclerView.setVisibility(View.GONE);
+                    emptyView.setVisibility(View.VISIBLE);
+                }
 
                 progressBar.setIndeterminate(false);
                 progressBar.setVisibility(View.INVISIBLE);
@@ -132,24 +127,6 @@ public class DayViewFragment extends Fragment implements AppConstants {
     @SuppressWarnings("unused")
     public void onEventMainThread(NetworkExceptionEvent e) {
         Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-    }
-
-    @SuppressWarnings("unused")
-    public void onEvent(MenuListAdapter.MenuClickEvent e) {
-        startMenuViewActivity(e.menuViewHolder);
-    }
-
-    private void startMenuViewActivity(MenuListAdapter.MenuViewHolder menuViewHolder) {
-        Menu menu = menuViewHolder.menu;
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
-                new Pair<View, String>(menuViewHolder.icon, EXTRA_MENU_ICON),
-                new Pair<View, String>(menuViewHolder.title, EXTRA_MENU_TITLE));
-
-        Intent intent = new Intent(getActivity(), MenuViewActivity.class);
-        intent.putExtra(EXTRA_MENU_ICON, menuViewHolder.icon.getImageURL());
-        intent.putExtra(EXTRA_MENU_TITLE, menuViewHolder.title.getText());
-
-        ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
     }
 
 	/**

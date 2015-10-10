@@ -1,24 +1,24 @@
 <resources>>
 
-    <style name="BobplanetTheme" parent="@android:style/Theme.Material.Light.DarkActionBar">
-        <item name="windowActionBar">true</item>
+    <style name="AppTheme" parent="@style/Theme.AppCompat.Light">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
         <item name="android:colorPrimary">@color/primary</item>
         <item name="android:colorPrimaryDark">@color/primary_dark</item>
         <item name="android:windowBackground">@color/window_background</item>
         <item name="android:colorAccent">@color/accent</item>
 
-        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowContentTransitions">false</item>
         <item name="android:windowAllowEnterTransitionOverlap">true</item>
         <item name="android:windowAllowReturnTransitionOverlap">true</item>
         <item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
         <item name="android:windowSharedElementExitTransition">@android:transition/move</item>
     </style>
 
-    <style name="BobplanetTheme.NoActionBar" parent="@style/Theme.AppCompat.Light.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <!--
-        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        -->
+    <style name="AppTheme.Toolbar" parent="@style/AppTheme">
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
+        <item name="android:background">@color/primary</item>
     </style>
 </resources>

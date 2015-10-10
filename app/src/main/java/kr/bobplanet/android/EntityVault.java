@@ -12,6 +12,7 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.JsonParser;
 
 import java.io.IOException;
+import java.util.Date;
 
 import de.greenrobot.event.EventBus;
 import kr.bobplanet.android.event.NetworkExceptionEvent;
@@ -30,6 +31,7 @@ import kr.bobplanet.backend.bobplanetApi.model.Menu;
  * - LruCache의 key는 '클래스이름:키값'이 되도록 함. (가령, "DailyMenu:2015-10-09")
  * - 캐쉬에서 객체를 찾아보고, 없으면 API를 호출해 가져온 뒤 캐쉬에 저장하는 반복코딩 줄이기 위해 generics 이용
  * - 네트웤에서 데이터를 가져올 경우 시간이 소요되므로 async 방식으로 데이터 조회
+ * - 이미 JSON 문자열을 갖고있는 경우에는 <code>getEntity()</code>를 이용해서 unserialize만 해도 됨
  * - callee는 OnEntityLoader를 전달하여, 데이터 로딩이 끝나면 UI업데이트 등을 수행해야 함
  *
  * @author hkjinlee on 2015. 10. 7
@@ -46,7 +48,11 @@ public class EntityVault implements AppConstants {
 	 * 캐쉬 최대 사이즈. 현재는 1MB.
 	 */
     private static final int MAX_SIZE = 1 * 1024 * 1024;
-    private static final String INVALID_KEY = "INVALID_KEY";
+
+    /**
+     *
+     */
+    private static final int CACHE_EXPIRE_SECONDS = 2 * 60;
 	
 	/**
 	 * LruCache 키값에서 클래스명과 ID를 연결하는 separator
@@ -56,7 +62,7 @@ public class EntityVault implements AppConstants {
 	/**
 	 * JSON 문자열을 저장할 LruCache.
 	 */
-    private LruCache<String, String> jsonCache;
+    private LruCache<String, Pair<Long, String>> jsonCache;
 	
 	/**
 	 * 캐쉬에서 꺼낸 JSON 문자열을 unserialize할 때 사용할 JSON factory.
@@ -73,7 +79,7 @@ public class EntityVault implements AppConstants {
                 AndroidHttp.newCompatibleTransport(), jsonFactory, null)
                 .setRootUrl(BACKEND_ROOT_URL).build();
 
-        this.jsonCache = new LruCache<String, String>(MAX_SIZE);
+        this.jsonCache = new LruCache<>(MAX_SIZE);
     }
 
 	/**
@@ -100,6 +106,19 @@ public class EntityVault implements AppConstants {
         };
 
         EntityLoader<Menu> loader = new EntityLoader<Menu>(remote, listener);
+    }
+
+	/**
+	 * 이미 JSON 문자열을 갖고있는 경우(다른 클래스로부터 전달받는 등) 사용.
+	 * 캐쉬나 네트웤 조회없이 JSON unserialize만 함
+	 */
+    protected <Entity> Entity getEntity(Class<Entity> type, String json) {
+        try {
+            JsonParser parser = jsonFactory.createJsonParser(json);
+            return parser.parse(type);
+        } catch (IOException e) {
+            return null;
+        }
     }
 
 	/**
@@ -134,20 +153,24 @@ public class EntityVault implements AppConstants {
                 Object key = params[0].second;
 
                 String cacheKey = _getKey(type, key);
-                String cachedJson = jsonCache.get(cacheKey);
+                Pair<Long, String> cachedObj = jsonCache.get(cacheKey);
+                Long now = new Date().getTime();
 
-                if (cachedJson != null) {
-                    Log.d(TAG, "Get cached entry for " + key);
-                    JsonParser parser = jsonFactory.createJsonParser(cachedJson);
-                    return (Entity) parser.parse(type);
-                } else {
-                    Log.d(TAG, "No cache found for " + key + ". Fetching from network API");
-                    Entity result = remote.fromRemoteApi();
-
-                    jsonCache.put(cacheKey, result.toString());
-
-                    return result;
+                if (cachedObj != null) {
+                    Long timestamp = cachedObj.first;
+                    String json = cachedObj.second;
+                    if (now - timestamp < CACHE_EXPIRE_SECONDS * 1000 && json != null) {
+                        Log.d(TAG, "Get cached entry for " + key);
+						return (Entity) getEntity(type, json);
+                    }
                 }
+
+                Log.d(TAG, "No cache or expired for " + key + ". Fetching from network API");
+                Entity result = remote.fromRemoteApi();
+
+                jsonCache.put(cacheKey, new Pair<>(now, result.toString()));
+
+                return result;
             } catch (IOException e) {
                 Log.d(TAG, "error", e);
                 EventBus.getDefault().post(new NetworkExceptionEvent("Daily menu fetch error", e));
@@ -181,7 +204,7 @@ public class EntityVault implements AppConstants {
 	/**
 	 * 데이터 로딩이 끝난 뒤의 후처리 로직.
 	 */
-    public static interface OnEntityLoadListener<Entity> {
-        public void onEntityLoad(Entity result);
+    public interface OnEntityLoadListener<Entity> {
+        void onEntityLoad(Entity result);
     }
 }

@@ -1,9 +1,8 @@
 <resources>
-    <dimen name="action_bar_text_size">12dip</dimen>
-
     <dimen name="daily_name">16dp</dimen>
     <dimen name="daily_sub">13dip</dimen>
     <dimen name="daily_calories">12dip</dimen>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="app_bar_height">200dp</dimen>
+    <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
 </resources>

@@ -8,7 +8,7 @@
         android:id="@+id/progress_bar"
         style="@android:style/Widget.Holo.ProgressBar.Horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="2dp"
+        android:layout_height="4dp"
         android:indeterminate="true"
         android:max="100"
         android:progress="0" />
@@ -35,15 +35,35 @@
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/menu_recyler"
+            android:id="@+id/recylerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:listitem="list_content" />
 
-        <TextView
-            android:id="@id/android:empty"
+        <LinearLayout
+            android:id="@+id/empty"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="EMPTY" />
+            android:layout_gravity="center"
+            android:paddingTop="100dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_event_busy" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14dip"
+                android:singleLine="false"
+                android:text="@string/closed_today"
+                android:gravity="center"
+                android:layout_gravity="center"/>
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

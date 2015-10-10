@@ -1,13 +1,10 @@
 <resources>
 
-    <style name="BobplanetTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="windowActionBar">true</item>
-    </style>
-    <style name="BobplanetTheme.NoActionBar" parent="@style/Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
 </resources>

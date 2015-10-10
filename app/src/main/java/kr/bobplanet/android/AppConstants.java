@@ -41,15 +41,17 @@ public interface AppConstants {
 
 
 	/**
-	 * Intent나 Bundle에서 이용될 key값들.
+	 * Intent나 Bundle, Preferences에서 이용될 key값들.
 	 */
     String DATE_ARGUMENT = "DATE_ARGUMENT";
     String EXTRA_MENU_ICON = "EXTRA_MENU_ICON";
     String EXTRA_MENU_TITLE = "EXTRA_MENU_TITLE";
     String MENUID_ARGUMENT = "MENUID_ARGUMENT";
+    String MENU_ARGUMENT = "MENU_ARGUMENT";
     String DATE_DISPLAY = "DATE_DISPLAY";
     String SENT_GCM_TOKEN_TO_SERVER = "SENT_GCM_TOKEN_TO_SERVER";
     String HAS_LAUNCHED_BEFORE = "HAS_LAUNCHED_BEFORE";
+    String HAS_DISMISSED_SWIPE_NOTICE = "HAS_DISMISSED_SWIPE_NOTICE";
 
 	/**
 	 * 공용으로 사용할 DateFormat 객체들

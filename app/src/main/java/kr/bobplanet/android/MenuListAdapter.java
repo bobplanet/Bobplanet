@@ -31,7 +31,8 @@ import kr.bobplanet.backend.bobplanetApi.model.Submenu;
  * - setMenuList()를 통해 fragment로부터 메뉴 데이터를 전달받음
  * - 메뉴 썸네일은 Volley에서 제공하는 <code>NetworkImageView</code>를 이용하여 async로 가져옴
  *
- * @author hkjinlee on 15. 9. 29
+ * @author heonkyu.jin
+ * @version 15. 9. 29
  */
 public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuViewHolder> {
     private static final String TAG = MenuListAdapter.class.getSimpleName();
@@ -106,19 +107,19 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuVi
         TextView submenu;
         TextView calories;
 
-        public MenuViewHolder(View itemLayoutView) {
-            super(itemLayoutView);
+        public MenuViewHolder(View itemView) {
+            super(itemView);
 
-            when = (TextView) itemLayoutView.findViewById(R.id.when);
-            icon = (NetworkImageView) itemLayoutView.findViewById(R.id.icon);
-            title = (TextView) itemLayoutView.findViewById(R.id.title);
-            rating = (RatingBar) itemLayoutView.findViewById(R.id.rating);
+            when = (TextView) itemView.findViewById(R.id.when);
+            icon = (NetworkImageView) itemView.findViewById(R.id.icon);
+            title = (TextView) itemView.findViewById(R.id.title);
+            rating = (RatingBar) itemView.findViewById(R.id.rating);
             LayerDrawable progress = (LayerDrawable) rating.getProgressDrawable();
             DrawableCompat.setTint(progress.getDrawable(2), Color.MAGENTA);
-            submenu = (TextView) itemLayoutView.findViewById(R.id.submenu);
-            calories = (TextView) itemLayoutView.findViewById(R.id.calories);
+            submenu = (TextView) itemView.findViewById(R.id.submenu);
+            calories = (TextView) itemView.findViewById(R.id.calories);
 
-            itemLayoutView.setOnClickListener(this);
+            itemView.setOnClickListener(this);
         }
 
         void setMenu(Menu menu) {
