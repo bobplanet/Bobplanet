@@ -102,7 +102,10 @@ public class MenuEndpoint {
             path = "menu/{id}"
     )
     public Menu menu(@Named("id") Long id) {
+        logger.info("menu() : id = " + id);
         Menu m = ofy().load().type(Menu.class).id(id).now();
+
+        logger.info("result = " + m.toString());
         return m;
     }
 
