@@ -44,6 +44,8 @@ public interface AppConstants {
 	 * Intent나 Bundle에서 이용될 key값들.
 	 */
     String DATE_ARGUMENT = "DATE_ARGUMENT";
+    String EXTRA_MENU_ICON = "EXTRA_MENU_ICON";
+    String EXTRA_MENU_TITLE = "EXTRA_MENU_TITLE";
     String MENUID_ARGUMENT = "MENUID_ARGUMENT";
     String DATE_DISPLAY = "DATE_DISPLAY";
     String SENT_GCM_TOKEN_TO_SERVER = "SENT_GCM_TOKEN_TO_SERVER";

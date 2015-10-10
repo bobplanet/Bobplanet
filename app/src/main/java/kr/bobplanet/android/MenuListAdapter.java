@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import de.greenrobot.event.EventBus;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
 import kr.bobplanet.backend.bobplanetApi.model.Submenu;
 
@@ -62,6 +63,8 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuVi
         Menu menu = menuList.get(position);
         if (menu == null) return;
 
+        viewHolder.setMenu(menu);
+
         Resources resources = context.getResources();
 
         int index = Arrays.binarySearch(WHEN_ARRAY, menu.getWhen());
@@ -93,7 +96,9 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuVi
         viewHolder.calories.setText(menu.getCalories() == 0 ? "" : new StringBuilder().append(cal).append(" KCal"));
     }
 
-    static class MenuViewHolder extends RecyclerView.ViewHolder {
+    static class MenuViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        Menu menu;
+
         TextView when;
         NetworkImageView icon;
         TextView title;
@@ -103,6 +108,7 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuVi
 
         public MenuViewHolder(View itemLayoutView) {
             super(itemLayoutView);
+
             when = (TextView) itemLayoutView.findViewById(R.id.when);
             icon = (NetworkImageView) itemLayoutView.findViewById(R.id.icon);
             title = (TextView) itemLayoutView.findViewById(R.id.title);
@@ -111,6 +117,25 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuVi
             DrawableCompat.setTint(progress.getDrawable(2), Color.MAGENTA);
             submenu = (TextView) itemLayoutView.findViewById(R.id.submenu);
             calories = (TextView) itemLayoutView.findViewById(R.id.calories);
+
+            itemLayoutView.setOnClickListener(this);
+        }
+
+        void setMenu(Menu menu) {
+            this.menu = menu;
+        }
+
+        @Override
+        public void onClick(View v) {
+            EventBus.getDefault().post(new MenuClickEvent(this));
+        }
+    }
+
+    static class MenuClickEvent {
+        MenuViewHolder menuViewHolder;
+
+        MenuClickEvent(MenuViewHolder menuViewHolder) {
+            this.menuViewHolder = menuViewHolder;
         }
     }
 }

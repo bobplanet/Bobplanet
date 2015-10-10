@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- http://www.materialui.co/colors -->
+    <color name="primary">#E64A19</color>
+    <color name="primary_dark">#BF360C</color>
+    <color name="accent">#C71212</color>
+    <color name="window_background">#C0C0C0</color>
+    <color name="progress">#FFB300</color>
+
     <color name="calories">#666666</color>
     <color name="list_divider">#d9d9d9</color>
     <color name="list_row_start_color">#ffffff</color>

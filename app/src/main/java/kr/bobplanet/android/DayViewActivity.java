@@ -32,6 +32,9 @@ public class DayViewActivity extends ActivitySkeleton {
     private static final String TAG = DayViewActivity.class.getSimpleName();
     private static final String FRAGMENT_TAG_PREFIX = "DayViewFragment-";
 
+	/**
+	 * 좌우 swipe를 위해 사용하는 ViewPager
+	 */
     private ViewPager pager;
     private DayPagerAdapter adapter;
 
@@ -77,27 +80,37 @@ public class DayViewActivity extends ActivitySkeleton {
 	/**
 	 * DailyViewFragment가 데이터 로딩을 끝냈을 때 호출.
 	 * 식당이 매일 문열지는 않으므로, 이 때까지는 전날-다음날 메뉴가 있는지 없는지만 알 수 있음.
-	 * 일단 메뉴가 있을 경우 PagerAdapter에 추가해서 swipe scroll이 가능하게 함
+	 * 메뉴가 있을 경우 PagerAdapter에 추가해서 swipe scroll이 가능하게 함
 	 */
     @SuppressWarnings("unused")
     public void onEvent(DayViewFragment.DataLoadCompleteEvent e) {
         DailyMenu d = e.getDailyMenu();
         Log.d(TAG, "Data load complete: " + d.toString());
 
-        FragmentManager fm = getSupportFragmentManager();
+        Log.d(TAG, "START fragments # = " + adapter.getCount());
 
-        if (d.getPreviousDate() != null &&
-                fm.findFragmentByTag(FRAGMENT_TAG_PREFIX + d.getPreviousDate()) == null) {
+        if (d.getPreviousDate() != null && !isExistingPage(d.getPreviousDate())) {
             Log.i(TAG, "Creating fragment of the previous day: " + d.getPreviousDate());
             adapter.insert(newPageDescriptor(d.getPreviousDate()), 0);
         }
-        if (d.getNextDate() != null &&
-            fm.findFragmentByTag(FRAGMENT_TAG_PREFIX + d.getNextDate()) == null) {
+        if (d.getNextDate() != null && !isExistingPage(d.getNextDate())) {
             Log.i(TAG, "Creating fragment of the next day: " + d.getNextDate());
             adapter.add(newPageDescriptor(d.getNextDate()));
         }
+
+        Log.d(TAG, "END fragments # = " + adapter.getCount());
     }
 
+    private boolean isExistingPage(String date) {
+        int page_count = adapter.getCount();
+        for (int i = 0; i < page_count; i++) {
+            String title = adapter.getPageTitle(i);
+            if (title.equals(date)) {
+                return true;
+            }
+        }
+        return false;
+    }
 	/**
 	 * DayViewFragment를 동적으로 추가하기 위해 ArrayPagerAdapter를 이용
 	 * 
