@@ -72,7 +72,7 @@ public class MainApplication extends Application {
 	/**
 	 * 싱글턴 인스턴스 조회.
 	 */
-    protected static synchronized MainApplication getInstance() {
+    public static synchronized MainApplication getInstance() {
         return instance;
     }
 

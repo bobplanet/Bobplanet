@@ -1,12 +1,10 @@
 package kr.bobplanet.android;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.content.res.TypedArrayUtils;
 import android.support.v4.util.Pair;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewCompat;
@@ -34,6 +32,9 @@ import kr.bobplanet.backend.bobplanetApi.model.Menu;
  * @version 2015. 10. 10
  */
 public class MenuViewActivity extends ActivitySkeleton implements AppConstants {
+    @SuppressWarnings("UnusedDeclaration")
+    private static final String TAG = MenuViewActivity.class.getSimpleName();
+
     private ImageLoader imageLoader = MainApplication.getInstance().getImageLoader();
 
     private Menu menu;
@@ -44,22 +45,18 @@ public class MenuViewActivity extends ActivitySkeleton implements AppConstants {
         setContentView(R.layout.activity_menu_view);
 
         EntityVault entityVault = MainApplication.getInstance().getEntityVault();
-        menu = entityVault.getEntity(Menu.class, getIntent().getStringExtra(MENU_ARGUMENT));
+        menu = entityVault.parseEntity(Menu.class, getIntent().getStringExtra(MENU_ARGUMENT));
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setTitle(getIntent().getStringExtra(EXTRA_MENU_TITLE));
+        getSupportActionBar().setTitle(menu.getItem().getId());
 
         NetworkImageView iconView = (NetworkImageView) findViewById(R.id.icon);
-        ViewCompat.setTransitionName(iconView, EXTRA_MENU_ICON);
-        iconView.setImageUrl(getIntent().getStringExtra(EXTRA_MENU_ICON), imageLoader);
-
-        TextView text = (TextView) findViewById(R.id.title);
-        //text.setText(getIntent().getStringExtra(EXTRA_MENU_TITLE));
-        //text.setText(R.string.large_text);
+        //ViewCompat.setTransitionName(iconView, EXTRA_MENU_ICON);
+        iconView.setImageUrl(menu.getItem().getIconURL(), imageLoader);
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.tab_viewpager);
         viewPager.setAdapter(setupViewPager());

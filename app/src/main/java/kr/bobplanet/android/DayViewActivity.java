@@ -125,8 +125,6 @@ public class DayViewActivity extends ActivitySkeleton {
 
         Intent intent = new Intent(this, MenuViewActivity.class);
         intent.putExtra(MENU_ARGUMENT, menu.toString());
-        intent.putExtra(EXTRA_MENU_ICON, menuViewHolder.icon.getImageURL());
-        intent.putExtra(EXTRA_MENU_TITLE, menuViewHolder.title.getText());
 
         /*
         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),

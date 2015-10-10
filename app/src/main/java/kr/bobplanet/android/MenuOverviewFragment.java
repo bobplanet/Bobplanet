@@ -10,8 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.NetworkImageView;
-
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
 
 /**
@@ -36,7 +34,7 @@ public class MenuOverviewFragment extends Fragment implements AppConstants {
 
         EntityVault entityVault = MainApplication.getInstance().getEntityVault();
         String menu_json = getActivity().getIntent().getStringExtra(MENU_ARGUMENT);
-        menu = entityVault.getEntity(Menu.class, menu_json);
+        menu = entityVault.parseEntity(Menu.class, menu_json);
 
     }
 
