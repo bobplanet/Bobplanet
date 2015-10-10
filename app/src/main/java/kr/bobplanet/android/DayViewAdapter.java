@@ -35,9 +35,9 @@ import kr.bobplanet.backend.bobplanetApi.model.Submenu;
  * @author heonkyu.jin
  * @version 15. 9. 29
  */
-public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuViewHolder> {
+public class DayViewAdapter extends RecyclerView.Adapter<DayViewAdapter.ViewHolder> {
     @SuppressWarnings("UnusedDeclaration")
-    private static final String TAG = MenuListAdapter.class.getSimpleName();
+    private static final String TAG = DayViewAdapter.class.getSimpleName();
 
     private Context context;
     private List<Menu> menuList = new ArrayList<>();
@@ -45,7 +45,7 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuVi
 
     private static final String[] WHEN_ARRAY = { "08:00", "12:00", "18:00" };
 
-    public MenuListAdapter(Context context, List<Menu> menuList) {
+    public DayViewAdapter(Context context, List<Menu> menuList) {
         this.context = context;
         this.menuList = menuList;
     }
@@ -56,13 +56,13 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuVi
     }
 
     @Override
-    public MenuViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_day_row, viewGroup, false);
-        return new MenuViewHolder(itemView);
+        return new ViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(MenuViewHolder viewHolder, int position) {
+    public void onBindViewHolder(ViewHolder viewHolder, int position) {
         Menu menu = menuList.get(position);
         if (menu == null) return;
 
@@ -99,7 +99,11 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuVi
         viewHolder.calories.setText(menu.getCalories() == 0 ? "" : new StringBuilder().append(cal).append(" KCal"));
     }
 
-    static class MenuViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+	/**
+	 * 메뉴 객체의 ViewHolder.
+	 * EventBus를 이용해서 @link{DayViewActivity}로 Onclick 이벤트 전송
+	 */
+    static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         Menu menu;
 
         TextView when;
@@ -109,7 +113,7 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuVi
         TextView submenu;
         TextView calories;
 
-        public MenuViewHolder(View itemView) {
+        public ViewHolder(View itemView) {
             super(itemView);
 
             when = (TextView) itemView.findViewById(R.id.when);
@@ -130,15 +134,19 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuVi
 
         @Override
         public void onClick(View v) {
-            EventBus.getDefault().post(new MenuClickEvent(this));
+            EventBus.getDefault().post(new ViewClickEvent(this));
         }
     }
 
-    static class MenuClickEvent {
-        MenuViewHolder menuViewHolder;
+	/**
+	 * 메뉴 클릭 이벤트.
+	 * @link{MenuViewHolder}
+	 */
+    static class ViewClickEvent {
+        ViewHolder viewHolder;
 
-        MenuClickEvent(MenuViewHolder menuViewHolder) {
-            this.menuViewHolder = menuViewHolder;
+        ViewClickEvent(ViewHolder viewHolder) {
+            this.viewHolder = viewHolder;
         }
     }
 }

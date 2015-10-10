@@ -31,6 +31,10 @@ import kr.bobplanet.backend.bobplanetApi.model.Menu;
  * - 서버로부터 메뉴 데이터를 가져오면 activity에도 알려줌 (좌우 fragment를 미리 만들어둘 수 있도록)
  * - 화면은 listview로 구성하고 DayViewAdapter를 이용해 UI 구성.
  *
+ * TODO ProgressBar 색상을 theme에서 지정해볼 것.
+ *
+ * @author heonkyu.jin
+ * @version 2015. 9. 27.
  */
 public class DayViewFragment extends Fragment implements AppConstants {
     @SuppressWarnings("UnusedDeclaration")
@@ -39,18 +43,31 @@ public class DayViewFragment extends Fragment implements AppConstants {
 
     private static final List<Menu> EMPTY_MENU_LIST = new ArrayList<>();
     private List<Menu> menuList = EMPTY_MENU_LIST;
-    private ProgressBar progressBar;
-
-    private RecyclerView recyclerView;
-    private View emptyView;
 
     /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
+     * 네트웤에서 데이터를 가져올 때 동작하는 ProgressBar
      */
+    private ProgressBar progressBar;
+
+    /**
+     * 메뉴정보를 표시하는 RecyclerView
+     */
+    private RecyclerView recyclerView;
+
+    /**
+     * 메뉴가 없을 때(식당 노는날) 대신 표시되는 View. 안내메시지 포함.
+     */
+    private View emptyView;
+
     public DayViewFragment() {
     }
 
+    /**
+     * Fragment 팩토리함수. 
+	 *
+     * @param date 본 fragment가 표시해야 하는 식당메뉴의 타겟날짜
+     * @return fragment instance
+     */
     public static DayViewFragment newInstance(String date) {
         DayViewFragment f = new DayViewFragment();
 
@@ -107,7 +124,7 @@ public class DayViewFragment extends Fragment implements AppConstants {
                 menuList = dailyMenu.getMenu();
 
                 if (menuList != null) {
-                    MenuListAdapter adapter = new MenuListAdapter(DayViewFragment.this.getContext(),
+                    DayViewAdapter adapter = new DayViewAdapter(DayViewFragment.this.getContext(),
                             menuList);
                     recyclerView.setAdapter(adapter);
                 } else {

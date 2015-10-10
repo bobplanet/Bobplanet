@@ -34,7 +34,8 @@ import kr.bobplanet.backend.bobplanetApi.model.Menu;
  * - 이미 JSON 문자열을 갖고있는 경우에는 <code>parseEntity()</code>를 이용해서 unserialize만 해도 됨
  * - callee는 OnEntityLoader를 전달하여, 데이터 로딩이 끝나면 UI업데이트 등을 수행해야 함
  *
- * @author hkjinlee on 2015. 10. 7
+ * @author hkjinlee
+ * @version 2015. 10. 7
  */
 public class EntityVault implements AppConstants {
     private static final String TAG = EntityVault.class.getSimpleName();
@@ -50,7 +51,7 @@ public class EntityVault implements AppConstants {
     private static final int MAX_SIZE = 1024 * 1024;
 
     /**
-     *
+     * 캐쉬 유효기간. 현재는 2분.
      */
     private static final int CACHE_EXPIRE_SECONDS = 2 * 60;
 	
@@ -65,7 +66,7 @@ public class EntityVault implements AppConstants {
     private LruCache<String, Pair<Long, String>> jsonCache;
 	
 	/**
-	 * 캐쉬에서 꺼낸 JSON 문자열을 unserialize할 때 사용할 JSON factory.
+	 * 캐쉬에서 꺼낸 JSON 문자열에서 객체를 꺼내는 parser를 만들 때 사용할 JSON factory.
 	 */
     private JsonFactory jsonFactory;
 	
@@ -83,7 +84,11 @@ public class EntityVault implements AppConstants {
     }
 
 	/**
-	 * 특정 일자의 메뉴리스트를 로드한다. 로딩이 끝나면 listener의 onEntityLoad() 메소드를 호출.
+	 * 특정 일자의 메뉴리스트를 로드한다.
+	 * DayViewFragment에서 주로 사용.
+     *
+     * @param date 대상 날짜
+     * @param listener 데이터로드 후처리를 담당할 listener
 	 */
     public void loadMenuOfDate(final String date, OnEntityLoadListener<DailyMenu> listener) {
         RemoteApiLoader<DailyMenu> remote = new RemoteApiLoader<DailyMenu>() {
@@ -97,6 +102,13 @@ public class EntityVault implements AppConstants {
         loader.execute(new Pair<Class<DailyMenu>, Object>(DailyMenu.class, date));
     }
 
+    /**
+     * 주어진 메뉴번호로 메뉴를 가져온다. 
+	 * MenuDetailViewActivity와 GcmServices.MessageListener에서 주로 사용.
+	 *
+     * @param id
+     * @param listener 데이터로드 후처리를 담당할 listener
+     */
     public void loadMenu(final long id, OnEntityLoadListener<Menu> listener) {
         RemoteApiLoader<Menu> remote = new RemoteApiLoader<Menu>() {
             @Override
@@ -146,7 +158,7 @@ public class EntityVault implements AppConstants {
         }
 
 		/**
-		 * 캐쉬에서 객체 조회하고 없으면 네트웤API를 호출해서 가져옴
+		 * 캐쉬에서 객체 조회하고 없거나 이미 expire되었으면 네트웤API를 호출해서 가져옴
 		 */
         @Override
         protected Entity doInBackground(Pair<Class<Entity>, Object>... params) {

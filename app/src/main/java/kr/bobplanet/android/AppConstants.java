@@ -35,31 +35,22 @@ public interface AppConstants {
 	
 	/**
 	 * Google Cloud Message의 기본 발신자ID.
-	 * Google Cloud의 프로젝트 단위로 지정되므로 개발 릴리즈와 상용 릴리즈 사이에 차이가 없음.
+	 * Google Cloud의 프로젝트 단위로 지정되므로 개발/상용이 동일한 값을 가짐
 	 */
     String GCM_SENDER_ID = "603054087850";
-
 
 	/**
 	 * Intent나 Bundle, Preferences에서 이용될 key값들.
 	 */
-    String DATE_ARGUMENT = "DATE_ARGUMENT";
-    String EXTRA_MENU_ICON = "EXTRA_MENU_ICON";
-    String EXTRA_MENU_TITLE = "EXTRA_MENU_TITLE";
-    String MENUID_ARGUMENT = "MENUID_ARGUMENT";
-    String MENU_ARGUMENT = "MENU_ARGUMENT";
-    String DATE_DISPLAY = "DATE_DISPLAY";
+    String KEY_DATE = "KEY_DATE";
+    String KEY_MENU = "KEY_MENU";
+    String KEY_LAUNCHED_YN = "KEY_LAUNCHED_YN";
+    String KEY_DISMISSED_NOTICE_YN = "KEY_DISMISSED_NOTICE_YN";
     String SENT_GCM_TOKEN_TO_SERVER = "SENT_GCM_TOKEN_TO_SERVER";
-    String HAS_LAUNCHED_BEFORE = "HAS_LAUNCHED_BEFORE";
-    String HAS_DISMISSED_SWIPE_NOTICE = "HAS_DISMISSED_SWIPE_NOTICE";
 
 	/**
 	 * 공용으로 사용할 DateFormat 객체들
 	 */
     DateFormat DATEFORMAT_YMD = new SimpleDateFormat("yyyy-MM-dd");
     DateFormat DATEFORMAT_YMDE = new SimpleDateFormat("yyyy/MM/dd(EEE)");
-
-    String DAILY_VIEW_ACTION = "DAILY_VIEW_ACTION";
-    String ACTION_THUMB_UP = "ACTION_THUMB_UP";
-    String ACTION_THUMB_DOWN = "ACTION_THUMB_DOWN";
 }

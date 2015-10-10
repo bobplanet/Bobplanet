@@ -37,9 +37,9 @@ public class StartActivity extends ActivitySkeleton {
 
 		// 최초실행인 경우 초기화로직 수행. 지금은 하는 일 없음.
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        if (prefs.getBoolean(HAS_LAUNCHED_BEFORE, false)) {
+        if (prefs.getBoolean(KEY_LAUNCHED_YN, false)) {
   //          onFirstRun();
-            prefs.edit().putBoolean(HAS_LAUNCHED_BEFORE, true).commit();
+            prefs.edit().putBoolean(KEY_LAUNCHED_YN, true).apply();
         }
 
 		// 기본화면인 DayViewActivity를 화면에 띄움.
@@ -53,6 +53,11 @@ public class StartActivity extends ActivitySkeleton {
         EventBus.getDefault().unregister(this);
     }
 
+    /**
+     * GCM서버 등록이 끝났을때(성공 or 실패) 호출되는 콜백.
+     * 
+     * @param event GCM서버 등록 결과
+     */
     @SuppressWarnings("unused")
     public void onEvent(GcmEvent event) {
         switch (event.getType()) {

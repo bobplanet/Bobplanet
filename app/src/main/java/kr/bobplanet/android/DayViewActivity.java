@@ -59,7 +59,7 @@ public class DayViewActivity extends ActivitySkeleton {
         // intent에 날짜가 있으면 그 날짜, 없으면 오늘 날짜 이용
         Date start_date;
         try {
-            String date = getIntent().getStringExtra(AppConstants.DATE_ARGUMENT);
+            String date = getIntent().getStringExtra(AppConstants.KEY_DATE);
             start_date = DATEFORMAT_YMD.parse(date);
         } catch (Exception e) {
             start_date = new Date();
@@ -91,7 +91,7 @@ public class DayViewActivity extends ActivitySkeleton {
     }
 
     /**
-     * DailyViewFragment가 데이터 로딩을 끝냈을 때 호출.
+     * DayViewFragment가 데이터 로딩을 끝냈을 때 호출.
      * 식당이 매일 문열지는 않으므로, 이 때까지는 전날-다음날 메뉴가 있는지 없는지만 알 수 있음.
      * 메뉴가 있을 경우 PagerAdapter에 추가해서 swipe scroll이 가능하게 함
      */
@@ -100,6 +100,8 @@ public class DayViewActivity extends ActivitySkeleton {
         DailyMenu d = e.getDailyMenu();
         Log.d(TAG, "Data load complete: " + d.toString());
 
+		// 주의사항: FragmentManager를 이용해서 fragment 존재여부 체크하면 안됨.
+		// 이 단계에서는 adapter에만 추가되어있어, FM에서는 해당 fragment를 모르는 상태임.
         if (d.getPreviousDate() != null && !isExistingPage(d.getPreviousDate())) {
             Log.i(TAG, "Creating fragment of the previous day: " + d.getPreviousDate());
             adapter.insert(newPageDescriptor(d.getPreviousDate()), 0);
@@ -109,33 +111,6 @@ public class DayViewActivity extends ActivitySkeleton {
             adapter.add(newPageDescriptor(d.getNextDate()));
         }
     }
-
-	/**
-	 * 식단메뉴 상세페이지로 이동.
-	 * 식단메뉴가 클릭되었을 때 EventBus에 의해 호출됨.
-	 * 관련 View가 ViewPager 밑의 fragment 밑의 RecyclerView 밑에 있어서 그냥 EventBus로 한방에 통과.
-	 */
-    @SuppressWarnings("unused")
-    public void onEventMainThread(MenuListAdapter.MenuClickEvent e) {
-        startMenuViewActivity(e.menuViewHolder);
-    }
-
-    private void startMenuViewActivity(MenuListAdapter.MenuViewHolder menuViewHolder) {
-        Menu menu = menuViewHolder.menu;
-
-        Intent intent = new Intent(this, MenuViewActivity.class);
-        intent.putExtra(MENU_ARGUMENT, menu.toString());
-
-        /*
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
-                new Pair<View, String>(menuViewHolder.icon, EXTRA_MENU_ICON),
-                new Pair<View, String>(menuViewHolder.title, EXTRA_MENU_TITLE));
-
-        ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
-        */
-        startActivity(intent);
-    }
-
 
     /**
 	 * 이미 해당날짜의 Fragment가 있는지 확인한다.
@@ -155,13 +130,44 @@ public class DayViewActivity extends ActivitySkeleton {
     }
 
 	/**
+	 * 식단메뉴 상세페이지로 이동.
+	 * 식단메뉴가 클릭되었을 때 EventBus에 의해 호출됨.
+	 *
+	 * - 관련 View가 ViewPager 밑의 fragment 밑의 RecyclerView 밑에 있어서 그냥 EventBus로 간단히 구현함.
+	 * - startActivity()는 메인스레드(=UI스레드)에서 실행되어야 하는 것으로 보임.
+	 */
+    @SuppressWarnings("unused")
+    public void onEventMainThread(DayViewAdapter.ViewClickEvent e) {
+        startMenuViewActivity(e.viewHolder);
+    }
+
+	/**
+	 * TODO Activity 전환 transition 효과 복구.
+	 */
+    private void startMenuViewActivity(DayViewAdapter.ViewHolder viewHolder) {
+        Menu menu = viewHolder.menu;
+
+        Intent intent = new Intent(this, MenuViewActivity.class);
+        intent.putExtra(KEY_MENU, menu.toString());
+
+        /*
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
+                new Pair<View, String>(viewHolder.icon, EXTRA_MENU_ICON),
+                new Pair<View, String>(viewHolder.title, EXTRA_MENU_TITLE));
+
+        ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
+        */
+        startActivity(intent);
+    }
+
+	/**
 	 * 좌우로 swipe하면 다른 날짜 메뉴도 볼 수 있음을 Snackbar로 알려줌
 	 */
     private void showSwipeNotice() {
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         CoordinatorLayout layout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
 
-        if (prefs.getBoolean(HAS_DISMISSED_SWIPE_NOTICE, false)) {
+        if (prefs.getBoolean(KEY_DISMISSED_NOTICE_YN, false)) {
             return;
         }
 
@@ -170,7 +176,7 @@ public class DayViewActivity extends ActivitySkeleton {
                 .setAction(R.string.swipe_notice_goaway, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        prefs.edit().putBoolean(HAS_DISMISSED_SWIPE_NOTICE, true).apply();
+                        prefs.edit().putBoolean(KEY_DISMISSED_NOTICE_YN, true).apply();
                     }
                 }).show();
     }

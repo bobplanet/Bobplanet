@@ -17,7 +17,7 @@ import com.google.android.gms.plus.model.people.Person;
 
 /**
  * 커스텀 애플리케이션 클래스.
- * Google Analytics 초기화 등 잡다한 작업 및, Activity-Service 등 어디든 사용할 공용 유틸리티 로직 담당.
+ * Volley, Google Analytics 초기화 등 잡다한 작업 및, Activity-Service 등 어디든 사용할 공용 유틸리티 로직 담당.
  * 
  * - EntityVault의 싱글턴은 여기에서 관리함
  * - 공용 유틸리티 로직 제공을 위해 Singleton 인터페이스 제공함 (casting 없어도 되는 장점)

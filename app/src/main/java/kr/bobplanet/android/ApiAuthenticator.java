@@ -10,7 +10,11 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import java.security.GeneralSecurityException;
 
 /**
- * Created by hkjinlee on 15. 9. 29..
+ * Google API 결과값의 integrity를 확인하는 클래스.
+ * 현재는 사용하지 않음 (계속 사용할 일 없을 경우 제거 예정)
+ *
+ * @author heonkyu.jin
+ * @version 15. 9. 29
  */
 public class ApiAuthenticator {
     private static final String TAG = ApiAuthenticator.class.getSimpleName();

@@ -16,7 +16,8 @@ import java.util.List;
 import kr.bobplanet.backend.bobplanetApi.model.Submenu;
 
 /**
- * {@link MenuOverviewFragment}에서 사용되는 GridAdapter.
+ * {@link MenuDetailViewFragment}에서 사용되는 Adapter.
+ * 쌀밥, 김치 등과 같은 서브메뉴를 grid 형태로 표현할 때 사용됨.
  *
  * - setMenuList()를 통해 fragment로부터 메뉴 데이터를 전달받음
  * - 메뉴 썸네일은 Volley에서 제공하는 <code>NetworkImageView</code>를 이용하여 async로 가져옴
@@ -24,14 +25,15 @@ import kr.bobplanet.backend.bobplanetApi.model.Submenu;
  * @author heonkyu.jin
  * @version 15. 9. 29
  */
-public class SubmenuGridAdapter extends RecyclerView.Adapter<SubmenuGridAdapter.SubmenuViewHolder> {
-    private static final String TAG = SubmenuGridAdapter.class.getSimpleName();
+public class MenuDetailViewAdapter extends RecyclerView.Adapter<MenuDetailViewAdapter.ViewHolder> {
+    @SuppressWarnings("UnusedDeclaration")
+    private static final String TAG = MenuDetailViewAdapter.class.getSimpleName();
 
     private Context context;
     private List<Submenu> submenuList = new ArrayList<>();
     private ImageLoader imageLoader = MainApplication.getInstance().getImageLoader();
 
-    public SubmenuGridAdapter(Context context, List<Submenu> submenuList) {
+    public MenuDetailViewAdapter(Context context, List<Submenu> submenuList) {
         this.context = context;
         this.submenuList = submenuList;
     }
@@ -42,13 +44,13 @@ public class SubmenuGridAdapter extends RecyclerView.Adapter<SubmenuGridAdapter.
     }
 
     @Override
-    public SubmenuViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_menu_cell, viewGroup, false);
-        return new SubmenuViewHolder(itemView);
+        return new ViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(SubmenuViewHolder viewHolder, int position) {
+    public void onBindViewHolder(ViewHolder viewHolder, int position) {
         Submenu submenu = submenuList.get(position);
         if (submenu == null) return;
 
@@ -58,13 +60,18 @@ public class SubmenuGridAdapter extends RecyclerView.Adapter<SubmenuGridAdapter.
         viewHolder.title.setText(submenu.getItem().getId());
     }
 
-    static class SubmenuViewHolder extends RecyclerView.ViewHolder /*implements View.OnClickListener*/ {
+    /**
+     * 서브메뉴 정보를 담게 되는 ViewHolder.
+	 *
+     * TODO 얘를 clickable하게 만들어서 '쌀밥'에 대한 통계도 볼 수 있게 하자.
+     */
+    static class ViewHolder extends RecyclerView.ViewHolder /*implements View.OnClickListener*/ {
         Submenu submenu;
 
         NetworkImageView icon;
         TextView title;
 
-        public SubmenuViewHolder(View itemView) {
+        public ViewHolder(View itemView) {
             super(itemView);
 
             icon = (NetworkImageView) itemView.findViewById(R.id.icon);
@@ -76,22 +83,5 @@ public class SubmenuGridAdapter extends RecyclerView.Adapter<SubmenuGridAdapter.
         void setSubmenu(Submenu submenu) {
             this.submenu = submenu;
         }
-
-/*
-        @Override
-        public void onClick(View v) {
-            EventBus.getDefault().post(new MenuClickEvent(this));
-        }
-*/
     }
-
-/*
-    static class MenuClickEvent {
-        SubmenuViewHolder submenuViewHolder;
-
-        MenuClickEvent(SubmenuViewHolder submenuViewHolder) {
-            this.submenuViewHolder = submenuViewHolder;
-        }
-    }
-*/
 }
