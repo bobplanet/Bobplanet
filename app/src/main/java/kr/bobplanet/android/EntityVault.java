@@ -47,7 +47,7 @@ public class EntityVault implements AppConstants {
 	/**
 	 * 캐쉬 최대 사이즈. 현재는 1MB.
 	 */
-    private static final int MAX_SIZE = 1 * 1024 * 1024;
+    private static final int MAX_SIZE = 1024 * 1024;
 
     /**
      *
@@ -93,8 +93,8 @@ public class EntityVault implements AppConstants {
             }
         };
 
-        EntityLoader<DailyMenu> loader = new EntityLoader<DailyMenu>(remote, listener);
-        loader.execute(new Pair<Class, Object>(DailyMenu.class, date));
+        EntityLoader<DailyMenu> loader = new EntityLoader<>(remote, listener);
+        loader.execute(new Pair<Class<DailyMenu>, Object>(DailyMenu.class, date));
     }
 
     public void loadMenu(final long id, OnEntityLoadListener<Menu> listener) {
@@ -105,7 +105,8 @@ public class EntityVault implements AppConstants {
             }
         };
 
-        EntityLoader<Menu> loader = new EntityLoader<Menu>(remote, listener);
+        EntityLoader<Menu> loader = new EntityLoader<>(remote, listener);
+        loader.execute(new Pair<Class<Menu>, Object>(Menu.class, id));
     }
 
 	/**
@@ -129,14 +130,15 @@ public class EntityVault implements AppConstants {
 	 * - doInBackground()에서 캐쉬 조회 및 네트웤API 호출, 캐쉬 업데이트 등을 수행
 	 * - onPostExecute()에서 listener의 onEntityLoad() 메소드를 호출하여 데이터로딩 후처리 진행
 	 */
-    private class EntityLoader<Entity> extends AsyncTask<Pair<Class, Object>, Void, Entity> {
+    private class EntityLoader<Entity> extends AsyncTask<Pair<Class<Entity>, Object>, Void, Entity> {
         private RemoteApiLoader<Entity> remote;
         private OnEntityLoadListener<Entity> listener;
 
         /**
-         *
-         * @param remote
-         * @param listener
+         * 생성자.
+		 *
+         * @param remote BobplanetApi 호출로직
+         * @param listener 데이터 로딩 뒤 후처리로직
          */
         EntityLoader(RemoteApiLoader<Entity> remote, @Nullable OnEntityLoadListener<Entity> listener) {
             this.remote = remote;
@@ -147,9 +149,9 @@ public class EntityVault implements AppConstants {
 		 * 캐쉬에서 객체 조회하고 없으면 네트웤API를 호출해서 가져옴
 		 */
         @Override
-        protected Entity doInBackground(Pair<Class, Object>... params) {
+        protected Entity doInBackground(Pair<Class<Entity>, Object>... params) {
             try {
-                Class type = params[0].first;
+                Class<Entity> type = params[0].first;
                 Object key = params[0].second;
 
                 String cacheKey = _getKey(type, key);
@@ -161,7 +163,7 @@ public class EntityVault implements AppConstants {
                     String json = cachedObj.second;
                     if (now - timestamp < CACHE_EXPIRE_SECONDS * 1000 && json != null) {
                         Log.d(TAG, "Get cached entry for " + key);
-						return (Entity) getEntity(type, json);
+						return getEntity(type, json);
                     }
                 }
 
@@ -190,7 +192,7 @@ public class EntityVault implements AppConstants {
 	 * 내부 LruCache에 객체를 저장할 key값 생성.
 	 */
     private static String _getKey(Class type, Object key) {
-        return new StringBuilder().append(type.getSimpleName().toLowerCase()).append(KEY_SEPARATOR).append(key).toString();
+        return type.getSimpleName().toLowerCase() + KEY_SEPARATOR + key;
     }
 
 	/**

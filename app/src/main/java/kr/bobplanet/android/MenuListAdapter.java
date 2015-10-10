@@ -7,7 +7,6 @@ import android.graphics.drawable.LayerDrawable;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,14 +30,17 @@ import kr.bobplanet.backend.bobplanetApi.model.Submenu;
  * - setMenuList()를 통해 fragment로부터 메뉴 데이터를 전달받음
  * - 메뉴 썸네일은 Volley에서 제공하는 <code>NetworkImageView</code>를 이용하여 async로 가져옴
  *
+ * TODO 별을 하트로 바꾸고 색상 조정
+ *
  * @author heonkyu.jin
  * @version 15. 9. 29
  */
 public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuViewHolder> {
+    @SuppressWarnings("UnusedDeclaration")
     private static final String TAG = MenuListAdapter.class.getSimpleName();
 
     private Context context;
-    private List<Menu> menuList = new ArrayList<Menu>();
+    private List<Menu> menuList = new ArrayList<>();
     private ImageLoader imageLoader = MainApplication.getInstance().getImageLoader();
 
     private static final String[] WHEN_ARRAY = { "08:00", "12:00", "18:00" };
@@ -85,7 +87,7 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuVi
         // 서브메뉴는 ','로 concatenate
         List<Submenu> submenus = menu.getSubmenu();
         if (submenus != null) {
-            List<String> subs = new ArrayList<String>();
+            List<String> subs = new ArrayList<>();
             for (Submenu sub : submenus) {
                 subs.add(sub.getItem().getId());
             }

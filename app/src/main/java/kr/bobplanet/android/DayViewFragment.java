@@ -33,10 +33,11 @@ import kr.bobplanet.backend.bobplanetApi.model.Menu;
  *
  */
 public class DayViewFragment extends Fragment implements AppConstants {
+    @SuppressWarnings("UnusedDeclaration")
     private static final String TAG = DayViewFragment.class.getSimpleName();
     private static final String ARGUMENT_DATE = "ARGUMENT_DATE";
 
-    private static final List<Menu> EMPTY_MENU_LIST = new ArrayList<Menu>();
+    private static final List<Menu> EMPTY_MENU_LIST = new ArrayList<>();
     private List<Menu> menuList = EMPTY_MENU_LIST;
     private ProgressBar progressBar;
 
@@ -98,7 +99,7 @@ public class DayViewFragment extends Fragment implements AppConstants {
         super.onStart();
 
 		// 데이터 로딩이 끝나면 그에 맞게 UI 업데이트하고 activity에도 데이터로딩 끝났음을 전달
-        EntityVault.OnEntityLoadListener listener = new EntityVault.OnEntityLoadListener<DailyMenu>() {
+        EntityVault.OnEntityLoadListener<DailyMenu> listener = new EntityVault.OnEntityLoadListener<DailyMenu>() {
             @Override
             public void onEntityLoad(DailyMenu dailyMenu) {
                 if (dailyMenu == null) return;
@@ -117,7 +118,7 @@ public class DayViewFragment extends Fragment implements AppConstants {
                 progressBar.setIndeterminate(false);
                 progressBar.setVisibility(View.INVISIBLE);
 
-                EventBus.getDefault().post(new DataLoadCompleteEvent(DayViewFragment.this, dailyMenu));
+                EventBus.getDefault().post(new DataLoadCompleteEvent(dailyMenu));
             }
         };
 
@@ -133,7 +134,7 @@ public class DayViewFragment extends Fragment implements AppConstants {
 	 * <code>getArguments()</code>를 이용하여 이 fragment가 보여주는 메뉴데이터의 날짜를 조회.
 	 * true는 헤더용 텍스트, false는 서버 API에 전달할 parameter값으로 사용.
 	 * 
-	 * @argument isForTitle true면 "2015/10/09(금)"처럼 포맷, false면 "2015-10-09"
+	 * @param isForTitle true면 "2015/10/09(금)"처럼 포맷, false면 "2015-10-09"
 	 */
     private String getDate(boolean isForTitle) {
         String date = getArguments().getString(ARGUMENT_DATE);
@@ -155,15 +156,8 @@ public class DayViewFragment extends Fragment implements AppConstants {
     static class DataLoadCompleteEvent {
         private DailyMenu dailyMenu;
 
-        private DayViewFragment fragment;
-
-        protected DataLoadCompleteEvent(DayViewFragment fragment, DailyMenu dailyMenu) {
-            this.fragment = fragment;
+        protected DataLoadCompleteEvent(DailyMenu dailyMenu) {
             this.dailyMenu = dailyMenu;
-        }
-
-        protected DayViewFragment getFragment() {
-            return fragment;
         }
 
         protected DailyMenu getDailyMenu() {

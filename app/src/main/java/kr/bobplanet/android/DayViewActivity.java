@@ -8,7 +8,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -17,7 +16,7 @@ import com.commonsware.cwac.pager.PageDescriptor;
 import com.commonsware.cwac.pager.SimplePageDescriptor;
 import com.commonsware.cwac.pager.v4.ArrayPagerAdapter;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -41,11 +40,6 @@ public class DayViewActivity extends ActivitySkeleton {
     private static final String TAG = DayViewActivity.class.getSimpleName();
     private static final String FRAGMENT_TAG_PREFIX = "DayViewFragment-";
 
-    /**
-     * 좌우 swipe를 위해 사용하는 ViewPager
-     */
-    private ViewPager pager;
-	
 	/**
 	 * Fragment 관리용 Adapter
 	 */
@@ -71,12 +65,12 @@ public class DayViewActivity extends ActivitySkeleton {
             start_date = new Date();
         }
 
-        List<PageDescriptor> descriptors = Arrays.asList((PageDescriptor)
-                        newPageDescriptor(DATEFORMAT_YMD.format(start_date))
+        List<PageDescriptor> descriptors = Collections.singletonList(
+                newPageDescriptor(DATEFORMAT_YMD.format(start_date))
         );
         adapter = new DayPagerAdapter(getSupportFragmentManager(), descriptors);
 
-        pager = (ViewPager) findViewById(R.id.daily_view_pager);
+        ViewPager pager = (ViewPager) findViewById(R.id.daily_view_pager);
         pager.setAdapter(adapter);
 
 		// 처음 사용하는 사람들을 위해 좌우스와이프 안내메시지 노출
@@ -178,7 +172,7 @@ public class DayViewActivity extends ActivitySkeleton {
                 .setAction(R.string.swipe_notice_goaway, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        prefs.edit().putBoolean(HAS_DISMISSED_SWIPE_NOTICE, true).commit();
+                        prefs.edit().putBoolean(HAS_DISMISSED_SWIPE_NOTICE, true).apply();
                     }
                 }).show();
     }

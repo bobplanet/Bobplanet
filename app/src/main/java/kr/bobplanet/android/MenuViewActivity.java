@@ -28,6 +28,8 @@ import kr.bobplanet.backend.bobplanetApi.model.Menu;
  * - 메뉴 개요 탭과 세부평가 탭의 2개 탭으로 구성.
  * - 메뉴정보는 intent에 통째로 넣어서 받는다. (푸쉬메시지 수신한 경우에도 extra에 넣어서 본 화면 호출해야 함)
  *
+ * TODO 화면상단의 up arrow를 눌렀을 때 DayViewActivity의 마지막 fragment로 돌아가야 함
+ *
  * @author heonkyu.jin
  * @version 2015. 10. 10
  */
@@ -41,11 +43,15 @@ public class MenuViewActivity extends ActivitySkeleton implements AppConstants {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_view);
 
+        EntityVault entityVault = MainApplication.getInstance().getEntityVault();
+        menu = entityVault.getEntity(Menu.class, getIntent().getStringExtra(MENU_ARGUMENT));
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        EntityVault entityVault = MainApplication.getInstance().getEntityVault();
-        menu = entityVault.getEntity(Menu.class, getIntent().getStringExtra(MENU_ARGUMENT));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle(getIntent().getStringExtra(EXTRA_MENU_TITLE));
 
         NetworkImageView iconView = (NetworkImageView) findViewById(R.id.icon);
         ViewCompat.setTransitionName(iconView, EXTRA_MENU_ICON);
@@ -54,7 +60,6 @@ public class MenuViewActivity extends ActivitySkeleton implements AppConstants {
         TextView text = (TextView) findViewById(R.id.title);
         //text.setText(getIntent().getStringExtra(EXTRA_MENU_TITLE));
         //text.setText(R.string.large_text);
-        getSupportActionBar().setTitle(getIntent().getStringExtra(EXTRA_MENU_TITLE));
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.tab_viewpager);
         viewPager.setAdapter(setupViewPager());

@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- http://www.materialui.co/colors -->
-    <color name="primary">#E64A19</color>
-    <color name="primary_dark">#BF360C</color>
-    <color name="accent">#C71212</color>
+    <!--
+    http://www.materialui.co/colors
+     http://www.materialpalette.com/
+    -->
+    <color name="primary">#FF5722</color>
+    <color name="primary_dark">#D84315</color>
+    <color name="primary_light">#FFCCBC</color>
+    <color name="accent">#F9A825</color>
+    <color name="accent_light">#FFD54F</color>
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#B0BEC5</color>
+    <color name="divider">#B6B6B6</color>
     <color name="window_background">#C0C0C0</color>
     <color name="progress">#FFB300</color>
 
