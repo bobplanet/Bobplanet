@@ -21,8 +21,8 @@ import kr.bobplanet.android.gcm.GcmServices;
  * @author heonkyu.jin
  * @version 2015. 9. 30
  */
-public class StartActivity extends ActivitySkeleton {
-    private static final String TAG = StartActivity.class.getSimpleName();
+public class StartBaseActivity extends BaseActivity {
+    private static final String TAG = StartBaseActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

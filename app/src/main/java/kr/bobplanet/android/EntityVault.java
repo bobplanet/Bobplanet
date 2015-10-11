@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.Date;
 
 import de.greenrobot.event.EventBus;
+import kr.bobplanet.android.event.MeasureLogEvent;
 import kr.bobplanet.android.event.NetworkExceptionEvent;
 import kr.bobplanet.backend.bobplanetApi.BobplanetApi;
 import kr.bobplanet.backend.bobplanetApi.model.DailyMenu;
@@ -168,7 +169,7 @@ public class EntityVault implements AppConstants {
 
                 String cacheKey = _getKey(type, key);
                 Pair<Long, String> cachedObj = jsonCache.get(cacheKey);
-                Long now = new Date().getTime();
+                long now = new Date().getTime();
 
                 if (cachedObj != null) {
                     Long timestamp = cachedObj.first;
@@ -181,6 +182,9 @@ public class EntityVault implements AppConstants {
 
                 Log.d(TAG, "No cache or expired for " + key + ". Fetching from network API");
                 Entity result = remote.fromRemoteApi();
+
+                MeasureLogEvent.measure(MeasureLogEvent.Metric.API_LATENCY,
+                        type.getSimpleName(), new Date().getTime() - now).submit();
 
                 jsonCache.put(cacheKey, new Pair<>(now, result.toString()));
 

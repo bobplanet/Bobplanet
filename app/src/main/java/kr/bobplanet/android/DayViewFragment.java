@@ -2,7 +2,6 @@ package kr.bobplanet.android;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,13 +29,14 @@ import kr.bobplanet.backend.bobplanetApi.model.Menu;
  * - 날짜 parameter는 fragment 생성시에 bundle로 전달되어 <code>getArguments()</code>를 통해 조회
  * - 서버로부터 메뉴 데이터를 가져오면 activity에도 알려줌 (좌우 fragment를 미리 만들어둘 수 있도록)
  * - 화면은 listview로 구성하고 DayViewAdapter를 이용해 UI 구성.
+ * - 메뉴 데이터가 없을 경우(식당 노는 날) 안내화면 노출.
  *
  * TODO ProgressBar 색상을 theme에서 지정해볼 것.
  *
  * @author heonkyu.jin
  * @version 2015. 9. 27.
  */
-public class DayViewFragment extends Fragment implements AppConstants {
+public class DayViewFragment extends BaseFragment {
     @SuppressWarnings("UnusedDeclaration")
     private static final String TAG = DayViewFragment.class.getSimpleName();
     private static final String ARGUMENT_DATE = "ARGUMENT_DATE";
@@ -123,6 +123,7 @@ public class DayViewFragment extends Fragment implements AppConstants {
 
                 menuList = dailyMenu.getMenu();
 
+				// 이게 null이면 식당 노는날이라는 뜻임.
                 if (menuList != null) {
                     DayViewAdapter adapter = new DayViewAdapter(DayViewFragment.this.getContext(),
                             menuList);

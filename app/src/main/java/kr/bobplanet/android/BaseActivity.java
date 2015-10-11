@@ -14,19 +14,22 @@ import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 
+import kr.bobplanet.android.event.LogEvent;
+
 /**
  * Bobplanet 앱에서 사용하는 모든 Activity들의 엄마클래스.
  * 
+ * - onResume()에서 이벤트 측정
  * - Google OAuth 기능 사용을 위한 Google Api Client 관리
  * - 공용 옵션메뉴(ActionBar 오른쪽에 나오는) 관리
  *
  * @author heonkyu.jin
  * @version 2015. 10. 3
  */
-abstract public class ActivitySkeleton extends AppCompatActivity implements AppConstants,
+abstract public class BaseActivity extends AppCompatActivity implements AppConstants,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
-    private static final String TAG = ActivitySkeleton.class.getSimpleName();
+    private static final String TAG = BaseActivity.class.getSimpleName();
 
     private static final int REQUEST_SIGN_IN = 1;
 
@@ -55,7 +58,13 @@ abstract public class ActivitySkeleton extends AppCompatActivity implements AppC
     @Override
     protected void onStop() {
         super.onStop();
-        googleApiClient.disconnect();
+        //googleApiClient.disconnect();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LogEvent.activityView(this).submit();
     }
 
     @Override

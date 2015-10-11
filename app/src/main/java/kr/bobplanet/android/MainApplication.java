@@ -3,21 +3,25 @@ package kr.bobplanet.android;
 import android.app.Application;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Logger;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.iid.InstanceID;
 import com.google.android.gms.plus.model.people.Person;
 
+import de.greenrobot.event.EventBus;
+import kr.bobplanet.android.event.LogEvent;
+import kr.bobplanet.android.event.MeasureLogEvent;
+
 /**
  * 커스텀 애플리케이션 클래스.
- * Volley, Google Analytics 초기화 등 잡다한 작업 및, Activity-Service 등 어디든 사용할 공용 유틸리티 로직 담당.
+ * 애플리케이션 전체 scope에서 관리해야 할 EntityVault, Volley, Google Analytics 등을 관리.
  * 
  * - EntityVault의 싱글턴은 여기에서 관리함
  * - 공용 유틸리티 로직 제공을 위해 Singleton 인터페이스 제공함 (casting 없어도 되는 장점)
@@ -67,6 +71,8 @@ public class MainApplication extends Application {
             ga.enableAutoActivityReports(this);
             ga.getLogger().setLogLevel(Logger.LogLevel.VERBOSE);
         }
+
+        EventBus.getDefault().register(this);
     }
 
 	/**
@@ -74,13 +80,6 @@ public class MainApplication extends Application {
 	 */
     public static synchronized MainApplication getInstance() {
         return instance;
-    }
-
-	/**
-	 * Google Analytics의 Tracker 조회
-	 */
-    protected Tracker getTracker() {
-        return tracker;
     }
 
     protected void setCurrentUser(Person person) {
@@ -135,5 +134,25 @@ public class MainApplication extends Application {
         if (requestQueue != null) {
             requestQueue.cancelAll(tag);
         }
+    }
+
+    @SuppressWarnings("unused")
+    public void onEvent(LogEvent logEvent) {
+        Log.d(TAG, "LogEvent: " + logEvent.source);
+        if (logEvent.isScreenView()) {
+            tracker.setScreenName(logEvent.source);
+            tracker.send(new HitBuilders.ScreenViewBuilder().build());
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public void onEvent(MeasureLogEvent logEvent) {
+        Log.d(TAG, "MeasureLogEvent: " + logEvent.source);
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory("measure")
+                .setAction(logEvent.source)
+                .setLabel(logEvent.label)
+                .setValue(logEvent.value)
+                .build());
     }
 }

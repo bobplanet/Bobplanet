@@ -36,7 +36,7 @@ import kr.bobplanet.backend.bobplanetApi.model.Menu;
  * - 체감속도 향상을 위해 DayViewFragment는 좌우 1개씩 미리 생성
  * - Fragment가 데이터 로딩을 끝내면 PagerAdapter에 추가
  */
-public class DayViewActivity extends ActivitySkeleton {
+public class DayViewActivity extends BaseActivity {
     private static final String TAG = DayViewActivity.class.getSimpleName();
     private static final String FRAGMENT_TAG_PREFIX = "DayViewFragment-";
 
@@ -147,7 +147,7 @@ public class DayViewActivity extends ActivitySkeleton {
     private void startMenuViewActivity(DayViewAdapter.ViewHolder viewHolder) {
         Menu menu = viewHolder.menu;
 
-        Intent intent = new Intent(this, MenuViewActivity.class);
+        Intent intent = new Intent(this, MenuViewBaseActivity.class);
         intent.putExtra(KEY_MENU, menu.toString());
 
         /*

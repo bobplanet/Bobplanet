@@ -29,9 +29,9 @@ import kr.bobplanet.backend.bobplanetApi.model.Menu;
  * @author heonkyu.jin
  * @version 2015. 10. 10
  */
-public class MenuViewActivity extends ActivitySkeleton implements AppConstants {
+public class MenuViewBaseActivity extends BaseActivity implements AppConstants {
     @SuppressWarnings("UnusedDeclaration")
-    private static final String TAG = MenuViewActivity.class.getSimpleName();
+    private static final String TAG = MenuViewBaseActivity.class.getSimpleName();
 
     private final ImageLoader imageLoader = MainApplication.getInstance().getImageLoader();
 

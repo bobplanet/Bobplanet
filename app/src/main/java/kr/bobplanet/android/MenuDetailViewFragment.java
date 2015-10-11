@@ -2,7 +2,6 @@ package kr.bobplanet.android;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,7 +20,7 @@ import kr.bobplanet.backend.bobplanetApi.model.Menu;
  * @author heonkyu.jin
  * @version 2015. 10. 10
  */
-public class MenuDetailViewFragment extends Fragment implements AppConstants {
+public class MenuDetailViewFragment extends BaseFragment {
     private static final String TAG = MenuDetailViewFragment.class.getSimpleName();
 
     private Menu menu;
