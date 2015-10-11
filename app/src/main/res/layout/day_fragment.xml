@@ -1,9 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- DayFragment 레이아웃 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".DayViewFragment">
 
+    <!-- 네트웤에서 데이터 가져올 때 동작하는 ProgressBar -->
     <ProgressBar
         android:id="@+id/progress_bar"
         style="@android:style/Widget.Holo.ProgressBar.Horizontal"
@@ -13,6 +18,7 @@
         android:max="100"
         android:progress="0" />
 
+    <!-- 날짜 헤더 + 메뉴리스트를 담는 본문영역 -->
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -20,50 +26,52 @@
         android:orientation="vertical"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
-        android:paddingTop="0dp"
-        tools:context=".DayViewFragment">
+        android:paddingTop="0dp">
 
+        <!-- 날짜 헤더 -->
         <TextView
             android:id="@+id/daily_view_date_header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginBottom="8dp"
-            android:text="2015-10-02"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="8dp"
+            android:textStyle="bold"
+            android:textColor="?attr/colorPrimaryDark"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            tools:text="2015-10-02" />
 
+        <!-- 메뉴 리스트 -->
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/recylerview"
+            android:id="@+id/recyler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:listitem="list_content" />
 
+        <!-- 데이터 없을 때 대신 표시되는 휴업공지 -->
         <LinearLayout
             android:id="@+id/empty"
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
+            android:orientation="vertical"
             android:paddingTop="100dp"
             android:visibility="gone">
 
             <ImageView
                 android:layout_width="120dp"
                 android:layout_height="120dp"
-                android:gravity="center"
                 android:layout_gravity="center"
+                android:gravity="center"
                 android:src="@drawable/ic_event_busy" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14dip"
+                android:layout_gravity="center"
+                android:gravity="center"
                 android:singleLine="false"
                 android:text="@string/closed_today"
-                android:gravity="center"
-                android:layout_gravity="center"/>
+                android:textSize="14dip" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

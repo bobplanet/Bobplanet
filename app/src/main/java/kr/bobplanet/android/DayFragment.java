@@ -99,7 +99,7 @@ public class DayFragment extends BaseFragment {
         TextView t = (TextView) view.findViewById(R.id.daily_view_date_header);
         t.setText(getDate(true));
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.recylerview);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerView.setHasFixedSize(true);
 

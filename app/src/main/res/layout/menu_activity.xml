@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!-- 메뉴 Activity의 레이아웃 -->
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".MenuViewActivity">
+    tools:context=".MenuActivity">
 
+    <!-- 화면상단 툴바 및 이미지, 탭 -->
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
@@ -34,8 +37,8 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:minHeight="?attr/actionBarSize"
                 android:layout_gravity="top"
+                android:minHeight="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
                 app:layout_scrollFlags="scroll|enterAlways" />
 
@@ -55,7 +58,9 @@
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:padding="8dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:layout="@layout/menu_fragment" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

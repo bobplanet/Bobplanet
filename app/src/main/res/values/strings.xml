@@ -10,8 +10,8 @@
     	
 	<!-- 메뉴보기 화면 -->
 	<string name="title_menu">메뉴보기</string>
-    <string name="label_tab_menu">상세정보</string>
-    <string name="label_tab_menu_score">평점정보</string>
+    <string name="label_tab_menu">메뉴정보</string>
+    <string name="label_tab_menu_score">상세평점</string>
 	<string name="label_card_submenu">서브메뉴</string>
 
 	<!-- 설정화면 -->
