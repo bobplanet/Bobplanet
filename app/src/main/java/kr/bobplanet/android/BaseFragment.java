@@ -18,7 +18,7 @@ public class BaseFragment extends Fragment implements AppConstants {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        
+
         if (isVisibleToUser && isResumed()) {
             UserLogEvent.fragmentView(this).submit();
         }

@@ -42,7 +42,7 @@
         <!-- 특정메뉴 조회 Activity -->
         <activity
             android:name=".MenuActivity"
-            android:label="@string/title_menu_view"
+            android:label="@string/title_menu"
             android:parentActivityName=".DayActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

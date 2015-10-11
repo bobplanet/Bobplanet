@@ -1,6 +1,7 @@
 package kr.bobplanet.android;
 
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -9,6 +10,7 @@ import android.support.v4.util.Pair;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.widget.ImageView;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
@@ -46,16 +48,20 @@ public class MenuActivity extends BaseActivity implements AppConstants {
         menu = entityVault.parseEntity(Menu.class, getIntent().getStringExtra(KEY_MENU));
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(menu.getItem().getId());
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setTitle(menu.getItem().getId());
+
+        CollapsingToolbarLayout toolbar_layout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+        toolbar_layout.setTitleEnabled(false);
+        //toolbar_layout.setTitle(menu.getItem().getId());
 
         NetworkImageView iconView = (NetworkImageView) findViewById(R.id.icon);
         iconView.setImageUrl(menu.getItem().getIconURL(), imageLoader);
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.tab_viewpager);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
         PagerAdapter adapter = setupViewPagerAdapter();
         viewPager.setAdapter(adapter);
 
@@ -72,8 +78,8 @@ public class MenuActivity extends BaseActivity implements AppConstants {
         TabFragmentPagerAdapter adapter = new TabFragmentPagerAdapter(getSupportFragmentManager());
 
 		// fragment 두개 더해줌
-        adapter.addFragment(new MenuFragment(), getString(R.string.title_menu_overview));
-        adapter.addFragment(new MenuScoreFragment(), getString(R.string.title_menu_score));
+        adapter.addFragment(new MenuFragment(), getString(R.string.label_tab_menu));
+        adapter.addFragment(new MenuScoreFragment(), getString(R.string.label_tab_menu_score));
 
         return adapter;
     }

@@ -11,4 +11,8 @@
     <style name="AppTheme.RatingBar" parent="@android:style/Widget.RatingBar">
         <item name="android:progressDrawable">@drawable/rating_bar_heart</item>
     </style>
+
+    <style name="AppTheme.CardTitle" parent="AppTheme">
+        <item name="android:textColor">@color/primary_dark</item>
+    </style>
 </resources>

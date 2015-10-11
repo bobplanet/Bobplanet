@@ -1,25 +1,32 @@
 <resources>
-	<!-- 애플리케이션 및 액티비티, Fragment 이름 -->
+	<!-- 애플리케이션 공용 -->
     <string name="app_name">Bobplanet</string>
-	<string name="title_menu_view">메뉴보기</string>
-	<string name="title_settings">설정</string>
-    <string name="title_menu_overview">Overview</string>
-    <string name="title_menu_score">Score</string>
-
     <string name="action_settings">Settings</string>
 
+	<!-- 일간보기 화면 -->
+    <string name="closed_today">오늘은 회사식당 쉽니다.\n좌우로 화면을 넘겨보세요.\n(그런데.. 왜 휴일에 이 앱을 보고 계신가요?)</string>
+    <string name="swipe_notice">좌우로 화면을 넘기면 다른 날의 메뉴도 볼 수 있어요.</string>
+    <string name="swipe_notice_goaway">알았음</string>
+    	
+	<!-- 메뉴보기 화면 -->
+	<string name="title_menu">메뉴보기</string>
+    <string name="label_tab_menu">상세정보</string>
+    <string name="label_tab_menu_score">평점정보</string>
+	<string name="label_card_submenu">서브메뉴</string>
+
+	<!-- 설정화면 -->
+	<string name="title_settings">설정</string>
+	
+	<!-- Notification -->
     <string name="notification_title">Menu notification</string>
     <string name="action_thumb_up">좋아요</string>
     <string name="action_thumb_down">싫어요</string>
 
+	<!-- 화면 공용 -->
     <string-array name="when_titles">
         <item name="when_breakfast">아침</item>
         <item name="when_lunch">점심</item>
         <item name="when_dinner">저녁</item>
     </string-array>
-
-    <string name="closed_today">오늘은 식당 노는 날입니다.\n좌우로 화면을 넘겨 다른 날짜를 봐주시죠.\n(그런데.. 왜 휴일에 이런 앱을 보고 계시죠?)</string>
-    <string name="swipe_notice">좌우로 화면을 넘기면 다른날짜 메뉴도 볼 수 있어요.</string>
-    <string name="swipe_notice_goaway">라저</string>
 
 </resources>

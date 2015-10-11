@@ -70,7 +70,7 @@ public class DayActivity extends BaseActivity {
         );
         adapter = new DayPagerAdapter(getSupportFragmentManager(), descriptors);
 
-        ViewPager pager = (ViewPager) findViewById(R.id.daily_view_pager);
+        ViewPager pager = (ViewPager) findViewById(R.id.view_pager);
         pager.setAdapter(adapter);
 
 		// 처음 사용하는 사람들을 위해 좌우스와이프 안내메시지 노출
