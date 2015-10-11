@@ -29,3 +29,17 @@
 # Don't warn for missing support classes
 -dontwarn de.greenrobot.event.util.*$Support
 -dontwarn de.greenrobot.event.util.*$SupportManagerFragment
+
+# for Google cloud endpoints
+-keepclassmembers class * {
+    @com.google.api.client.util.Key <fields>;
+}
+-keepattributes Signature,RuntimeVisibleAnnotations,AnnotationDefault
+
+# for Google libraries
+-dontwarn sun.misc.Unsafe
+
+# Log.v() 제거
+-assumenosideeffects class android.util.Log {
+    public static int v(...);
+}

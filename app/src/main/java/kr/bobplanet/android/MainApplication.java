@@ -138,7 +138,7 @@ public class MainApplication extends Application {
 
     @SuppressWarnings("unused")
     public void onEvent(LogEvent logEvent) {
-        Log.d(TAG, "LogEvent: " + logEvent.source);
+        Log.v(TAG, "LogEvent: " + logEvent.source);
         if (logEvent.isScreenView()) {
             tracker.setScreenName(logEvent.source);
             tracker.send(new HitBuilders.ScreenViewBuilder().build());
@@ -147,7 +147,7 @@ public class MainApplication extends Application {
 
     @SuppressWarnings("unused")
     public void onEvent(MeasureLogEvent logEvent) {
-        Log.d(TAG, "MeasureLogEvent: " + logEvent.source);
+        Log.v(TAG, "MeasureLogEvent: " + logEvent.source);
         tracker.send(new HitBuilders.EventBuilder()
                 .setCategory("measure")
                 .setAction(logEvent.source)
