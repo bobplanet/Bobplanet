@@ -25,7 +25,7 @@ import kr.bobplanet.backend.bobplanetApi.model.Menu;
 import kr.bobplanet.backend.bobplanetApi.model.Submenu;
 
 /**
- * {@link DayViewFragment}에서 사용되는 ListAdapter.
+ * {@link DayFragment}에서 사용되는 ListAdapter.
  *
  * - setMenuList()를 통해 fragment로부터 메뉴 데이터를 전달받음
  * - 메뉴 썸네일은 Volley에서 제공하는 <code>NetworkImageView</code>를 이용하여 async로 가져옴
@@ -35,9 +35,9 @@ import kr.bobplanet.backend.bobplanetApi.model.Submenu;
  * @author heonkyu.jin
  * @version 15. 9. 29
  */
-public class DayViewAdapter extends RecyclerView.Adapter<DayViewAdapter.ViewHolder> {
+public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
     @SuppressWarnings("UnusedDeclaration")
-    private static final String TAG = DayViewAdapter.class.getSimpleName();
+    private static final String TAG = DayAdapter.class.getSimpleName();
 
     private Context context;
     private List<Menu> menuList = new ArrayList<>();
@@ -45,7 +45,7 @@ public class DayViewAdapter extends RecyclerView.Adapter<DayViewAdapter.ViewHold
 
     private static final String[] WHEN_ARRAY = { "08:00", "12:00", "18:00" };
 
-    public DayViewAdapter(Context context, List<Menu> menuList) {
+    public DayAdapter(Context context, List<Menu> menuList) {
         this.context = context;
         this.menuList = menuList;
     }
@@ -57,7 +57,7 @@ public class DayViewAdapter extends RecyclerView.Adapter<DayViewAdapter.ViewHold
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_day_row, viewGroup, false);
+        View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.day_item, viewGroup, false);
         return new ViewHolder(itemView);
     }
 
@@ -101,7 +101,7 @@ public class DayViewAdapter extends RecyclerView.Adapter<DayViewAdapter.ViewHold
 
 	/**
 	 * 메뉴 객체의 ViewHolder.
-	 * EventBus를 이용해서 @link{DayViewActivity}로 Onclick 이벤트 전송
+	 * EventBus를 이용해서 @link{DayActivity}로 Onclick 이벤트 전송
 	 */
     static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         Menu menu;

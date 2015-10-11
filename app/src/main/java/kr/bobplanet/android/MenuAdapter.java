@@ -16,7 +16,7 @@ import java.util.List;
 import kr.bobplanet.backend.bobplanetApi.model.Submenu;
 
 /**
- * {@link MenuDetailViewFragment}에서 사용되는 Adapter.
+ * {@link MenuFragment}에서 사용되는 Adapter.
  * 쌀밥, 김치 등과 같은 서브메뉴를 grid 형태로 표현할 때 사용됨.
  *
  * - setMenuList()를 통해 fragment로부터 메뉴 데이터를 전달받음
@@ -25,15 +25,15 @@ import kr.bobplanet.backend.bobplanetApi.model.Submenu;
  * @author heonkyu.jin
  * @version 15. 9. 29
  */
-public class MenuDetailViewAdapter extends RecyclerView.Adapter<MenuDetailViewAdapter.ViewHolder> {
+public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
     @SuppressWarnings("UnusedDeclaration")
-    private static final String TAG = MenuDetailViewAdapter.class.getSimpleName();
+    private static final String TAG = MenuAdapter.class.getSimpleName();
 
     private final Context context;
     private List<Submenu> submenuList = new ArrayList<>();
     private final ImageLoader imageLoader = MainApplication.getInstance().getImageLoader();
 
-    public MenuDetailViewAdapter(Context context, List<Submenu> submenuList) {
+    public MenuAdapter(Context context, List<Submenu> submenuList) {
         this.context = context;
         this.submenuList = submenuList;
     }
@@ -45,7 +45,7 @@ public class MenuDetailViewAdapter extends RecyclerView.Adapter<MenuDetailViewAd
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_menu_cell, viewGroup, false);
+        View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.menu_item, viewGroup, false);
         return new ViewHolder(itemView);
     }
 

@@ -36,9 +36,9 @@ import kr.bobplanet.backend.bobplanetApi.model.Menu;
  * - 체감속도 향상을 위해 DayViewFragment는 좌우 1개씩 미리 생성
  * - Fragment가 데이터 로딩을 끝내면 PagerAdapter에 추가
  */
-public class DayViewActivity extends BaseActivity {
-    private static final String TAG = DayViewActivity.class.getSimpleName();
-    private static final String FRAGMENT_TAG_PREFIX = "DayViewFragment-";
+public class DayActivity extends BaseActivity {
+    private static final String TAG = DayActivity.class.getSimpleName();
+    private static final String FRAGMENT_TAG_PREFIX = "DayFragment-";
 
 	/**
 	 * Fragment 관리용 Adapter
@@ -48,7 +48,7 @@ public class DayViewActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_day_view);
+        setContentView(R.layout.day_activity);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -96,7 +96,7 @@ public class DayViewActivity extends BaseActivity {
      * 메뉴가 있을 경우 PagerAdapter에 추가해서 swipe scroll이 가능하게 함
      */
     @SuppressWarnings("unused")
-    public void onEvent(DayViewFragment.DataLoadCompleteEvent e) {
+    public void onEvent(DayFragment.DataLoadCompleteEvent e) {
         DailyMenu d = e.getDailyMenu();
         Log.d(TAG, "Data load complete: " + d.toString());
 
@@ -137,17 +137,17 @@ public class DayViewActivity extends BaseActivity {
 	 * - startActivity()는 메인스레드(=UI스레드)에서 실행되어야 하는 것으로 보임.
 	 */
     @SuppressWarnings("unused")
-    public void onEventMainThread(DayViewAdapter.ViewClickEvent e) {
+    public void onEventMainThread(DayAdapter.ViewClickEvent e) {
         startMenuViewActivity(e.viewHolder);
     }
 
 	/**
 	 * TODO Activity 전환 transition 효과 복구.
 	 */
-    private void startMenuViewActivity(DayViewAdapter.ViewHolder viewHolder) {
+    private void startMenuViewActivity(DayAdapter.ViewHolder viewHolder) {
         Menu menu = viewHolder.menu;
 
-        Intent intent = new Intent(this, MenuViewActivity.class);
+        Intent intent = new Intent(this, MenuActivity.class);
         intent.putExtra(KEY_MENU, menu.toString());
 
         /*
@@ -186,14 +186,14 @@ public class DayViewActivity extends BaseActivity {
      *
      * @see {https://github.com/commonsguy/cwac-pager}
      */
-    private class DayPagerAdapter extends ArrayPagerAdapter<DayViewFragment> {
+    private class DayPagerAdapter extends ArrayPagerAdapter<DayFragment> {
         public DayPagerAdapter(FragmentManager fragmentManager, List<PageDescriptor> descriptors) {
             super(fragmentManager, descriptors);
         }
 
         @Override
-        protected DayViewFragment createFragment(PageDescriptor pageDescriptor) {
-            return DayViewFragment.newInstance(pageDescriptor.getTitle());
+        protected DayFragment createFragment(PageDescriptor pageDescriptor) {
+            return DayFragment.newInstance(pageDescriptor.getTitle());
         }
     }
 

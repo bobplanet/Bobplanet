@@ -25,7 +25,7 @@
 
         <!-- 메인 Actiivty -->
         <activity
-            android:name=".StartBaseActivity"
+            android:name=".StartActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,17 +36,17 @@
 
         <!-- 일간메뉴 조회 Acivity -->
         <activity
-            android:name=".DayViewActivity"
+            android:name=".DayActivity"
             android:label="@string/app_name" />
 
         <!-- 특정메뉴 조회 Activity -->
         <activity
-            android:name=".MenuViewActivity"
+            android:name=".MenuActivity"
             android:label="@string/title_menu_view"
-            android:parentActivityName=".DayViewActivity" >
+            android:parentActivityName=".DayActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".DayViewActivity" />
+                android:value=".DayActivity" />
         </activity>
 
         <!-- 설정화면 Activity -->

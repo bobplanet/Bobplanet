@@ -25,7 +25,7 @@ import de.greenrobot.event.EventBus;
 import kr.bobplanet.android.AppConstants;
 import kr.bobplanet.android.EntityVault;
 import kr.bobplanet.android.MainApplication;
-import kr.bobplanet.android.MenuViewActivity;
+import kr.bobplanet.android.MenuActivity;
 import kr.bobplanet.android.R;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
 
@@ -147,7 +147,7 @@ public class GcmServices implements AppConstants {
          * @param bitmap
          */
         private void registerNotification(Menu menu, Bundle data, @Nullable Bitmap bitmap) {
-            Intent intent = new Intent(this, MenuViewActivity.class);
+            Intent intent = new Intent(this, MenuActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra(KEY_MENU, menu.toString());
 

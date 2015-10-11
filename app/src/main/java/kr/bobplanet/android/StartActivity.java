@@ -21,8 +21,8 @@ import kr.bobplanet.android.gcm.GcmServices;
  * @author heonkyu.jin
  * @version 2015. 9. 30
  */
-public class StartBaseActivity extends BaseActivity {
-    private static final String TAG = StartBaseActivity.class.getSimpleName();
+public class StartActivity extends BaseActivity {
+    private static final String TAG = StartActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +43,7 @@ public class StartBaseActivity extends BaseActivity {
         }
 
 		// 기본화면인 DayViewActivity를 화면에 띄움.
-        startActivity(new Intent(this, DayViewActivity.class));
+        startActivity(new Intent(this, DayActivity.class));
         finish();
     }
 

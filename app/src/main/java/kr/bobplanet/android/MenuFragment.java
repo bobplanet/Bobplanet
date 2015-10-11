@@ -12,20 +12,20 @@ import android.widget.TextView;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
 
 /**
- * 메뉴 개요를 보여주는 fragment. MenuDetailViewActivity 안에서 실행된다.
+ * 메뉴 개요를 보여주는 fragment. MenuActivity 안에서 실행된다.
  * 
- * - 메뉴정보는 MenuViewActivity의 intent에서 빼온다. 
+ * - 메뉴정보는 MenuActivity의 intent에서 빼온다.
  *   (이것 때문에 fragment랑 activity랑 연결채널 만들기도 귀찮고..)
  * 
  * @author heonkyu.jin
  * @version 2015. 10. 10
  */
-public class MenuDetailViewFragment extends BaseFragment {
-    private static final String TAG = MenuDetailViewFragment.class.getSimpleName();
+public class MenuFragment extends BaseFragment {
+    private static final String TAG = MenuFragment.class.getSimpleName();
 
     private Menu menu;
 
-    public MenuDetailViewFragment() {
+    public MenuFragment() {
     }
 
     @Override
@@ -41,7 +41,7 @@ public class MenuDetailViewFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        return inflater.inflate(R.layout.fragment_menu_overview, container, false);
+        return inflater.inflate(R.layout.menu_fragment, container, false);
     }
 
     @Override
@@ -54,6 +54,6 @@ public class MenuDetailViewFragment extends BaseFragment {
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recylerview);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
-        recyclerView.setAdapter(new MenuDetailViewAdapter(getContext(), menu.getSubmenu()));
+        recyclerView.setAdapter(new MenuAdapter(getContext(), menu.getSubmenu()));
     }
 }

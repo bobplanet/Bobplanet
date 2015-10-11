@@ -36,9 +36,9 @@ import kr.bobplanet.backend.bobplanetApi.model.Menu;
  * @author heonkyu.jin
  * @version 2015. 9. 27.
  */
-public class DayViewFragment extends BaseFragment {
+public class DayFragment extends BaseFragment {
     @SuppressWarnings("UnusedDeclaration")
-    private static final String TAG = DayViewFragment.class.getSimpleName();
+    private static final String TAG = DayFragment.class.getSimpleName();
     private static final String ARGUMENT_DATE = "ARGUMENT_DATE";
 
     private static final List<Menu> EMPTY_MENU_LIST = new ArrayList<>();
@@ -59,7 +59,7 @@ public class DayViewFragment extends BaseFragment {
      */
     private View emptyView;
 
-    public DayViewFragment() {
+    public DayFragment() {
     }
 
     /**
@@ -68,8 +68,8 @@ public class DayViewFragment extends BaseFragment {
      * @param date 본 fragment가 표시해야 하는 식당메뉴의 타겟날짜
      * @return fragment instance
      */
-    public static DayViewFragment newInstance(String date) {
-        DayViewFragment f = new DayViewFragment();
+    public static DayFragment newInstance(String date) {
+        DayFragment f = new DayFragment();
 
         Bundle args = new Bundle();
         args.putString(ARGUMENT_DATE, date);
@@ -82,7 +82,7 @@ public class DayViewFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        return inflater.inflate(R.layout.fragment_day_view, container, false);
+        return inflater.inflate(R.layout.day_fragment, container, false);
     }
 
     @Override
@@ -125,7 +125,7 @@ public class DayViewFragment extends BaseFragment {
 
 				// 이게 null이면 식당 노는날이라는 뜻임.
                 if (menuList != null) {
-                    DayViewAdapter adapter = new DayViewAdapter(DayViewFragment.this.getContext(),
+                    DayAdapter adapter = new DayAdapter(DayFragment.this.getContext(),
                             menuList);
                     recyclerView.setAdapter(adapter);
                 } else {

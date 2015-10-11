@@ -3,6 +3,7 @@ package kr.bobplanet.android;
 import android.app.Activity;
 import android.bluetooth.BluetoothClass;
 import android.content.Context;
+import android.net.wifi.WifiManager;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -16,7 +17,9 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
  */
 public class DeviceEnvironment {
     private static final String TAG = DeviceEnvironment.class.getSimpleName();
-	
+
+    private static final String SKP_WIFI_SSID = "SKP-GUEST";
+
     /**
      * Time limit for the application to wait on a response from Play Services.
      */
@@ -41,5 +44,4 @@ public class DeviceEnvironment {
         }
         return true;
     }
-
 }

@@ -68,7 +68,6 @@ public class MainApplication extends Application {
             Log.i(TAG, "Initializing Google Analytics");
             GoogleAnalytics ga = GoogleAnalytics.getInstance(this);
             tracker = ga.newTracker(R.xml.ga_config);
-            ga.enableAutoActivityReports(this);
             ga.getLogger().setLogLevel(Logger.LogLevel.VERBOSE);
         }
 
