@@ -11,7 +11,7 @@ public class GcmEvent {
     public static final String REGISTER_SUCCESS = "REGISTER_SUCCESS";
     public static final String REGISTER_FAILURE = "REGISTER_FAILURE";
 
-    private String type;
+    private final String type;
 
     public GcmEvent(String type) {
         this.type = type;

@@ -1,7 +1,7 @@
 <html>
 <head>
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="-1">
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="-1" />
     <script>
     function init() {
         var ROOT = "https://kr-bobplanet.appspot.com/_ah/api";
@@ -14,20 +14,23 @@
 </head>
 <body>
 <script>
-    function helloworld() {
-        gapi.auth.authorize({
+    function auth() {
+            gapi.auth.authorize({
             client_id: '603054087850-5qgda69d0j99oja4q5cjbl0mr2cp5s7d.apps.googleusercontent.com',
             scope: 'https://www.googleapis.com/auth/userinfo.email',
             immediate: false
         }, function() {
             console.log('auth completed');
         });
+    }
 
-        gapi.client.menu.helloworld().execute(function(resp) {
+    function helloworld() {
+        gapi.client.bobplanetApi.helloworld().execute(function(resp) {
             console.log(resp)
         });
     }
 </script>
-<input type="button" value="click me" onclick="javascript:helloworld()" />
+<input type="button" value="1. AUTH" onclick="javascript:auth()" />
+<input type="button" value="2. HELLOWORLD" onclick="javascript:helloworld()" />
 </body>
 </html>

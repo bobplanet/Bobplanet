@@ -171,7 +171,7 @@ public class DayViewFragment extends Fragment implements AppConstants {
      * 해당 일자의 메뉴데이터 로딩이 끝날 경우 DayViewActivity로 전달되는 이벤트 클래스.
      */
     static class DataLoadCompleteEvent {
-        private DailyMenu dailyMenu;
+        private final DailyMenu dailyMenu;
 
         protected DataLoadCompleteEvent(DailyMenu dailyMenu) {
             this.dailyMenu = dailyMenu;

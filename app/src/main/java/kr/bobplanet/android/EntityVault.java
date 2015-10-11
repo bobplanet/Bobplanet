@@ -63,12 +63,12 @@ public class EntityVault implements AppConstants {
 	/**
 	 * JSON 문자열을 저장할 LruCache.
 	 */
-    private LruCache<String, Pair<Long, String>> jsonCache;
+    private final LruCache<String, Pair<Long, String>> jsonCache;
 	
 	/**
 	 * 캐쉬에서 꺼낸 JSON 문자열에서 객체를 꺼내는 parser를 만들 때 사용할 JSON factory.
 	 */
-    private JsonFactory jsonFactory;
+    private final JsonFactory jsonFactory;
 	
 	/**
 	 * 기본 생성자.
@@ -143,8 +143,8 @@ public class EntityVault implements AppConstants {
 	 * - onPostExecute()에서 listener의 onEntityLoad() 메소드를 호출하여 데이터로딩 후처리 진행
 	 */
     private class EntityLoader<Entity> extends AsyncTask<Pair<Class<Entity>, Object>, Void, Entity> {
-        private RemoteApiLoader<Entity> remote;
-        private OnEntityLoadListener<Entity> listener;
+        private final RemoteApiLoader<Entity> remote;
+        private final OnEntityLoadListener<Entity> listener;
 
         /**
          * 생성자.

@@ -49,7 +49,6 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@id/icon_holder"
             android:layout_toRightOf="@id/icon_holder"
-            android:autoText="false"
             android:textSize="@dimen/daily_name"
             android:textStyle="bold"
             android:transitionName="menu_title"

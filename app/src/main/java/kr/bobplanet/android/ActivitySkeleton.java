@@ -23,7 +23,7 @@ import com.google.android.gms.plus.model.people.Person;
  * @author heonkyu.jin
  * @version 2015. 10. 3
  */
-public class ActivitySkeleton extends AppCompatActivity implements AppConstants,
+abstract public class ActivitySkeleton extends AppCompatActivity implements AppConstants,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
     private static final String TAG = ActivitySkeleton.class.getSimpleName();
@@ -36,10 +36,6 @@ public class ActivitySkeleton extends AppCompatActivity implements AppConstants,
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (savedInstanceState != null) {
-
-        }
 
         googleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -89,8 +85,6 @@ public class ActivitySkeleton extends AppCompatActivity implements AppConstants,
                     isResolving = false;
                     googleApiClient.connect();
                 }
-            } else {
-
             }
         }
     }

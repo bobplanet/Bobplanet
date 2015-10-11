@@ -29,9 +29,9 @@ public class MenuDetailViewAdapter extends RecyclerView.Adapter<MenuDetailViewAd
     @SuppressWarnings("UnusedDeclaration")
     private static final String TAG = MenuDetailViewAdapter.class.getSimpleName();
 
-    private Context context;
+    private final Context context;
     private List<Submenu> submenuList = new ArrayList<>();
-    private ImageLoader imageLoader = MainApplication.getInstance().getImageLoader();
+    private final ImageLoader imageLoader = MainApplication.getInstance().getImageLoader();
 
     public MenuDetailViewAdapter(Context context, List<Submenu> submenuList) {
         this.context = context;
@@ -68,8 +68,8 @@ public class MenuDetailViewAdapter extends RecyclerView.Adapter<MenuDetailViewAd
     static class ViewHolder extends RecyclerView.ViewHolder /*implements View.OnClickListener*/ {
         Submenu submenu;
 
-        NetworkImageView icon;
-        TextView title;
+        final NetworkImageView icon;
+        final TextView title;
 
         public ViewHolder(View itemView) {
             super(itemView);

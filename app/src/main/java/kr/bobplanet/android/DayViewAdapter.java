@@ -41,7 +41,7 @@ public class DayViewAdapter extends RecyclerView.Adapter<DayViewAdapter.ViewHold
 
     private Context context;
     private List<Menu> menuList = new ArrayList<>();
-    private ImageLoader imageLoader = MainApplication.getInstance().getImageLoader();
+    private final ImageLoader imageLoader = MainApplication.getInstance().getImageLoader();
 
     private static final String[] WHEN_ARRAY = { "08:00", "12:00", "18:00" };
 

@@ -33,7 +33,7 @@ public class MenuViewActivity extends ActivitySkeleton implements AppConstants {
     @SuppressWarnings("UnusedDeclaration")
     private static final String TAG = MenuViewActivity.class.getSimpleName();
 
-    private ImageLoader imageLoader = MainApplication.getInstance().getImageLoader();
+    private final ImageLoader imageLoader = MainApplication.getInstance().getImageLoader();
 
     private Menu menu;
 
