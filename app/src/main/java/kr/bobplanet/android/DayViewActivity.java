@@ -147,7 +147,7 @@ public class DayViewActivity extends BaseActivity {
     private void startMenuViewActivity(DayViewAdapter.ViewHolder viewHolder) {
         Menu menu = viewHolder.menu;
 
-        Intent intent = new Intent(this, MenuViewBaseActivity.class);
+        Intent intent = new Intent(this, MenuViewActivity.class);
         intent.putExtra(KEY_MENU, menu.toString());
 
         /*

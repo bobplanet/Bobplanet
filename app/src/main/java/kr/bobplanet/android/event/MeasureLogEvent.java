@@ -11,6 +11,9 @@ import android.support.annotation.Nullable;
  * @version 2015. 10. 11
  */
 public class MeasureLogEvent extends LogEvent {
+
+    private static final String CATEGORY_MEASURE = "CATEGORY_MEASURE";
+
     /**
      * 측정값
      */
@@ -23,8 +26,8 @@ public class MeasureLogEvent extends LogEvent {
      * @param label 측정대상(소분류)
      * @param value 측정값
      */
-    protected MeasureLogEvent(Metric category, @Nullable String label, long value) {
-        super(LogEvent.Category.MEASURE, category.toString(), label);
+    private MeasureLogEvent(Metric category, @Nullable String label, long value) {
+        super(CATEGORY_MEASURE, category.toString(), label);
         this.value = value;
     }
 

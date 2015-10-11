@@ -2,7 +2,7 @@ package kr.bobplanet.android;
 
 import android.support.v4.app.Fragment;
 
-import kr.bobplanet.android.event.LogEvent;
+import kr.bobplanet.android.event.UserLogEvent;
 
 /**
  * 이 앱이 사용하는 모든 fragment의 엄마 클래스. 
@@ -16,6 +16,6 @@ public class BaseFragment extends Fragment implements AppConstants {
     @Override
     public void onResume() {
         super.onResume();
-        LogEvent.fragmentView(this).submit();
+        UserLogEvent.fragmentView(this).submit();
     }
 }

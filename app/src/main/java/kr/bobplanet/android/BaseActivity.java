@@ -14,7 +14,7 @@ import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 
-import kr.bobplanet.android.event.LogEvent;
+import kr.bobplanet.android.event.UserLogEvent;
 
 /**
  * Bobplanet 앱에서 사용하는 모든 Activity들의 엄마클래스.
@@ -64,7 +64,7 @@ abstract public class BaseActivity extends AppCompatActivity implements AppConst
     @Override
     protected void onResume() {
         super.onResume();
-        LogEvent.activityView(this).submit();
+        UserLogEvent.activityView(this).submit();
     }
 
     @Override

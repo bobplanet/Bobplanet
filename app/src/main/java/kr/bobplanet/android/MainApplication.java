@@ -16,8 +16,8 @@ import com.google.android.gms.iid.InstanceID;
 import com.google.android.gms.plus.model.people.Person;
 
 import de.greenrobot.event.EventBus;
-import kr.bobplanet.android.event.LogEvent;
 import kr.bobplanet.android.event.MeasureLogEvent;
+import kr.bobplanet.android.event.UserLogEvent;
 
 /**
  * 커스텀 애플리케이션 클래스.
@@ -136,15 +136,23 @@ public class MainApplication extends Application {
         }
     }
 
+    /**
+     *
+     * @param logEvent
+     */
     @SuppressWarnings("unused")
-    public void onEvent(LogEvent logEvent) {
-        Log.v(TAG, "LogEvent: " + logEvent.source);
+    public void onEvent(UserLogEvent logEvent) {
+        Log.v(TAG, "UserLogEvent: " + logEvent.source);
         if (logEvent.isScreenView()) {
             tracker.setScreenName(logEvent.source);
             tracker.send(new HitBuilders.ScreenViewBuilder().build());
         }
     }
 
+    /**
+     *
+     * @param logEvent
+     */
     @SuppressWarnings("unused")
     public void onEvent(MeasureLogEvent logEvent) {
         Log.v(TAG, "MeasureLogEvent: " + logEvent.source);

@@ -41,7 +41,7 @@
 
         <!-- 특정메뉴 조회 Activity -->
         <activity
-            android:name=".MenuViewBaseActivity"
+            android:name=".MenuViewActivity"
             android:label="@string/title_menu_view"
             android:parentActivityName=".DayViewActivity" >
             <meta-data
