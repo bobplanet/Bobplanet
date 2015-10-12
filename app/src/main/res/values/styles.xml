@@ -1,11 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+	<!-- 모든 스타일의 엄마 스타일. 직접 사용되지 않고 상속받아 사용해야 함 -->
+    <style name="Base.AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="windowActionBarOverlay">true</item>
+
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="android:windowBackground">@color/window_background</item>
+    </style>
+
+	<!-- 기본 스타일 -->
+    <style name="AppTheme" parent="Base.AppTheme" />
+
+	<!-- 상세페이지용 스타일. Lollipop 이상에서는 StatusBar 침범 가능 -->
+    <style name="AppTheme.Detail" parent="AppTheme">
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.Toolbar" parent="@style/AppTheme">
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
+        <item name="android:background">@color/primary</item>
+    </style>
+
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="AppTheme.RatingBar" parent="@android:style/Widget.RatingBar">

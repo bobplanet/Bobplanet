@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!-- DayActivity 레이아웃 -->
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coordinator_layout"
     android:layout_width="match_parent"
@@ -10,24 +10,23 @@
     android:fitsSystemWindows="true"
     tools:context=".DayActivity">
 
-	<!-- LinearLayout을 안넣으면 툴바와 본문이 겹침. 일단 LinearLayout 넣어서 해결 -->
-    <LinearLayout
+    <!-- 화면 최상단 툴바 -->
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical" >
+        android:layout_height="wrap_content">
 
-		<!-- 화면 최상단 툴바 -->
         <include
             android:id="@+id/toolbar"
             layout="@layout/toolbar" />
 
-		<!-- Fragment 들어갈 자리 -->
-        <android.support.v4.view.ViewPager
-            android:id="@+id/view_pager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:layout="@layout/day_fragment" />
+    </android.support.design.widget.AppBarLayout>
 
-    </LinearLayout>
+    <!-- Fragment 들어갈 자리 -->
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:layout="@layout/day_fragment" />
 
 </android.support.design.widget.CoordinatorLayout>

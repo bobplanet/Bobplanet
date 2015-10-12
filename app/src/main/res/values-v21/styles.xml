@@ -1,14 +1,10 @@
-<resources>>
+<resources>
 
-    <style name="AppTheme" parent="@style/Theme.AppCompat.Light">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+	<!-- 기본 스타일. Lollipop 이상에서만 사용되는 속성 -->
+    <style name="AppTheme" parent="Base.AppTheme">
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:navigationBarColor">@color/primary_dark</item>
 
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primary_dark</item>
-        <item name="colorAccent">@color/accent</item>
-
-        <item name="android:windowBackground">@color/window_background</item>
         <item name="android:windowContentTransitions">false</item>
         <item name="android:windowAllowEnterTransitionOverlap">true</item>
         <item name="android:windowAllowReturnTransitionOverlap">true</item>
@@ -16,9 +12,12 @@
         <item name="android:windowSharedElementExitTransition">@android:transition/move</item>
     </style>
 
-    <style name="AppTheme.Toolbar" parent="@style/AppTheme">
-        <item name="android:textColorPrimary">@android:color/white</item>
-        <item name="android:textColorSecondary">@android:color/white</item>
-        <item name="android:background">@color/primary</item>
+	<!-- 상세페이지용 스타일. StatusBar 침범 -->
+    <style name="AppTheme.Detail" parent="AppTheme">
+		<!-- StatusBar가 절반만 투명해짐 -->
+        <item name="android:windowTranslucentStatus">true</item>
+		<!-- StatusBar가 완전히 투명해짐 -->
+        <!--<item name="android:statusBarColor">@android:color/transparent</item>-->
     </style>
+
 </resources>

@@ -52,8 +52,6 @@ public class MenuFragment extends BaseFragment {
         TextView title = (TextView) view.findViewById(R.id.title);
         title.setText(menu.getItem().getId());
 
-        Log.d(TAG, "submenu # = " + menu.getSubmenu().size());
-        
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));

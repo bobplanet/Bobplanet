@@ -43,7 +43,8 @@
         <activity
             android:name=".MenuActivity"
             android:label="@string/title_menu"
-            android:parentActivityName=".DayActivity" >
+            android:parentActivityName=".DayActivity"
+            android:theme="@style/AppTheme.Detail">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".DayActivity" />

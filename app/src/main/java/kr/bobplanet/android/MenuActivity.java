@@ -9,8 +9,12 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.util.Pair;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
@@ -56,7 +60,6 @@ public class MenuActivity extends BaseActivity implements AppConstants {
 
         CollapsingToolbarLayout toolbar_layout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         toolbar_layout.setTitleEnabled(false);
-        //toolbar_layout.setTitle(menu.getItem().getId());
 
         NetworkImageView iconView = (NetworkImageView) findViewById(R.id.icon);
         iconView.setImageUrl(menu.getItem().getIconURL(), imageLoader);
