@@ -56,7 +56,11 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
 
         viewHolder.setSubmenu(submenu);
 
-        viewHolder.icon.setImageUrl(submenu.getItem().getIconURL(), imageLoader);
+        if (submenu.getItem().getIconURL() != null) {
+            viewHolder.icon.setImageUrl(submenu.getItem().getIconURL(), imageLoader);
+        } else {
+            viewHolder.icon.setDefaultImageResId(R.drawable.no_menu);
+        }
         viewHolder.title.setText(submenu.getItem().getId());
     }
 

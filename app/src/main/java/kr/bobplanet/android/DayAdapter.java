@@ -72,13 +72,17 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
 
         int index = Arrays.binarySearch(WHEN_ARRAY, menu.getWhen());
         viewHolder.when.setText(new StringBuilder()
-                .append(resources.getStringArray(R.array.when_titles)[index])
-                .append(menu.getType() == null ? "" : menu.getType())
+                        .append(resources.getStringArray(R.array.when_titles)[index])
+                        .append(menu.getType() == null ? "" : menu.getType())
         );
         viewHolder.when.setBackgroundColor(
                 resources.obtainTypedArray(R.array.when_background_color).getColor(index, Color.BLACK));
 
-        viewHolder.icon.setImageUrl(menu.getItem().getIconURL(), imageLoader);
+        if (menu.getItem().getIconURL() != null) {
+            viewHolder.icon.setImageUrl(menu.getItem().getIconURL(), imageLoader);
+        } else {
+            viewHolder.icon.setDefaultImageResId(R.drawable.no_menu);
+        }
 
         viewHolder.title.setText(menu.getItem().getId());
 
@@ -140,7 +144,7 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
 
 	/**
 	 * 메뉴 클릭 이벤트.
-	 * @link{MenuViewHolder}
+	 * @link MenuViewHolder
 	 */
     static class ViewClickEvent {
         ViewHolder viewHolder;
