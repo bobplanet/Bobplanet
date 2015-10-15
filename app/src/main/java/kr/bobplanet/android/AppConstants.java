@@ -13,22 +13,6 @@ import java.text.SimpleDateFormat;
  */
 public interface AppConstants {
 	/**
-	 * 상용 릴리즈의 클라이언트ID. 
-	 */
-    String ANDROID_CLIENT_ID_RELEASE =
-            "603054087850-2kjko3ai98mdk3j2igap589ovni27jbp.apps.googleusercontent.com";
-	/**
-	 * 개발 릴리즈의 클라이언트ID.
-	 */
-    String ANDROID_CLIENT_ID_DEV =
-            "603054087850-2e4d6q2t8992f9j6nedl8qp1ejr9ibaj.apps.googleusercontent.com";
-	/**
-	 * 클라이언트ID. BuildConfig을 이용하여 적절한 값을 선택.
-	 */
-    String ANDROID_CLIENT_ID = BuildConfig.DEV_VERSION ?
-            ANDROID_CLIENT_ID_DEV : ANDROID_CLIENT_ID_RELEASE;
-
-	/**
 	 * 데이터를 가져올 Google AppEngine의 root URL
 	 */
     String BACKEND_ROOT_URL = "https://kr-bobplanet.appspot.com/_ah/api/";

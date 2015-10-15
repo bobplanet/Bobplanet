@@ -46,9 +46,9 @@ import static kr.bobplanet.backend.api.ObjectifyRegister.ofy;
                 BackendConstants.EMAIL_SCOPE
         },
         clientIds = {
-                BackendConstants.ANDROID_CLIENT_ID_RELEASE,
-                BackendConstants.ANDROID_CLIENT_ID_DEV,
-                BackendConstants.WEB_CLIENT_ID
+                BackendConstants.CLIENTID_ANDROID_DEV,
+                BackendConstants.CLIENTID_ANDROID_RELEASE,
+                BackendConstants.CLIENTID_WEB
         },
         audiences = {
                 BackendConstants.ANDROID_AUDIENCE

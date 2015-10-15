@@ -4,9 +4,13 @@
 buildscript {
     repositories {
         jcenter()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
-        classpath 'com.google.appengine:gradle-appengine-plugin:1.9.18'
+        classpath 'com.google.appengine:gradle-appengine-plugin:1.9.26'
+        classpath "gradle.plugin.de.fuerstenau:BuildConfigPlugin:1.0.5"
     }
 }
 
@@ -17,15 +21,16 @@ repositories {
 apply plugin: 'java'
 apply plugin: 'war'
 apply plugin: 'appengine'
+apply plugin: 'de.fuerstenau.buildconfig'
 
 sourceCompatibility = JavaVersion.VERSION_1_7
 targetCompatibility = JavaVersion.VERSION_1_7
 
 dependencies {
-    appengineSdk 'com.google.appengine:appengine-java-sdk:1.9.18'
-    compile 'com.google.appengine:appengine-endpoints:1.9.18'
-    compile 'com.google.appengine:appengine-endpoints-deps:1.9.18'
-    compile 'com.googlecode.objectify:objectify:5.0.3'
+    appengineSdk 'com.google.appengine:appengine-java-sdk:1.9.27'
+    compile 'com.google.appengine:appengine-endpoints:1.9.27'
+    compile 'com.google.appengine:appengine-endpoints-deps:1.9.27'
+    compile 'com.googlecode.objectify:objectify:5.1.8'
     compile 'javax.servlet:servlet-api:2.5'
 }
 
@@ -38,5 +43,19 @@ appengine {
     endpoints {
         getClientLibsOnBuild = true
         getDiscoveryDocsOnBuild = true
+    }
+}
+
+def props = new Properties()
+props.load(new FileInputStream(rootProject.file('secrets.properties')))
+
+buildConfig {
+    sourceSets {
+        main {
+            packageName = "kr.bobplanet.backend"
+            buildConfigField "String", "CLIENTID_ANDROID_DEV", props.get("backend.clientid.android.dev")
+            buildConfigField "String", "CLIENTID_ANDROID_RELEASE", props.get("backend.clientid.android.release")
+            buildConfigField "String", "CLIENTID_WEB", props.get("backend.clientid.web")
+        }
     }
 }
