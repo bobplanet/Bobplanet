@@ -1,7 +1,9 @@
 ![스크린샷](https://cloud.githubusercontent.com/assets/7744953/10517292/18c0fe90-7397-11e5-9148-b9285b7c5321.png)
 
 # 프로젝트 개요
-- SK플래닛의 사내식당 메뉴를 읽어와 스마트폰으로 푸쉬해주는 프로젝트
+- SK플래닛의 사내식당 메뉴를 읽어와 스마트폰으로 푸쉬해주는 프로젝트입니다.
+- 상세한 내용은 아래 위키 링크들을 참고해 주세요.
+	- [프로젝트를 시작한 이유](https://github.com/bobplanet/Bobplanet/wiki/%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EB%A5%BC-%EC%8B%9C%EC%9E%91%ED%95%9C-%EC%9D%B4%EC%9C%A0)
 
 ## 현재 구현된 기능
 - 사내식당 메뉴 조회: 구현완료 (UI는 아주 못생김)
