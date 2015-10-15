@@ -1,6 +1,8 @@
 # 프로젝트 개요
 - SK플래닛의 사내식당 메뉴를 읽어와 스마트폰으로 푸쉬해주는 프로젝트
 
+![스크린샷](https://cloud.githubusercontent.com/assets/7744953/10517292/18c0fe90-7397-11e5-9148-b9285b7c5321.png)
+
 ## 주요 기능
 - 사내식당 메뉴 조회
 - 푸쉬알림
@@ -14,6 +16,7 @@
 	- 패키지명: 상용버전은 kr.bobplanet.android, 개발버전은 kr.bobplanet.android.debug
 	- 개발버전의 경우 ActionBar에 표시되는 앱 이름, GA 트래킹코드 등이 다르므로 src/debug에 별도 코드를 둔다.
 - backend: 서버 API
+	- 
 
 # 이용 라이브러리
 ## App
