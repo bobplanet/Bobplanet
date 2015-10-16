@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
 import kr.bobplanet.backend.bobplanetApi.model.Submenu;
@@ -62,31 +64,31 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         Menu menu = menuList.get(position);
         if (menu == null) return;
 
-        viewHolder.setMenu(menu);
+        holder.setMenu(menu);
 
         Resources resources = context.getResources();
 
         int index = Arrays.binarySearch(WHEN_ARRAY, menu.getWhen());
-        viewHolder.when.setText(new StringBuilder()
+        holder.when.setText(new StringBuilder()
                         .append(resources.getStringArray(R.array.when_titles)[index])
                         .append(menu.getType() == null ? "" : menu.getType())
         );
-        viewHolder.when.setBackgroundColor(
+        holder.when.setBackgroundColor(
                 resources.obtainTypedArray(R.array.when_background_color).getColor(index, Color.BLACK));
 
         if (menu.getItem().getIconURL() != null) {
-            viewHolder.icon.setImageUrl(menu.getItem().getIconURL(), imageLoader);
+            holder.icon.setImageUrl(menu.getItem().getIconURL(), imageLoader);
         } else {
-            viewHolder.icon.setDefaultImageResId(R.drawable.no_menu);
+            holder.icon.setDefaultImageResId(R.drawable.no_menu);
         }
 
-        viewHolder.title.setText(menu.getItem().getId());
+        holder.title.setText(menu.getItem().getId());
 
-        viewHolder.rating.setRating(menu.getItem().getAverageScore());
+        holder.rating.setRating(menu.getItem().getAverageScore());
 
         // 서브메뉴는 ','로 concatenate
         List<Submenu> submenus = menu.getSubmenu();
@@ -95,12 +97,12 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
             for (Submenu sub : submenus) {
                 subs.add(sub.getItem().getId());
             }
-            viewHolder.submenu.setText(TextUtils.join(", ", subs));
+            holder.submenu.setText(TextUtils.join(", ", subs));
         }
 
         // 아침 메뉴는 칼로리 데이터가 없으므로 비워서 보여줌
         int cal = menu.getCalories();
-        viewHolder.calories.setText(menu.getCalories() == 0 ? "" : new StringBuilder().append(cal).append(" KCal"));
+        holder.calories.setText(menu.getCalories() == 0 ? "" : new StringBuilder().append(cal).append(" KCal"));
     }
 
 	/**
@@ -110,24 +112,19 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
     static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         Menu menu;
 
-        TextView when;
-        NetworkImageView icon;
-        TextView title;
-        RatingBar rating;
-        TextView submenu;
-        TextView calories;
+        @Bind(R.id.when) TextView when;
+        @Bind(R.id.icon) NetworkImageView icon;
+        @Bind(R.id.title) TextView title;
+        @Bind(R.id.rating) RatingBar rating;
+        @Bind(R.id.submenu) TextView submenu;
+        @Bind(R.id.calories) TextView calories;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            ButterKnife.bind(this, itemView);
 
-            when = (TextView) itemView.findViewById(R.id.when);
-            icon = (NetworkImageView) itemView.findViewById(R.id.icon);
-            title = (TextView) itemView.findViewById(R.id.title);
-            rating = (RatingBar) itemView.findViewById(R.id.rating);
             LayerDrawable progress = (LayerDrawable) rating.getProgressDrawable();
             DrawableCompat.setTint(progress.getDrawable(2), Color.MAGENTA);
-            submenu = (TextView) itemView.findViewById(R.id.submenu);
-            calories = (TextView) itemView.findViewById(R.id.calories);
 
             itemView.setOnClickListener(this);
         }

@@ -30,7 +30,7 @@
 
         <!-- 날짜 헤더 -->
         <TextView
-            android:id="@+id/daily_view_date_header"
+            android:id="@+id/header_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"

@@ -39,6 +39,19 @@
 # for Google libraries
 -dontwarn sun.misc.Unsafe
 
+# for ButterKnife
+-keep class butterknife.** { *; }
+-dontwarn butterknife.internal.**
+-keep class **$$ViewBinder { *; }
+
+-keepclasseswithmembernames class * {
+    @butterknife.* <fields>;
+}
+
+-keepclasseswithmembernames class * {
+    @butterknife.* <methods>;
+}
+
 # Log.v() 제거
 -assumenosideeffects class android.util.Log {
     public static int v(...);

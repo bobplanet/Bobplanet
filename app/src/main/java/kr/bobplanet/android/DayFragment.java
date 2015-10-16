@@ -16,6 +16,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
 import fr.castorflex.android.smoothprogressbar.SmoothProgressDrawable;
 import kr.bobplanet.android.event.NetworkExceptionEvent;
@@ -47,17 +49,19 @@ public class DayFragment extends BaseFragment {
     /**
      * 네트웤에서 데이터를 가져올 때 동작하는 ProgressBar
      */
-    private ProgressBar progressBar;
+    @Bind(R.id.progress_bar) ProgressBar progressBar;
+
+    @Bind(R.id.header_text) TextView headerTextView;
 
     /**
      * 메뉴정보를 표시하는 RecyclerView
      */
-    private RecyclerView recyclerView;
+    @Bind(R.id.recyler_view) RecyclerView recyclerView;
 
     /**
      * 메뉴가 없을 때(식당 노는날) 대신 표시되는 View. 안내메시지 포함.
      */
-    private View emptyView;
+    @Bind(R.id.empty) View emptyView;
 
     public DayFragment() {
     }
@@ -82,28 +86,31 @@ public class DayFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        return inflater.inflate(R.layout.day_fragment, container, false);
+        View view = inflater.inflate(R.layout.day_fragment, container, false);
+        ButterKnife.bind(this, view);
+        return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
         Drawable d = new SmoothProgressDrawable.Builder(getActivity())
                 .interpolator(new AccelerateInterpolator()).build();
         d.setColorFilter(ContextCompat.getColor(getContext(), R.color.progress),
                 android.graphics.PorterDuff.Mode.SRC_IN);
         progressBar.setIndeterminateDrawable(d);
 
-        TextView t = (TextView) view.findViewById(R.id.daily_view_date_header);
-        t.setText(getDate(true));
+        headerTextView.setText(getDate(true));
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerView.setHasFixedSize(true);
-
-        emptyView = view.findViewById(R.id.empty);
     }
 
 	/**

@@ -13,6 +13,8 @@ import com.android.volley.toolbox.NetworkImageView;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import kr.bobplanet.backend.bobplanetApi.model.Submenu;
 
 /**
@@ -72,16 +74,12 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
     static class ViewHolder extends RecyclerView.ViewHolder /*implements View.OnClickListener*/ {
         Submenu submenu;
 
-        final NetworkImageView icon;
-        final TextView title;
+        @Bind(R.id.icon) NetworkImageView icon;
+        @Bind(R.id.title) TextView title;
 
         public ViewHolder(View itemView) {
             super(itemView);
-
-            icon = (NetworkImageView) itemView.findViewById(R.id.icon);
-            title = (TextView) itemView.findViewById(R.id.title);
-
-            //itemLayoutView.setOnClickListener(this);
+            ButterKnife.bind(this, itemView);
         }
 
         void setSubmenu(Submenu submenu) {
