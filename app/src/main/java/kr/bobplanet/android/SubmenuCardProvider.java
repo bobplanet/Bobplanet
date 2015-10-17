@@ -2,9 +2,7 @@ package kr.bobplanet.android;
 
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
@@ -15,7 +13,6 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import hugo.weaving.DebugLog;
 import kr.bobplanet.backend.bobplanetApi.model.Submenu;
 
 /**
@@ -43,50 +40,35 @@ public class SubmenuCardProvider extends TextCardProvider<SubmenuCardProvider> {
     public void render(View view, Card card) {
         super.render(view, card);
 
+        BaseListAdapter.BaseViewHolderFactory factory = new BaseListAdapter.BaseViewHolderFactory() {
+            @Override
+            public BaseListAdapter.BaseViewHolder newInstance(View view) {
+                return new SubmenuViewHolder(view);
+            }
+        };
+        adapter = new BaseListAdapter(factory, submenuList, R.layout.menu_submenu_item);
+
         RecyclerView recyclerView = ButterKnife.findById(view, R.id.recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 3));
         recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(getAdapter());
+        recyclerView.setAdapter(adapter);
     }
 
-    private RecyclerView.Adapter getAdapter() {
-        if (adapter == null) {
-            adapter = new RecyclerView.Adapter<SubmenuCardProvider.ViewHolder>() {
-                @Override
-                public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                    View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.menu_submenu_item,
-                            parent, false);
-                    return new ViewHolder(view);
-                }
-
-                @Override
-                public void onBindViewHolder(SubmenuCardProvider.ViewHolder holder, int position) {
-                    Submenu submenu = submenuList.get(position);
-
-                    holder.thumbnail.setImageUrl(submenu.getItem().getThumbnail(),
-                            MainApplication.getInstance().getImageLoader());
-                    holder.title.setText(submenu.getItem().getId());
-                }
-
-                @Override
-                public int getItemCount() {
-                    return submenuList.size();
-                }
-            };
-        }
-
-        return adapter;
-    }
-
-    static public class ViewHolder extends RecyclerView.ViewHolder {
+    class SubmenuViewHolder extends BaseListAdapter.BaseViewHolder<Submenu> {
         @Bind(R.id.thumbnail)
         NetworkImageView thumbnail;
         @Bind(R.id.title)
         TextView title;
 
-        public ViewHolder(View view) {
+        public SubmenuViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
+        }
+
+        @Override
+        public void setItem(Submenu submenu) {
+            thumbnail.setImageUrl(submenu.getItem().getThumbnail(), getImageLoader());
+            title.setText(submenu.getItem().getId());
         }
     }
 }

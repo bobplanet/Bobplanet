@@ -10,6 +10,7 @@ import android.support.v4.util.Pair;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
@@ -57,7 +58,8 @@ public class MenuActivity extends BaseActivity implements AppConstants {
         CollapsingToolbarLayout toolbar_layout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         toolbar_layout.setTitleEnabled(false);
 
-        NetworkImageView iconView = ButterKnife.findById(this, R.id.thumbnail);
+        NetworkImageView iconView = ButterKnife.findById(this, R.id.image);
+        Log.d(TAG, "image = " + menu.getItem().getImage());
         iconView.setImageUrl(menu.getItem().getImage(), imageLoader);
 
         ViewPager viewPager = ButterKnife.findById(this, R.id.view_pager);

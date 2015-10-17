@@ -137,14 +137,14 @@ public class DayActivity extends BaseActivity {
 	 * - startActivity()는 메인스레드(=UI스레드)에서 실행되어야 하는 것으로 보임.
 	 */
     @SuppressWarnings("unused")
-    public void onEventMainThread(DayAdapter.ViewClickEvent e) {
+    public void onEventMainThread(MenuViewHolder.ViewClickEvent e) {
         startMenuViewActivity(e.viewHolder);
     }
 
 	/**
 	 * TODO Activity 전환 transition 효과 복구.
 	 */
-    private void startMenuViewActivity(DayAdapter.ViewHolder viewHolder) {
+    private void startMenuViewActivity(MenuViewHolder viewHolder) {
         Menu menu = viewHolder.menu;
 
         Intent intent = new Intent(this, MenuActivity.class);

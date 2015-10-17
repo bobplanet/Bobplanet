@@ -27,12 +27,12 @@ import kr.bobplanet.backend.bobplanetApi.model.Menu;
 /**
  * 특정 일자의 아침-점심-저녁 메뉴를 보여주는 fragment.
  * DayViewActivity에 삽입되어 실제 메뉴를 화면에 보여주는 역할을 담당함.
- * 
+ * <p/>
  * - 날짜 parameter는 fragment 생성시에 bundle로 전달되어 <code>getArguments()</code>를 통해 조회
  * - 서버로부터 메뉴 데이터를 가져오면 activity에도 알려줌 (좌우 fragment를 미리 만들어둘 수 있도록)
  * - 화면은 listview로 구성하고 DayViewAdapter를 이용해 UI 구성.
  * - 메뉴 데이터가 없을 경우(식당 노는 날) 안내화면 노출.
- *
+ * <p/>
  * TODO ProgressBar 색상을 theme에서 지정해볼 것.
  *
  * @author heonkyu.jin
@@ -49,26 +49,30 @@ public class DayFragment extends BaseFragment {
     /**
      * 네트웤에서 데이터를 가져올 때 동작하는 ProgressBar
      */
-    @Bind(R.id.progress_bar) ProgressBar progressBar;
+    @Bind(R.id.progress_bar)
+    ProgressBar progressBar;
 
-    @Bind(R.id.header_text) TextView headerTextView;
+    @Bind(R.id.header_text)
+    TextView headerTextView;
 
     /**
      * 메뉴정보를 표시하는 RecyclerView
      */
-    @Bind(R.id.recycler_view) RecyclerView recyclerView;
+    @Bind(R.id.recycler_view)
+    RecyclerView recyclerView;
 
     /**
      * 메뉴가 없을 때(식당 노는날) 대신 표시되는 View. 안내메시지 포함.
      */
-    @Bind(R.id.empty) View emptyView;
+    @Bind(R.id.empty)
+    View emptyView;
 
     public DayFragment() {
     }
 
     /**
-     * Fragment 팩토리함수. 
-	 *
+     * Fragment 팩토리함수.
+     *
      * @param date 본 fragment가 표시해야 하는 식당메뉴의 타겟날짜
      * @return fragment instance
      */
@@ -113,16 +117,15 @@ public class DayFragment extends BaseFragment {
         recyclerView.setHasFixedSize(true);
     }
 
-	/**
-	 * 구동되자마자 서버에서 일간메뉴데이터를 가져옴.
-	 * 데이터 캐싱을 위해 <code>EntityVault</code>를 이용함.
-	 *
-	 */
+    /**
+     * 구동되자마자 서버에서 일간메뉴데이터를 가져옴.
+     * 데이터 캐싱을 위해 <code>EntityVault</code>를 이용함.
+     */
     @Override
     public void onStart() {
         super.onStart();
 
-		// 데이터 로딩이 끝나면 그에 맞게 UI 업데이트하고 activity에도 데이터로딩 끝났음을 전달
+        // 데이터 로딩이 끝나면 그에 맞게 UI 업데이트하고 activity에도 데이터로딩 끝났음을 전달
         EntityVault.OnEntityLoadListener<DailyMenu> listener = new EntityVault.OnEntityLoadListener<DailyMenu>() {
             @Override
             public void onEntityLoad(DailyMenu dailyMenu) {
@@ -130,10 +133,16 @@ public class DayFragment extends BaseFragment {
 
                 menuList = dailyMenu.getMenu();
 
-				// 이게 null이면 식당 노는날이라는 뜻임.
+                // 이게 null이면 식당 노는날이라는 뜻임.
                 if (menuList != null) {
-                    DayAdapter adapter = new DayAdapter(DayFragment.this.getContext(),
-                            menuList);
+                    BaseListAdapter.BaseViewHolderFactory factory = new BaseListAdapter.BaseViewHolderFactory() {
+                        @Override
+                        public BaseListAdapter.BaseViewHolder newInstance(View view) {
+                            return new MenuViewHolder(view);
+                        }
+                    };
+
+                    RecyclerView.Adapter adapter = new BaseListAdapter(factory, menuList, R.layout.day_item);
                     recyclerView.setAdapter(adapter);
                 } else {
                     recyclerView.setVisibility(View.GONE);
@@ -155,12 +164,12 @@ public class DayFragment extends BaseFragment {
         Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
     }
 
-	/**
-	 * <code>getArguments()</code>를 이용하여 이 fragment가 보여주는 메뉴데이터의 날짜를 조회.
-	 * true는 헤더용 텍스트, false는 서버 API에 전달할 parameter값으로 사용.
-	 * 
-	 * @param isForTitle true면 "2015/10/09(금)"처럼 포맷, false면 "2015-10-09"
-	 */
+    /**
+     * <code>getArguments()</code>를 이용하여 이 fragment가 보여주는 메뉴데이터의 날짜를 조회.
+     * true는 헤더용 텍스트, false는 서버 API에 전달할 parameter값으로 사용.
+     *
+     * @param isForTitle true면 "2015/10/09(금)"처럼 포맷, false면 "2015-10-09"
+     */
     private String getDate(boolean isForTitle) {
         String date = getArguments().getString(ARGUMENT_DATE);
 
