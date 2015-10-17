@@ -4,9 +4,12 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.LayerDrawable;
+import android.support.annotation.ColorInt;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +22,7 @@ import com.android.volley.toolbox.NetworkImageView;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -45,8 +49,6 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
     private List<Menu> menuList = new ArrayList<>();
     private final ImageLoader imageLoader = MainApplication.getInstance().getImageLoader();
 
-    private static final String[] WHEN_ARRAY = { "08:00", "12:00", "18:00" };
-
     public DayAdapter(Context context, List<Menu> menuList) {
         this.context = context;
         this.menuList = menuList;
@@ -70,15 +72,20 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
 
         holder.setMenu(menu);
 
-        Resources resources = context.getResources();
+        int background = R.color.breakfast_bg;
+        switch (menu.getWhen()) {
+            case "아침":
+                background = R.color.breakfast_bg;
+                break;
+            case "점심":
+                background = R.color.lunch_bg;
+                break;
+            case "저녁":
+                background = R.color.dinner_bg;
+        }
 
-        int index = Arrays.binarySearch(WHEN_ARRAY, menu.getWhen());
-        holder.when.setText(new StringBuilder()
-                        .append(resources.getStringArray(R.array.when_titles)[index])
-                        .append(menu.getType() == null ? "" : menu.getType())
-        );
-        holder.when.setBackgroundColor(
-                resources.obtainTypedArray(R.array.when_background_color).getColor(index, Color.BLACK));
+        holder.when.setText(menu.getWhen() + (menu.getType() == null ? "" : menu.getType()));
+        holder.when.setBackgroundColor(ContextCompat.getColor(context, background));
 
         if (menu.getItem().getThumbnail() != null) {
             holder.thumbnail.setImageUrl(menu.getItem().getThumbnail(), imageLoader);
