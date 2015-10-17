@@ -11,7 +11,10 @@ import com.android.volley.toolbox.ImageLoader;
 import java.util.List;
 
 /**
- * Created by hkjinlee on 15. 10. 17..
+ * 화면마다 별로 할일도 없는 Adapter들이 많아지는 것 같아 한단계 추상화한 클래스.
+ *
+ * @author heonkyu.jin
+ * @versoin 15. 10. 17
  */
 public class BaseListAdapter extends RecyclerView.Adapter<BaseListAdapter.BaseViewHolder> {
     final List itemList;

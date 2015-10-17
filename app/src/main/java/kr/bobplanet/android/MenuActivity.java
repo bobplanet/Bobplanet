@@ -1,7 +1,9 @@
 package kr.bobplanet.android;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -9,8 +11,12 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.util.Pair;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.RatingBar;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
@@ -68,6 +74,31 @@ public class MenuActivity extends BaseActivity implements AppConstants {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+        FloatingActionButton fab = ButterKnife.findById(this, R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayRatingDialog();
+            }
+        });
+    }
+
+    private void displayRatingDialog() {
+        View ratingBarHolder = getLayoutInflater().inflate(R.layout.menu_rating_dialog, null);
+        final RatingBar ratingBar = ButterKnife.findById(ratingBarHolder, R.id.rating);
+
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.dialog_rating_label)
+                .setView(ratingBarHolder)
+                .setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.d(TAG, "OK clicked. rating = " + ratingBar.getNumStars());
+                    }
+                })
+                .setNegativeButton(R.string.button_cancel, null)
+                .show();
     }
 
     /**

@@ -16,7 +16,10 @@ import butterknife.ButterKnife;
 import kr.bobplanet.backend.bobplanetApi.model.Submenu;
 
 /**
- * Created by hkjinlee on 15. 10. 17..
+ *
+ *
+ * @author heonkyu.jin
+ * @versoin 15. 10. 17
  */
 public class SubmenuCardProvider extends TextCardProvider<SubmenuCardProvider> {
 

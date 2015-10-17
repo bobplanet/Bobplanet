@@ -24,7 +24,7 @@ import kr.bobplanet.backend.bobplanetApi.model.Submenu;
  * 메뉴 객체의 ViewHolder.
  * EventBus를 이용해서 @link{DayActivity}로 Onclick 이벤트 전송
  */
-class MenuViewHolder extends BaseListAdapter.BaseViewHolder<Menu> implements View.OnClickListener {
+public class MenuViewHolder extends BaseListAdapter.BaseViewHolder<Menu> implements View.OnClickListener {
     Menu menu;
 
     @Bind(R.id.when)
@@ -44,8 +44,10 @@ class MenuViewHolder extends BaseListAdapter.BaseViewHolder<Menu> implements Vie
         super(itemView);
         ButterKnife.bind(this, itemView);
 
+/*
         LayerDrawable progress = (LayerDrawable) rating.getProgressDrawable();
         DrawableCompat.setTint(progress.getDrawable(2), Color.MAGENTA);
+*/
 
         itemView.setOnClickListener(this);
     }

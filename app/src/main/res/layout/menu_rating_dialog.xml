@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp"
+        android:layout_centerInParent="true">
+
+        <TextView
+            android:id="@+id/rating_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/rating"
+            android:gravity="left"
+            android:text="@string/dialog_rating_min"
+            android:textColor="@color/rating_dialog_support"
+            tools:text="별로에요" />
+
+        <TextView
+            android:id="@+id/rating_mid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="@string/dialog_rating_mid"
+            android:textColor="@color/rating_dialog_support"
+            tools:text="보통" />
+
+        <TextView
+            android:id="@+id/rating_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@id/rating"
+            android:gravity="right"
+            android:text="@string/dialog_rating_max"
+            android:textColor="@color/rating_dialog_support"
+            tools:text="맛있어요" />
+
+        <RatingBar
+            android:id="@+id/rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rating_mid"
+            android:numStars="5"
+            android:stepSize="1"
+            android:rating="3"
+            android:theme="@style/AppTheme"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

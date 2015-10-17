@@ -65,7 +65,9 @@
             android:layout_marginLeft="6dp"
             android:layout_toRightOf="@id/title"
             android:numStars="5"
-            android:paddingTop="4dp" />
+            android:paddingTop="4dp"
+            android:theme="@style/AppTheme"
+            />
 
         <!-- 서브메뉴 -->
         <TextView

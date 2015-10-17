@@ -2,6 +2,8 @@
 	<!-- 애플리케이션 공용 -->
     <string name="app_name">Bobplanet</string>
     <string name="action_settings">Settings</string>
+	<string name="button_ok">확인</string>
+	<string name="button_cancel">취소</string>
 
 	<!-- 일간보기 화면 -->
     <string name="closed_today">오늘은 회사식당 쉽니다.\n좌우로 화면을 넘겨보세요.\n(그런데.. 왜 휴일에 이 앱을 보고 계신가요?)</string>
@@ -15,6 +17,12 @@
     <string name="card_rating_label">평점</string>
 	<string name="card_submenu_label">서브메뉴</string>
     <string name="card_submenu_description">함께 제공되는 메뉴들</string>
+	
+	<!-- 메뉴 평가하기 Dialog -->
+	<string name="dialog_rating_label">평가하기</string>
+	<string name="dialog_rating_min">별로에요</string>
+	<string name="dialog_rating_mid">보통</string>
+	<string name="dialog_rating_max">맛있어요</string>
 
 	<!-- 설정화면 -->
 	<string name="title_settings">설정</string>

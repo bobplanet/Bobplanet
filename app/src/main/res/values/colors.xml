@@ -25,6 +25,8 @@
 	<!-- 서브메뉴 카드 -->
     <color name="submenu_item_title_bg">#403030</color>
 
+    <color name="rating_dialog_support">#808080</color>
+
     <color name="breakfast_bg">#aa3939</color>
     <color name="lunch_bg">#7b9f35</color>
     <color name="dinner_bg">#226666</color>

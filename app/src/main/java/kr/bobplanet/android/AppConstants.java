@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 
 /**
  * 여러 클래스에서 공유하는 상수. 클래스 이름으로 참조하기 귀찮아서 interface로 구현함.
- * 상수값을 이용하고자 하는 클래스에서는 implement만 하면 됨.
+ * 소수값을 이용하고자 하는 클래스에서는 implement만 하면 됨.
  *
  * - 상용빌드와 개발빌드에서 달라지는 값이 있어 BuildConfig를 이용함
  *
@@ -37,4 +37,9 @@ public interface AppConstants {
 	 */
     DateFormat DATEFORMAT_YMD = new SimpleDateFormat("yyyy-MM-dd");
     DateFormat DATEFORMAT_YMDE = new SimpleDateFormat("yyyy/MM/dd(EEE)");
+
+    /**
+     * 별점 최대값은 5점
+     */
+	int RATING_MAX = 5;
 }
