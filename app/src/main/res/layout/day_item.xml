@@ -8,8 +8,8 @@
     android:layout_height="wrap_content"
     android:layout_margin="4dp"
     android:clickable="true"
-    app:cardElevation="2dp"
-    app:cardCornerRadius="4dp"
+    app:cardElevation="@dimen/card_elevation"
+    app:cardCornerRadius="@dimen/card_corner_radius"
     android:foreground="?android:attr/selectableItemBackground">
 
 	<!-- 이미지 / 메뉴명 / 서브메뉴 / 칼로리 등을 담는 layout -->
@@ -23,14 +23,13 @@
         <FrameLayout
             android:id="@+id/thumbnail_holder"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp">
 
             <com.android.volley.toolbox.NetworkImageView
                 android:id="@+id/thumbnail"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:layout_alignParentLeft="true"
-                android:layout_marginRight="8dp"
                 android:scaleType="centerCrop"
                 android:transitionName="menu_icon"/>
 
@@ -38,9 +37,9 @@
                 android:id="@+id/when"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="2dp"
+                android:padding="@dimen/thumbnail_label_padding"
                 android:textColor="@android:color/white"
-                android:textSize="12dp"
+                android:textSize="@dimen/thumbnail_label_size"
                 tools:text="아침" />
 
         </FrameLayout>

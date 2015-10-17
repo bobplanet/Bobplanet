@@ -2,11 +2,9 @@
 
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="@dimen/submenu_item_height"
-    android:layout_margin="4dp"
-    app:cardElevation="1dp">
+    android:layout_margin="4dp">
 
     <com.android.volley.toolbox.NetworkImageView
         android:id="@+id/thumbnail"
@@ -19,7 +17,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/submenu_item_title_bg"
-        android:padding="4dp"
+        android:textSize="@dimen/thumbnail_label_size"
+        android:padding="@dimen/thumbnail_label_padding"
         android:textColor="@android:color/white" />
 
 </FrameLayout>

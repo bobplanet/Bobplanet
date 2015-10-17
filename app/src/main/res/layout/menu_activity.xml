@@ -69,7 +69,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_grade"
-        app:layout_anchor="@id/app_bar"
+        app:layout_anchor="@id/view_pager"
         app:layout_anchorGravity="bottom|end" />
 
 </android.support.design.widget.CoordinatorLayout>

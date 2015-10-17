@@ -6,6 +6,14 @@
     <dimen name="app_bar_height">240dp</dimen>
     <dimen name="text_margin">16dp</dimen>
 
+	<!-- Cardview 공통 -->
+	<dimen name="card_elevation">2dp</dimen>
+	<dimen name="card_corner_radius">4dp</dimen>
+
+	<!-- 썸네일 공통 -->
+	<dimen name="thumbnail_label_size">12dp</dimen>
+	<dimen name="thumbnail_label_padding">3dp</dimen>
+	
 	<!-- 서브메뉴 카드 -->
     <dimen name="submenu_card_height">250dp</dimen>
 	<dimen name="submenu_item_height">100dp</dimen>

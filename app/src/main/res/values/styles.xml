@@ -37,4 +37,6 @@
     <style name="AppTheme.CardTitle" parent="AppTheme">
         <item name="android:textColor">@color/primary_dark</item>
     </style>
+	
+	<!-- Materiallist용 스타일 -->
 </resources>
