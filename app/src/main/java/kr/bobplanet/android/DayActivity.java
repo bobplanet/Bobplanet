@@ -152,7 +152,7 @@ public class DayActivity extends BaseActivity {
 
         /*
         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
-                new Pair<View, String>(viewHolder.icon, EXTRA_MENU_ICON),
+                new Pair<View, String>(viewHolder.thumbnail, EXTRA_MENU_ICON),
                 new Pair<View, String>(viewHolder.title, EXTRA_MENU_TITLE));
 
         ActivityCompat.startActivity(getActivity(), intent, options.toBundle());

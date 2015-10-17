@@ -107,7 +107,7 @@ public class GcmServices implements AppConstants {
                 @Override
                 public void onEntityLoad(Menu result) {
                     menu = result;
-                    imageLoader.get(result.getItem().getIconURL(), MessageListener.this);
+                    imageLoader.get(result.getItem().getThumbnail(), MessageListener.this);
                 }
             });
         }

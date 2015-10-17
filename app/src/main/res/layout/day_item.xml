@@ -21,12 +21,12 @@
 
         <!-- 이미지 + '아침/점심/저녁' -->
         <FrameLayout
-            android:id="@+id/icon_holder"
+            android:id="@+id/thumbnail_holder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <com.android.volley.toolbox.NetworkImageView
-                android:id="@+id/icon"
+                android:id="@+id/thumbnail"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_alignParentLeft="true"
@@ -50,8 +50,8 @@
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@id/icon_holder"
-            android:layout_toRightOf="@id/icon_holder"
+            android:layout_alignTop="@id/thumbnail_holder"
+            android:layout_toRightOf="@id/thumbnail_holder"
             android:textSize="@dimen/daily_name"
             android:textStyle="bold"
             android:transitionName="menu_title"
@@ -75,7 +75,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/title"
             android:layout_marginTop="1dip"
-            android:layout_toRightOf="@id/icon_holder"
+            android:layout_toRightOf="@id/thumbnail_holder"
             android:textSize="@dimen/daily_sub"
             tools:text="Submenus 1, Submenus 2" />
 
@@ -86,7 +86,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/submenu"
             android:layout_marginTop="5dp"
-            android:layout_toRightOf="@id/icon_holder"
+            android:layout_toRightOf="@id/thumbnail_holder"
             android:textColor="@color/calories"
             android:textSize="@dimen/daily_calories"
             tools:text="860 KCal" />

@@ -9,12 +9,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.util.Pair;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
@@ -22,6 +17,7 @@ import com.android.volley.toolbox.NetworkImageView;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
 
 /**
@@ -51,7 +47,7 @@ public class MenuActivity extends BaseActivity implements AppConstants {
         EntityVault entityVault = MainApplication.getInstance().getEntityVault();
         menu = entityVault.parseEntity(Menu.class, getIntent().getStringExtra(KEY_MENU));
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = ButterKnife.findById(this, R.id.toolbar);
         toolbar.setTitle(menu.getItem().getId());
         setSupportActionBar(toolbar);
 
@@ -61,10 +57,10 @@ public class MenuActivity extends BaseActivity implements AppConstants {
         CollapsingToolbarLayout toolbar_layout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         toolbar_layout.setTitleEnabled(false);
 
-        NetworkImageView iconView = (NetworkImageView) findViewById(R.id.icon);
-        iconView.setImageUrl(menu.getItem().getIconURL(), imageLoader);
+        NetworkImageView iconView = ButterKnife.findById(this, R.id.thumbnail);
+        iconView.setImageUrl(menu.getItem().getImage(), imageLoader);
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
+        ViewPager viewPager = ButterKnife.findById(this, R.id.view_pager);
         PagerAdapter adapter = setupViewPagerAdapter();
         viewPager.setAdapter(adapter);
 
@@ -81,8 +77,8 @@ public class MenuActivity extends BaseActivity implements AppConstants {
         TabFragmentPagerAdapter adapter = new TabFragmentPagerAdapter(getSupportFragmentManager());
 
 		// fragment 두개 더해줌
-        adapter.addFragment(new MenuFragment(), getString(R.string.label_tab_menu));
-        adapter.addFragment(new MenuScoreFragment(), getString(R.string.label_tab_menu_score));
+        adapter.addFragment(new MenuFragment(), getString(R.string.tab_menu_label));
+        adapter.addFragment(new MenuScoreFragment(), getString(R.string.tab_menu_score_label));
 
         return adapter;
     }

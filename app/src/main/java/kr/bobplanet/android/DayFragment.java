@@ -56,7 +56,7 @@ public class DayFragment extends BaseFragment {
     /**
      * 메뉴정보를 표시하는 RecyclerView
      */
-    @Bind(R.id.recyler_view) RecyclerView recyclerView;
+    @Bind(R.id.recycler_view) RecyclerView recyclerView;
 
     /**
      * 메뉴가 없을 때(식당 노는날) 대신 표시되는 View. 안내메시지 포함.

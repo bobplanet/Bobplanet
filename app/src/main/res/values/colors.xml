@@ -22,7 +22,8 @@
     <color name="list_row_hover_start_color">#ebeef0</color>
     <color name="list_row_hover_end_color">#ebeef0</color>
 
-    <color name="item_title_background">#403030</color>
+	<!-- 서브메뉴 카드 -->
+    <color name="submenu_item_title_bg">#403030</color>
 
     <array name="when_background_color">
         <item>#aa3939</item>

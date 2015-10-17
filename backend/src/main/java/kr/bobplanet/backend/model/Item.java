@@ -25,11 +25,16 @@ public class Item {
 	 */
     @Id private String ID;
 
+    /**
+     *
+     */
+    private String image;
+
 	/**
 	 * 메뉴 아이콘.
 	 * P넷은 아이콘을 제공하지 않으므로, scrape할 때 네이버API를 이용해 썸네일 URL을 미리 밀어넣어둔다.
 	 */
-    private String iconURL;
+    private String thumbnail;
 
 	/**
 	 * 평균점수
@@ -47,11 +52,17 @@ public class Item {
     public Item(String ID) {
         this.ID = ID;
     }
+
     public String getID() {
         return ID;
     }
-    public String getIconURL() {
-        return iconURL;
+
+    public String getImage() {
+        return image;
+    }
+
+    public String getThumbnail() {
+        return thumbnail;
     }
 
     public float getAverageScore() {

@@ -5,4 +5,12 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="app_bar_height">240dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+
+	<!-- 서브메뉴 카드 -->
+    <dimen name="submenu_card_height">250dp</dimen>
+	<dimen name="submenu_item_height">100dp</dimen>
+	
+    <!-- MaterializeListView 설정 -->
+    <dimen name="title_size">16dp</dimen>
+    <dimen name="bigger_title_size">16dp</dimen>
 </resources>

@@ -80,10 +80,10 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
         holder.when.setBackgroundColor(
                 resources.obtainTypedArray(R.array.when_background_color).getColor(index, Color.BLACK));
 
-        if (menu.getItem().getIconURL() != null) {
-            holder.icon.setImageUrl(menu.getItem().getIconURL(), imageLoader);
+        if (menu.getItem().getThumbnail() != null) {
+            holder.thumbnail.setImageUrl(menu.getItem().getThumbnail(), imageLoader);
         } else {
-            holder.icon.setDefaultImageResId(R.drawable.no_menu);
+            holder.thumbnail.setDefaultImageResId(R.drawable.no_menu);
         }
 
         holder.title.setText(menu.getItem().getId());
@@ -113,7 +113,7 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
         Menu menu;
 
         @Bind(R.id.when) TextView when;
-        @Bind(R.id.icon) NetworkImageView icon;
+        @Bind(R.id.thumbnail) NetworkImageView thumbnail;
         @Bind(R.id.title) TextView title;
         @Bind(R.id.rating) RatingBar rating;
         @Bind(R.id.submenu) TextView submenu;

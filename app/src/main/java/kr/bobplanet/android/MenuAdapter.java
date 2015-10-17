@@ -47,7 +47,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.menu_item, viewGroup, false);
+        View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.menu_submenu_item, viewGroup, false);
         return new ViewHolder(itemView);
     }
 
@@ -58,8 +58,8 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
 
         viewHolder.setSubmenu(submenu);
 
-        if (submenu.getItem().getIconURL() != null) {
-            viewHolder.icon.setImageUrl(submenu.getItem().getIconURL(), imageLoader);
+        if (submenu.getItem().getThumbnail() != null) {
+            viewHolder.icon.setImageUrl(submenu.getItem().getThumbnail(), imageLoader);
         } else {
             viewHolder.icon.setDefaultImageResId(R.drawable.no_menu);
         }
@@ -74,7 +74,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
     static class ViewHolder extends RecyclerView.ViewHolder /*implements View.OnClickListener*/ {
         Submenu submenu;
 
-        @Bind(R.id.icon) NetworkImageView icon;
+        @Bind(R.id.thumbnail) NetworkImageView icon;
         @Bind(R.id.title) TextView title;
 
         public ViewHolder(View itemView) {

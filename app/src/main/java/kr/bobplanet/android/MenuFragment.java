@@ -2,14 +2,16 @@ package kr.bobplanet.android;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
+import com.dexafree.materialList.card.Card;
+import com.dexafree.materialList.card.provider.BasicButtonsCardProvider;
+import com.dexafree.materialList.view.MaterialListView;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
 
 /**
@@ -25,6 +27,8 @@ public class MenuFragment extends BaseFragment {
     private static final String TAG = MenuFragment.class.getSimpleName();
 
     private Menu menu;
+
+    @Bind(R.id.material_listview) MaterialListView materialListView;
 
     public MenuFragment() {
     }
@@ -49,12 +53,20 @@ public class MenuFragment extends BaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        TextView title = (TextView) view.findViewById(R.id.title);
-        title.setText(menu.getItem().getId());
+        MaterialListView materialListView = ButterKnife.findById(view, R.id.material_listview);
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyler_view);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
-        recyclerView.setAdapter(new MenuAdapter(getContext(), menu.getSubmenu()));
+        Card summaryCard = new Card.Builder(getContext())
+                .withProvider(BasicButtonsCardProvider.class)
+                .setTitle(R.string.card_rating_label)
+                .endConfig().build();
+
+        Card submenuCard = new Card.Builder(getContext())
+                .withProvider(SubmenuCardProvider.class)
+                .setTitle(R.string.card_submenu_label)
+                .setDescription(R.string.card_submenu_description)
+                .setSubmenu(menu.getSubmenu())
+                .endConfig().build();
+
+        materialListView.addAll(summaryCard, submenuCard);
     }
 }
