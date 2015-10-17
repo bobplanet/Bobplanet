@@ -1,23 +1,17 @@
 package kr.bobplanet.backend.api;
 
-import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiClass;
 import com.google.api.server.spi.config.ApiMethod;
-import com.google.api.server.spi.config.ApiNamespace;
-//import com.google.appengine.api.users.User;
 import com.googlecode.objectify.VoidWork;
 import com.googlecode.objectify.cmd.LoadType;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 import javax.inject.Named;
 
-import kr.bobplanet.backend.BackendConstants;
 import kr.bobplanet.backend.model.Menu;
 import kr.bobplanet.backend.model.Item;
 import kr.bobplanet.backend.model.DailyMenu;
-import kr.bobplanet.backend.model.StringHolder;
 import kr.bobplanet.backend.model.User;
 import kr.bobplanet.backend.model.Vote;
 
@@ -32,39 +26,10 @@ import static kr.bobplanet.backend.api.ObjectifyRegister.ofy;
  * @author heonkyu.jin
  * @version 2015. 9. 27
  */
-@Api(
-        name = "bobplanetApi",
-        version = "v1",
-        title = "Bobplanet Server API",
-        description = "Bobplanet 프로젝트에서 사용되는 메뉴조회, 평가, GCM메시지 전송 등의 API들을 제공합니다.",
-        namespace = @ApiNamespace(
-                ownerDomain = BackendConstants.API_OWNER,
-                ownerName = BackendConstants.API_OWNER,
-                packagePath = ""
-        ),
-        scopes = {
-                BackendConstants.EMAIL_SCOPE
-        },
-        clientIds = {
-                BackendConstants.CLIENTID_ANDROID_DEV,
-                BackendConstants.CLIENTID_ANDROID_RELEASE,
-                BackendConstants.CLIENTID_WEB
-        },
-        audiences = {
-                BackendConstants.ANDROID_AUDIENCE
-        }
-)
 @ApiClass(
-        resource = "menu"
+     resource = "menu"
 )
-public class MenuEndpoint {
-    private static final Logger logger = Logger.getLogger(MenuEndpoint.class.getName());
-
-	/**
-	 * 현재는 이용하지 않음.
-	 */
-    private static final int DEFAULT_LIST_LIMIT = 20;
-
+public class MenuEndpoint extends BaseEndpoint {
 	/**
 	 * 특정 일자의 메뉴 리스트를 조회.
 	 * DailyViewActivity에서 이용함.
@@ -74,7 +39,7 @@ public class MenuEndpoint {
 	 */
     @ApiMethod(
             name = "menuOfDate",
-            path = "menuOfDate/{date}"
+            path = "menu/date/{date}"
     )
     public DailyMenu menuOfDate(@Named("date") String date) {
         logger.info("Executing menuOfDate() : date = " + date);
@@ -122,15 +87,15 @@ public class MenuEndpoint {
             name = "vote",
             httpMethod = "POST"
     )
-    public void vote(@Named("itemName") final String itemName, @Named("menuId") final Long menuId,
-                     @Named("score") final int score) {
+    public void vote(@Named("userId") final Long userId, @Named("itemName") final String itemName,
+                     @Named("menuId") final Long menuId, @Named("score") final int score) {
         logger.info("Executing vote() : { itemName, menuId, score }  = {" + new StringBuilder().append(itemName)
                 .append(", ").append(menuId).append(", ").append(score).append(" }"));
 
         final Item item = ofy().load().entity(new Item(itemName)).now();
         item.addScore(score);
 
-        final Vote vote = new Vote(new User("1234"), item, new Menu(menuId));
+        final Vote vote = new Vote(new User(userId), item, new Menu(menuId));
         vote.setScore(score);
 
 		// 데이터 저장시 transaction 처리
@@ -141,16 +106,5 @@ public class MenuEndpoint {
                 ofy().save().entity(item);
             }
         });
-    }
-
-	/**
-	 * API가 동작하는지 간단히 확인하기 위한 Hello world API
-	 *
-	 */
-    @ApiMethod(
-            name = "helloworld"
-    )
-    public StringHolder helloworld() {
-        return new StringHolder("Hello, world!");
     }
 }

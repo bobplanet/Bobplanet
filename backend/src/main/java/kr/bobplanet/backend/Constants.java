@@ -6,7 +6,7 @@ package kr.bobplanet.backend;
  * @author heonkyu.jin
  * @version 15. 9. 29..
  */
-public interface BackendConstants {
+public interface Constants {
 	/**
 	 * 
 	 */

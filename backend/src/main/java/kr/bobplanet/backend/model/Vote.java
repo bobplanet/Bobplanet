@@ -5,7 +5,6 @@ import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Load;
-import com.googlecode.objectify.annotation.Parent;
 
 /**
  * 사용자가 평점을 매길 때마다 하나씩 생성되는 투표 객체.

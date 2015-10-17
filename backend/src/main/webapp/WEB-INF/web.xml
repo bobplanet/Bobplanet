@@ -14,7 +14,11 @@
         <init-param>
             <param-name>services</param-name>
 			<!-- Endpoint 클래스가 늘어날 경우 여기에 ','로 구분하여 추가 필요 -->
-            <param-value>kr.bobplanet.backend.api.MenuEndpoint</param-value>
+            <param-value>
+                kr.bobplanet.backend.api.MenuEndpoint,
+                kr.bobplanet.backend.api.UserEndpoint,
+                kr.bobplanet.backend.api.MiscEndpoint
+            </param-value>
         </init-param>
     </servlet>
     <servlet-mapping>
