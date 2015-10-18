@@ -14,7 +14,7 @@ import kr.bobplanet.android.event.UserLogEvent;
  * @author heonkyu.jin
  * @version 2015. 10. 11
  */
-public class BaseFragment extends Fragment implements AppConstants {
+public class BaseFragment extends Fragment implements Constants {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);

@@ -22,9 +22,9 @@ import com.google.android.gms.iid.InstanceID;
 import com.google.android.gms.iid.InstanceIDListenerService;
 
 import de.greenrobot.event.EventBus;
-import kr.bobplanet.android.AppConstants;
-import kr.bobplanet.android.EntityVault;
-import kr.bobplanet.android.MainApplication;
+import kr.bobplanet.android.ApiProxy;
+import kr.bobplanet.android.Constants;
+import kr.bobplanet.android.App;
 import kr.bobplanet.android.MenuActivity;
 import kr.bobplanet.android.R;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
@@ -38,7 +38,7 @@ import kr.bobplanet.backend.bobplanetApi.model.Menu;
  * @author heonkyu.jin
  * @version 2015. 10. 3
  */
-public class GcmServices implements AppConstants {
+public class GcmServices implements Constants {
     /**
      * GCM 등록을 담당하는 서비스.
      * 등록완료(성공이든 실패든)시에는 GcmEvent 이벤트를 fire함.
@@ -64,7 +64,7 @@ public class GcmServices implements AppConstants {
                     pubSub.subscribe(token, "/topics/" + topic, null);
                 }
 
-                EventBus.getDefault().post(new GcmEvent(GcmEvent.REGISTER_SUCCESS));
+                EventBus.getDefault().post(new GcmEvent(GcmEvent.REGISTER_SUCCESS, token));
             } catch (Exception e) {
                 Log.d(TAG, "Failed to complete token refresh", e);
 
@@ -100,10 +100,10 @@ public class GcmServices implements AppConstants {
             long menuId = Long.valueOf(data.getString("menuId"));
             this.data = data;
 
-            EntityVault entityVault = MainApplication.getInstance().getEntityVault();
-            final ImageLoader imageLoader = MainApplication.getInstance().getImageLoader();
+            ApiProxy apiProxy = App.getInstance().getApiProxy();
+            final ImageLoader imageLoader = App.getInstance().getImageLoader();
 
-            entityVault.loadMenu(menuId, new EntityVault.OnEntityLoadListener<Menu>() {
+            apiProxy.loadMenu(menuId, new ApiProxy.OnEntityLoadListener<Menu>() {
                 @Override
                 public void onEntityLoad(Menu result) {
                     menu = result;

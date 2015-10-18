@@ -12,12 +12,22 @@ public class GcmEvent {
     public static final String REGISTER_FAILURE = "REGISTER_FAILURE";
 
     private final String type;
+    private final String token;
+
+    public GcmEvent(String type, String token) {
+        this.type = type;
+        this.token = token;
+    }
 
     public GcmEvent(String type) {
-        this.type = type;
+        this(type, null);
     }
 
     public String getType() {
         return type;
+    }
+
+    public String getToken() {
+        return token;
     }
 }

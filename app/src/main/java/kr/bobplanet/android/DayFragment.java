@@ -49,7 +49,6 @@ public class DayFragment extends BaseFragment {
     /**
      * 네트웤에서 데이터를 가져올 때 동작하는 ProgressBar
      */
-    @Bind(R.id.progress_bar)
     ProgressBar progressBar;
 
     @Bind(R.id.header_text)
@@ -58,7 +57,6 @@ public class DayFragment extends BaseFragment {
     /**
      * 메뉴정보를 표시하는 RecyclerView
      */
-    @Bind(R.id.recycler_view)
     RecyclerView recyclerView;
 
     /**
@@ -92,6 +90,10 @@ public class DayFragment extends BaseFragment {
 
         View view = inflater.inflate(R.layout.day_fragment, container, false);
         ButterKnife.bind(this, view);
+
+        recyclerView = ButterKnife.findById(view, R.id.recycler_view);
+        progressBar = ButterKnife.findById(view, R.id.progress_bar);
+
         return view;
     }
 
@@ -119,14 +121,16 @@ public class DayFragment extends BaseFragment {
 
     /**
      * 구동되자마자 서버에서 일간메뉴데이터를 가져옴.
-     * 데이터 캐싱을 위해 <code>EntityVault</code>를 이용함.
+     * 데이터 캐싱을 위해 <code>ApiProxy</code>를 이용함.
      */
     @Override
     public void onStart() {
         super.onStart();
 
+        EventBus.getDefault().register(this);
+
         // 데이터 로딩이 끝나면 그에 맞게 UI 업데이트하고 activity에도 데이터로딩 끝났음을 전달
-        EntityVault.OnEntityLoadListener<DailyMenu> listener = new EntityVault.OnEntityLoadListener<DailyMenu>() {
+        ApiProxy.OnEntityLoadListener<DailyMenu> listener = new ApiProxy.OnEntityLoadListener<DailyMenu>() {
             @Override
             public void onEntityLoad(DailyMenu dailyMenu) {
                 if (dailyMenu == null) return;
@@ -156,7 +160,13 @@ public class DayFragment extends BaseFragment {
             }
         };
 
-        MainApplication.getInstance().getEntityVault().loadMenuOfDate(getDate(false), listener);
+        App.getInstance().getApiProxy().loadMenuOfDate(getDate(false), listener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
     @SuppressWarnings("unused")

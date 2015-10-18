@@ -2,22 +2,26 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="kr.bobplanet.android" >
 
+	<!-- 네트웤에서 데이터 가져와야 하므로 기본적으로 필요 -->
     <uses-permission android:name="android.permission.INTERNET" />
+	
+	<!-- Google login을 위해 필요 -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+	
+    <!-- GCM 이용을 위해 필요한 권한 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-    <!-- GCM 이용을 위해 필요한 권한 -->
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE" />
-    <!-- 이 permission을 정의해야 다른 앱이 GCM 메시지를 가로채지 못함 -->
+    <!-- 아래 permission을 정의해야 다른 앱이 GCM 메시지를 가로채지 못함 -->
     <permission
         android:name="${applicationId}.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
+	<!-- 애플리케이션 -->
     <application
-        android:name=".MainApplication"
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -34,12 +38,12 @@
             </intent-filter>
         </activity>
 
-        <!-- 일간메뉴 조회 Acivity -->
+        <!-- 일간 조회 Acivity -->
         <activity
             android:name=".DayActivity"
             android:label="@string/app_name" />
 
-        <!-- 특정메뉴 조회 Activity -->
+        <!-- 메뉴 조회 Activity -->
         <activity
             android:name=".MenuActivity"
             android:label="@string/title_menu"
@@ -49,6 +53,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".DayActivity" />
         </activity>
+
+        <!-- 구글 로그인 Acivity -->
+        <activity
+            android:name=".GoogleLoginActivity" />
 
         <!-- 설정화면 Activity -->
 
@@ -66,7 +74,7 @@
             </intent-filter>
         </receiver>
 
-        <!--  -->
+        <!-- Play Services의 GA가 데이터를 보낼 때 "보낼 데이터 있으면 내놔"라는 이벤트 수신용 Receiver -->
         <receiver
             android:name="com.google.android.gms.analytics.AnalyticsReceiver"
             android:enabled="true" >
@@ -79,6 +87,7 @@
         <service
             android:name=".gcm.GcmServices$Registration"
             android:exported="false" />
+			
         <!-- GCM 메시지 수신 Service -->
         <service
             android:name=".gcm.GcmServices$MessageListener"
@@ -87,6 +96,7 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
         </service>
+		
         <!-- 인스턴스ID 변경이벤트 수신 Service -->
         <service
             android:name=".gcm.GcmServices$InstanceIDListener"

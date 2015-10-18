@@ -8,18 +8,18 @@ import android.util.Log;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.JsonParser;
 
 import java.io.IOException;
 import java.util.Date;
 
 import de.greenrobot.event.EventBus;
+import hugo.weaving.DebugLog;
 import kr.bobplanet.android.event.MeasureLogEvent;
 import kr.bobplanet.android.event.NetworkExceptionEvent;
 import kr.bobplanet.backend.bobplanetApi.BobplanetApi;
 import kr.bobplanet.backend.bobplanetApi.model.DailyMenu;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
+import kr.bobplanet.backend.bobplanetApi.model.User;
 
 /**
  * Google AppEngine으로부터 가져오는 데이터를 LruCache를 이용해 한차례 caching하는 객체저장소.
@@ -38,8 +38,8 @@ import kr.bobplanet.backend.bobplanetApi.model.Menu;
  * @author hkjinlee
  * @version 2015. 10. 7
  */
-public class EntityVault implements AppConstants {
-    private static final String TAG = EntityVault.class.getSimpleName();
+public class ApiProxy implements Constants {
+    private static final String TAG = ApiProxy.class.getSimpleName();
 	
 	/**
 	 * Google Cloud Endpoint에 의해 만들어지는 서버사이드 API의 wrapper.
@@ -67,18 +67,11 @@ public class EntityVault implements AppConstants {
     private final LruCache<String, Pair<Long, String>> jsonCache;
 	
 	/**
-	 * 캐쉬에서 꺼낸 JSON 문자열에서 객체를 꺼내는 parser를 만들 때 사용할 JSON factory.
-	 */
-    private final JsonFactory jsonFactory;
-	
-	/**
 	 * 기본 생성자.
 	 */
-    protected EntityVault() {
-        this.jsonFactory = new AndroidJsonFactory();
-
+    protected ApiProxy() {
         this.api = new BobplanetApi.Builder(
-                AndroidHttp.newCompatibleTransport(), jsonFactory, null)
+                AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
                 .setRootUrl(BACKEND_ROOT_URL).build();
 
         this.jsonCache = new LruCache<>(MAX_SIZE);
@@ -99,8 +92,7 @@ public class EntityVault implements AppConstants {
             }
         };
 
-        EntityLoader<DailyMenu> loader = new EntityLoader<>(remote, listener);
-        loader.execute(new Pair<Class<DailyMenu>, Object>(DailyMenu.class, date));
+        new ApiLoader<>(DailyMenu.class, remote, listener, "menuOfDate").execute(date);
     }
 
     /**
@@ -118,21 +110,59 @@ public class EntityVault implements AppConstants {
             }
         };
 
-        EntityLoader<Menu> loader = new EntityLoader<>(remote, listener);
-        loader.execute(new Pair<Class<Menu>, Object>(Menu.class, id));
+        new ApiLoader<>(Menu.class, remote, listener, "menu").execute(id);
     }
 
-	/**
-	 * 이미 JSON 문자열을 갖고있는 경우(다른 클래스로부터 전달받는 등) 사용.
-	 * 캐쉬나 네트웤 조회없이 JSON unserialize만 함
-	 */
-    protected <Entity> Entity parseEntity(Class<Entity> type, String json) {
-        try {
-            JsonParser parser = jsonFactory.createJsonParser(json);
-            return parser.parse(type);
-        } catch (IOException e) {
-            return null;
-        }
+    /**
+     * 사용자 등록.
+     * @param user
+     * @param listener
+     */
+    @DebugLog
+    public void registerUser(final User user, OnEntityLoadListener<User> listener) {
+        RemoteApiLoader<User> remote = new RemoteApiLoader<User>() {
+            @Override
+            public User fromRemoteApi() throws IOException {
+                return api.registerUser(user).execute();
+            }
+        };
+
+        new ApiLoader<>(User.class, remote, listener, "registerUser").execute();
+    }
+
+    /**
+     * 사용자정보 업데이트.
+     * @param user
+     */
+    @DebugLog
+    public void updateUser(final User user) {
+        RemoteApiLoader<Void> remote = new RemoteApiLoader<Void>() {
+            @Override
+            public Void fromRemoteApi() throws IOException {
+                return api.updateUser(user).execute();
+            }
+        };
+
+        new ApiLoader<>(Void.class, remote, null, "updateUser").execute();
+    }
+
+    /**
+     * 메뉴 평가.
+     * @param userId
+     * @param menu
+     * @param score
+     * @param listener
+     */
+    @DebugLog
+    public void vote(final Long userId, final Menu menu, final int score, OnEntityLoadListener<Menu> listener) {
+        RemoteApiLoader<Menu> remote = new RemoteApiLoader<Menu>() {
+            @Override
+            public Menu fromRemoteApi() throws IOException {
+                return api.vote(userId, menu.getItem().getId(), menu.getId(), score).execute();
+            }
+        };
+
+        new ApiLoader<>(Menu.class, remote, listener, "vote").execute();
     }
 
 	/**
@@ -143,9 +173,11 @@ public class EntityVault implements AppConstants {
 	 * - doInBackground()에서 캐쉬 조회 및 네트웤API 호출, 캐쉬 업데이트 등을 수행
 	 * - onPostExecute()에서 listener의 onEntityLoad() 메소드를 호출하여 데이터로딩 후처리 진행
 	 */
-    private class EntityLoader<Entity> extends AsyncTask<Pair<Class<Entity>, Object>, Void, Entity> {
-        private final RemoteApiLoader<Entity> remote;
-        private final OnEntityLoadListener<Entity> listener;
+    private class ApiLoader<T> extends AsyncTask<Object, Void, T> {
+        private final Class<T> type;
+        private final RemoteApiLoader<T> remote;
+        private final OnEntityLoadListener<T> listener;
+        private String apiName;
 
         /**
          * 생성자.
@@ -153,62 +185,64 @@ public class EntityVault implements AppConstants {
          * @param remote BobplanetApi 호출로직
          * @param listener 데이터 로딩 뒤 후처리로직
          */
-        EntityLoader(RemoteApiLoader<Entity> remote, @Nullable OnEntityLoadListener<Entity> listener) {
+        ApiLoader(Class<T> type, RemoteApiLoader<T> remote, @Nullable OnEntityLoadListener<T> listener,
+                  String apiName) {
+            this.type = type;
             this.remote = remote;
             this.listener = listener;
+            this.apiName = apiName;
         }
 
 		/**
 		 * 캐쉬에서 객체 조회하고 없거나 이미 expire되었으면 네트웤API를 호출해서 가져옴
 		 */
         @Override
-        protected Entity doInBackground(Pair<Class<Entity>, Object>... params) {
+        @DebugLog
+        protected T doInBackground(Object... params) {
             try {
-                Class<Entity> type = params[0].first;
-                Object key = params[0].second;
-
-                String cacheKey = _getKey(type, key);
-                Pair<Long, String> cachedObj = jsonCache.get(cacheKey);
                 long now = new Date().getTime();
+                String cacheKey = "";
 
-                if (cachedObj != null) {
-                    Long timestamp = cachedObj.first;
-                    String json = cachedObj.second;
-                    if (now - timestamp < CACHE_EXPIRE_SECONDS * 1000 && json != null) {
-                        Log.d(TAG, "Get cached entry for " + key);
-						return parseEntity(type, json);
+                if (params.length > 0) {
+                    cacheKey = type.getSimpleName() + "-" + params[0];
+                    Pair<Long, String> cachedObj = jsonCache.get(cacheKey);
+
+                    if (cachedObj != null) {
+                        Long timestamp = cachedObj.first;
+                        String json = cachedObj.second;
+                        if (now - timestamp < CACHE_EXPIRE_SECONDS * 1000 && json != null) {
+                            Log.v(TAG, "Get cached entry for " + cacheKey);
+                            return EntityParser.parseEntity(type, json);
+                        }
+                        Log.v(TAG, "Cache expired for " + cacheKey);
                     }
                 }
 
-                Log.d(TAG, "No cache or expired for " + key + ". Fetching from network API");
-                Entity result = remote.fromRemoteApi();
+                Log.v(TAG, "Fetching from network API");
+                T result = remote.fromRemoteApi();
+                Log.v(TAG, "result = " + result);
 
                 MeasureLogEvent.measure(MeasureLogEvent.Metric.API_LATENCY,
-                        type.getSimpleName(), new Date().getTime() - now).submit();
+                        apiName, new Date().getTime() - now).submit();
 
-                jsonCache.put(cacheKey, new Pair<>(now, result.toString()));
+                if (params.length > 0) {
+                    jsonCache.put(cacheKey, new Pair<>(now, result.toString()));
+                }
 
                 return result;
             } catch (IOException e) {
                 Log.d(TAG, "error", e);
-                EventBus.getDefault().post(new NetworkExceptionEvent("Daily menu fetch error", e));
+                EventBus.getDefault().post(new NetworkExceptionEvent("Network error", e));
                 return null;
             }
         }
 
         @Override
-        protected void onPostExecute(Entity entity) {
+        protected void onPostExecute(T entity) {
             if (listener != null) {
                 listener.onEntityLoad(entity);
             }
         }
-    }
-
-	/**
-	 * 내부 LruCache에 객체를 저장할 key값 생성.
-	 */
-    private static String _getKey(Class type, Object key) {
-        return type.getSimpleName().toLowerCase() + KEY_SEPARATOR + key;
     }
 
 	/**
@@ -222,7 +256,7 @@ public class EntityVault implements AppConstants {
 	/**
 	 * 데이터 로딩이 끝난 뒤의 후처리 로직.
 	 */
-    public interface OnEntityLoadListener<Entity> {
-        void onEntityLoad(Entity result);
+    public interface OnEntityLoadListener<T> {
+        void onEntityLoad(T result);
     }
 }

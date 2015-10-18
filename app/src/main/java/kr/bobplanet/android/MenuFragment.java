@@ -37,9 +37,9 @@ public class MenuFragment extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        EntityVault entityVault = MainApplication.getInstance().getEntityVault();
+        ApiProxy apiProxy = App.getInstance().getApiProxy();
         String menu_json = getActivity().getIntent().getStringExtra(KEY_MENU);
-        menu = entityVault.parseEntity(Menu.class, menu_json);
+        menu = EntityParser.parseEntity(Menu.class, menu_json);
 
     }
 

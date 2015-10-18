@@ -23,6 +23,12 @@
 	<string name="dialog_rating_min">별로에요</string>
 	<string name="dialog_rating_mid">보통</string>
 	<string name="dialog_rating_max">맛있어요</string>
+	<string name="rated_notice">평가하였습니다</string>
+	
+	<!-- 구글 로그인 Dialog -->
+	<string name="dialog_login_label">로그인 필요</string>
+	<string name="dialog_login_desc">점수를 주시려면 구글 로그인 필요해요</string>
+	<string name="pick_account_needed">구글계정 선택 안함!</string>
 
 	<!-- 설정화면 -->
 	<string name="title_settings">설정</string>

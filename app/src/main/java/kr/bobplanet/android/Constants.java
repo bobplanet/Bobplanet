@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat;
  *
  * @author hkjinlee on 15. 9. 29
  */
-public interface AppConstants {
+public interface Constants {
 	/**
 	 * 데이터를 가져올 Google AppEngine의 root URL
 	 */
@@ -28,18 +28,10 @@ public interface AppConstants {
 	 */
     String KEY_DATE = "KEY_DATE";
     String KEY_MENU = "KEY_MENU";
-    String KEY_LAUNCHED_YN = "KEY_LAUNCHED_YN";
-    String KEY_DISMISSED_NOTICE_YN = "KEY_DISMISSED_NOTICE_YN";
-    String SENT_GCM_TOKEN_TO_SERVER = "SENT_GCM_TOKEN_TO_SERVER";
 
 	/**
 	 * 공용으로 사용할 DateFormat 객체들
 	 */
     DateFormat DATEFORMAT_YMD = new SimpleDateFormat("yyyy-MM-dd");
     DateFormat DATEFORMAT_YMDE = new SimpleDateFormat("yyyy/MM/dd(EEE)");
-
-    /**
-     * 별점 최대값은 5점
-     */
-	int RATING_MAX = 5;
 }

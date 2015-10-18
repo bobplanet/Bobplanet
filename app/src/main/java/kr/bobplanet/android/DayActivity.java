@@ -59,7 +59,7 @@ public class DayActivity extends BaseActivity {
         // intent에 날짜가 있으면 그 날짜, 없으면 오늘 날짜 이용
         Date start_date;
         try {
-            String date = getIntent().getStringExtra(AppConstants.KEY_DATE);
+            String date = getIntent().getStringExtra(Constants.KEY_DATE);
             start_date = DATEFORMAT_YMD.parse(date);
         } catch (Exception e) {
             start_date = new Date();
@@ -98,7 +98,7 @@ public class DayActivity extends BaseActivity {
     @SuppressWarnings("unused")
     public void onEvent(DayFragment.DataLoadCompleteEvent e) {
         DailyMenu d = e.getDailyMenu();
-        Log.d(TAG, "Data load complete: " + d.toString());
+        Log.v(TAG, "Data load complete: " + d.toString());
 
 		// 주의사항: FragmentManager를 이용해서 fragment 존재여부 체크하면 안됨.
 		// 이 단계에서는 adapter에만 추가되어있어, FM에서는 해당 fragment를 모르는 상태임.
@@ -164,19 +164,19 @@ public class DayActivity extends BaseActivity {
 	 * 좌우로 swipe하면 다른 날짜 메뉴도 볼 수 있음을 Snackbar로 알려줌
 	 */
     private void showSwipeNotice() {
-        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        CoordinatorLayout layout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
+        final Preferences prefs = App.getInstance().getPreferences();
 
-        if (prefs.getBoolean(KEY_DISMISSED_NOTICE_YN, false)) {
+        if (prefs.hasDismissedSwipeNotice()) {
             return;
         }
 
+        CoordinatorLayout layout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
         Snackbar.make(
                 layout, R.string.swipe_notice, Snackbar.LENGTH_INDEFINITE)
                 .setAction(R.string.swipe_notice_goaway, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        prefs.edit().putBoolean(KEY_DISMISSED_NOTICE_YN, true).apply();
+                        prefs.setDismissedSwipeNotice();
                     }
                 }).show();
     }
