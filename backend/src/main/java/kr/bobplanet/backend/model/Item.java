@@ -1,16 +1,13 @@
 package kr.bobplanet.backend.model;
 
-import com.googlecode.objectify.Ref;
-import com.googlecode.objectify.annotation.AlsoLoad;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
-import com.googlecode.objectify.annotation.Load;
-import com.googlecode.objectify.annotation.OnLoad;
 
 /**
  * 식당에서 제공되는 개별 메뉴항목 객체(가령, '갈비탕', '잡채밥').
  * 메뉴의 메타데이터 및 평점정보로 구성된다.
  * 
+ * - 메뉴 이미지는 외부검색에서 긁어옴 (처음에 네이버API 쓰다가 다음API로 전향)
  * - Datastore의 "Item" kind로 매핑.
  * - 메뉴이름(string)을 그대로 key로 사용함.
  * - 평점은 5점 만점 기준이며, 각 점수를 준 사람 수를 기준으로 평균평점을 계산함.
@@ -26,13 +23,12 @@ public class Item {
     @Id private String ID;
 
     /**
-     *
+     * 메뉴 큰 이미지.
      */
     private String image;
 
 	/**
 	 * 메뉴 아이콘.
-	 * P넷은 아이콘을 제공하지 않으므로, scrape할 때 네이버API를 이용해 썸네일 URL을 미리 밀어넣어둔다.
 	 */
     private String thumbnail;
 
@@ -78,6 +74,22 @@ public class Item {
 	 */
     public void addScore(int score) {
         numVotesPerScore[score - 1]++;
+        recalculateScore();
+    }
+
+	/**
+	 * 기존 평가자가 점수를 수정하는 경우, 기존점수는 제거하고 평균평점에 반영
+	 */
+    public void editScore(int score, int oldScore) {
+        numVotesPerScore[score - 1]++;
+        numVotesPerScore[oldScore - 1]--;
+        recalculateScore();
+    }
+
+    /**
+     * 평점대별 평점자수에 기반하여 정확한 평점 계산
+     */
+    private void recalculateScore() {
         long totalVotes = 0;
         long totalScore = 0;
         for (int i = 0; i < 5; i++) {
