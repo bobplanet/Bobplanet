@@ -155,6 +155,7 @@ public class ApiProxy implements Constants {
      */
     @DebugLog
     public void vote(final Long userId, final Menu menu, final int score, OnEntityLoadListener<Menu> listener) {
+        Log.v(TAG, "score = " + score);
         RemoteApiLoader<Menu> remote = new RemoteApiLoader<Menu>() {
             @Override
             public Menu fromRemoteApi() throws IOException {
@@ -204,7 +205,7 @@ public class ApiProxy implements Constants {
                 String cacheKey = "";
 
                 if (params.length > 0) {
-                    cacheKey = type.getSimpleName() + "-" + params[0];
+                    cacheKey = type.getSimpleName() + KEY_SEPARATOR + params[0];
                     Pair<Long, String> cachedObj = jsonCache.get(cacheKey);
 
                     if (cachedObj != null) {
@@ -226,7 +227,7 @@ public class ApiProxy implements Constants {
                         apiName, new Date().getTime() - now).submit();
 
                 if (params.length > 0) {
-                    jsonCache.put(cacheKey, new Pair<>(now, result.toString()));
+                    jsonCache.put(cacheKey, new Pair<>(now, EntityParser.toString(result)));
                 }
 
                 return result;

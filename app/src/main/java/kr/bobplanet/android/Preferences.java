@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Entity;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import kr.bobplanet.backend.bobplanetApi.model.User;
 
@@ -15,14 +16,12 @@ import kr.bobplanet.backend.bobplanetApi.model.User;
  * @version 15. 10. 17
  */
 public class Preferences {
+    private static final String TAG = Preferences.class.getSimpleName();
+
     private static final String USER = "USER";
-    private static final String USERID = "USERID";
-    private static final String GCM_TOKEN = "GCM_TOKEN";
 
     private static final String HAS_LAUNCHED = "HAS_LAUNCHED";
     private static final String HAS_DISMISSED_SWIPE_NOTICE = "HAS_DISMISSED_SWIPE_NOTICE";
-
-    protected static final long INVALID_USERID = -1;
 
     final SharedPreferences prefs;
 
@@ -33,11 +32,12 @@ public class Preferences {
 
     public User loadUser() {
         String userString = prefs.getString(USER, null);
+        Log.v(TAG, "userString = " + userString);
         return userString != null ? EntityParser.parseEntity(User.class, userString) : null;
     }
 
     public void storeUser(User user) {
-        prefs.edit().putString(USER, user.toString()).apply();
+        prefs.edit().putString(USER, EntityParser.toString(user)).apply();
     }
 
     public boolean hasDismissedSwipeNotice() {

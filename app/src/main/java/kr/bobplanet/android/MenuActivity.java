@@ -1,6 +1,7 @@
 package kr.bobplanet.android;
 
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -15,8 +16,11 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.RatingBar;
+import android.widget.Toast;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
@@ -124,7 +128,8 @@ public class MenuActivity extends BaseActivity implements Constants, ApiProxy.On
                 .setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                myScore = ratingBar.getNumStars();
+                                myScore = (int) ratingBar.getRating();
+                                Log.d(TAG, "score = " + myScore);
 
                                 if (App.getInstance().getUserManager().hasAccount()) {
                                     uploadVote();
@@ -171,8 +176,14 @@ public class MenuActivity extends BaseActivity implements Constants, ApiProxy.On
             proxy.vote(App.getInstance().getUserManager().getUserId(), menu, myScore, this);
         }
 
+        Resources r = getResources();
+        String[] levels = r.getStringArray(R.array.rating_level);
+        String message = String.format(r.getString(R.string.rating_notice_fmt),
+                menu.getItem().getId(),
+                Util.endsWithConsonant(menu.getItem().getId()) ? "을" : "를",
+                levels[myScore - 1]);
         CoordinatorLayout layout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
-        Snackbar.make(layout, R.string.rated_notice, Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(layout, message, Snackbar.LENGTH_LONG).show();
     }
 
     /**

@@ -1,44 +1,51 @@
 <resources>
-	<!-- 애플리케이션 공용 -->
+    <!-- 애플리케이션 공용 -->
     <string name="app_name">Bobplanet</string>
     <string name="action_settings">Settings</string>
-	<string name="button_ok">확인</string>
-	<string name="button_cancel">취소</string>
+    <string name="button_ok">확인</string>
+    <string name="button_cancel">취소</string>
 
-	<!-- 일간보기 화면 -->
+    <!-- 일간보기 화면 -->
     <string name="closed_today">오늘은 회사식당 쉽니다.\n좌우로 화면을 넘겨보세요.\n(그런데.. 왜 휴일에 이 앱을 보고 계신가요?)</string>
     <string name="swipe_notice">좌우로 화면을 넘기면 다른 날의 메뉴도 볼 수 있어요.</string>
     <string name="swipe_notice_goaway">알았음</string>
-    	
-	<!-- 메뉴보기 화면 -->
-	<string name="title_menu">메뉴보기</string>
+
+    <!-- 메뉴보기 화면 -->
+    <string name="title_menu">메뉴보기</string>
     <string name="tab_menu_label">메뉴정보</string>
     <string name="tab_menu_score_label">상세평점</string>
     <string name="card_rating_label">평점</string>
-	<string name="card_submenu_label">서브메뉴</string>
+    <string name="card_submenu_label">서브메뉴</string>
     <string name="card_submenu_description">함께 제공되는 메뉴들</string>
-	
-	<!-- 메뉴 평가하기 Dialog -->
-	<string name="dialog_rating_label">평가하기</string>
-	<string name="dialog_rating_min">별로에요</string>
-	<string name="dialog_rating_mid">보통</string>
-	<string name="dialog_rating_max">맛있어요</string>
-	<string name="rated_notice">평가하였습니다</string>
-	
-	<!-- 구글 로그인 Dialog -->
-	<string name="dialog_login_label">로그인 필요</string>
-	<string name="dialog_login_desc">점수를 주시려면 구글 로그인 필요해요</string>
-	<string name="pick_account_needed">구글계정 선택 안함!</string>
 
-	<!-- 설정화면 -->
-	<string name="title_settings">설정</string>
-	
-	<!-- Notification -->
+    <!-- 메뉴 평가하기 Dialog -->
+    <string name="dialog_rating_label">평가하기</string>
+    <string name="dialog_rating_min">별로에요</string>
+    <string name="dialog_rating_mid">보통</string>
+    <string name="dialog_rating_max">맛있어요</string>
+    <string-array name="rating_level">
+        <item>아주 별로</item>
+        <item>별로</item>
+        <item>보통</item>
+        <item>맛있다</item>
+        <item>아주 맛있다</item>
+    </string-array>
+	<string name="rating_notice_fmt" formatted="false">%s%s \"%s\"라고 평가해주셨네요. 생각이 바뀌시면 재평가도 가능합니다</string>
+
+    <!-- 구글 로그인 Dialog -->
+    <string name="dialog_login_label">로그인 필요</string>
+    <string name="dialog_login_desc">점수를 주시려면 구글 로그인 필요해요</string>
+    <string name="pick_account_needed">구글계정 선택 안함!</string>
+
+    <!-- 설정화면 -->
+    <string name="title_settings">설정</string>
+
+    <!-- Notification -->
     <string name="notification_title">Menu notification</string>
     <string name="action_thumb_up">좋아요</string>
     <string name="action_thumb_down">싫어요</string>
 
-	<!-- 화면 공용 -->
+    <!-- 화면 공용 -->
     <string-array name="when_titles">
         <item name="when_breakfast">아침</item>
         <item name="when_lunch">점심</item>

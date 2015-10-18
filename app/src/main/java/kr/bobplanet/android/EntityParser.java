@@ -1,5 +1,7 @@
 package kr.bobplanet.android;
 
+import android.util.Log;
+
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.JsonParser;
@@ -7,10 +9,13 @@ import com.google.api.client.json.JsonParser;
 import java.io.IOException;
 
 /**
+ *
+ *
  * @author heonkyu.jin
  * @version 15. 10. 18
  */
 public class EntityParser {
+    private static final String TAG = EntityParser.class.getSimpleName();
     /**
      * 캐쉬에서 꺼낸 JSON 문자열에서 객체를 꺼내는 parser를 만들 때 사용할 JSON factory.
      */
@@ -22,8 +27,15 @@ public class EntityParser {
      */
     protected static <T> T parseEntity(Class<T> type, String json) {
         try {
-            JsonParser parser = jsonFactory.createJsonParser(json);
-            return parser.parse(type);
+            return jsonFactory.fromString(json, type);
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    protected static String toString(Object obj) {
+        try {
+            return jsonFactory.toString(obj);
         } catch (IOException e) {
             return null;
         }

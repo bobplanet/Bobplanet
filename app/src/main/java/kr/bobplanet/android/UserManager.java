@@ -53,10 +53,12 @@ public class UserManager implements ApiProxy.OnEntityLoadListener<User> {
     private void initializeUser() {
         User u = prefs.loadUser();
         if (u == null) {
+            Log.i(TAG, "User doesn't exists. Creating new user");
             user = new User();
 
             App.getInstance().getApiProxy().registerUser(user, this);
         } else {
+            Log.i(TAG, "User restored from prefs: " + u);
             this.user = u;
         }
     }
@@ -96,8 +98,11 @@ public class UserManager implements ApiProxy.OnEntityLoadListener<User> {
     @Override
     @DebugLog
     public void onEntityLoad(User result) {
-        user.setId(result.getId());
-        updateUser();
+        Log.v(TAG, "User registered. user = " + result);
+        if (result != null) {
+            user.setId(result.getId());
+            updateUser();
+        }
     }
 
     /**
@@ -128,8 +133,8 @@ public class UserManager implements ApiProxy.OnEntityLoadListener<User> {
     @DebugLog
     public void updateUserGoogleAccount(Person person) {
         user.setAccountType("Google");
+        user.setAccountId(person.getId());
         user.setNickName(person.getNickname());
-        user.setEmail(person.getId());
         user.setImage(person.getImage().getUrl());
 
         updateUser();

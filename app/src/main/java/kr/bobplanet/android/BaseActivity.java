@@ -1,29 +1,19 @@
 package kr.bobplanet.android;
 
-import android.accounts.AccountManager;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-import com.google.android.gms.auth.GoogleAuthException;
-import com.google.android.gms.auth.GoogleAuthUtil;
-import com.google.android.gms.auth.UserRecoverableAuthException;
-import com.google.android.gms.common.AccountPicker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
-
-import java.io.IOException;
 
 import de.greenrobot.event.EventBus;
 import hugo.weaving.DebugLog;
@@ -45,8 +35,11 @@ abstract public class BaseActivity extends AppCompatActivity implements Constant
         GoogleApiClient.OnConnectionFailedListener {
     private static final String TAG = BaseActivity.class.getSimpleName();
 
+    private static final int REQUEST_SIGN_IN = 1;
+
     private GoogleApiClient googleApiClient;
     private boolean isResolving = false;
+    private boolean shouldResolve = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,9 +62,26 @@ abstract public class BaseActivity extends AppCompatActivity implements Constant
         googleApiClient.connect();
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG, "onActivityResult:" + requestCode + ":" + resultCode + ":" + data);
+
+        if (requestCode == REQUEST_SIGN_IN) {
+            // If the error resolution was not successful we should not resolve further.
+            if (resultCode != RESULT_OK) {
+                shouldResolve = false;
+            }
+
+            isResolving = false;
+            googleApiClient.connect();
+        }
+    }
+
     /**
-     * 구글 로그인이 완료되었을 때 호출되는 callback.
-     * 
+     * 구글 로그인이 완료되면 GoogleApiClient에 의해 호출되는 callback.
+     * 로그인을 요청한 Activity에게 알리기 위해 Eventbus 이벤트를 쏴준다.
+	 *
      * @param bundle
      */
     @Override
@@ -107,7 +117,7 @@ abstract public class BaseActivity extends AppCompatActivity implements Constant
         if (!isResolving) {
             if (connectionResult.hasResolution()) {
                 try {
-                    connectionResult.startResolutionForResult(this, ConnectionResult.SIGN_IN_REQUIRED);
+                    connectionResult.startResolutionForResult(this, REQUEST_SIGN_IN);
                     isResolving = true;
                 } catch (IntentSender.SendIntentException e) {
                     Log.e(TAG, "error", e);
