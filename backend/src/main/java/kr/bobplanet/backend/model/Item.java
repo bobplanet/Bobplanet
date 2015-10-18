@@ -1,7 +1,13 @@
 package kr.bobplanet.backend.model;
 
+import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.IgnoreLoad;
+import com.googlecode.objectify.annotation.Load;
+import com.googlecode.objectify.annotation.OnSave;
+
+import java.util.Date;
 
 /**
  * 식당에서 제공되는 개별 메뉴항목 객체(가령, '갈비탕', '잡채밥').
@@ -32,15 +38,21 @@ public class Item {
 	 */
     private String thumbnail;
 
-	/**
-	 * 평균점수
-	 */
+    /**
+     * 평균점수
+     */
     protected float averageScore;
 
-	/**
-	 * 점수대별 평점자수.
-	 */
+    /**
+     * 점수대별 평점자수.
+     */
     protected int[] numVotesPerScore = new int[5];
+
+    /**
+     * 최종수정일
+     */
+    @IgnoreLoad
+    protected Date updateDate;
 
     public Item() {
     }
@@ -65,37 +77,34 @@ public class Item {
         return averageScore;
     }
 
-    public int[] getNumVotesPerScore() {
-        return numVotesPerScore;
-    }
-
-	/**
-	 * 새로운 평가점수를 합산하여 평균평점에 반영
-	 */
+    /**
+     * 새로운 평가점수를 합산하여 평균평점에 반영
+     */
     public void addScore(int score) {
         numVotesPerScore[score - 1]++;
-        recalculateScore();
     }
 
-	/**
-	 * 기존 평가자가 점수를 수정하는 경우, 기존점수는 제거하고 평균평점에 반영
-	 */
+    /**
+     * 기존 평가자가 점수를 수정하는 경우, 기존점수는 제거하고 평균평점에 반영
+     */
     public void editScore(int score, int oldScore) {
         numVotesPerScore[score - 1]++;
         numVotesPerScore[oldScore - 1]--;
-        recalculateScore();
     }
 
     /**
      * 평점대별 평점자수에 기반하여 정확한 평점 계산
      */
-    private void recalculateScore() {
+    @OnSave
+    void onSave() {
         long totalVotes = 0;
         long totalScore = 0;
         for (int i = 0; i < 5; i++) {
             totalVotes += numVotesPerScore[i];
             totalScore += (i + 1) * numVotesPerScore[i];
         }
-        averageScore = totalScore / totalVotes;
+        averageScore = Math.round(totalScore / (float) totalVotes);
+
+        updateDate = new Date();
     }
 }

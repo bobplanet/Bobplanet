@@ -90,27 +90,30 @@ public class MenuEndpoint extends BaseEndpoint {
     public Menu vote(@Named("userId") final Long userId, @Named("itemName") final String itemName,
                      @Named("menuId") final Long menuId, @Named("score") final int score) {
         logger.info(String.format(
-                "Executing vote() : { userId, itemName, menuId, score }  = { %s, %s, %s, %d }",
-                userId, itemName, menuId, score)
+                        "Executing vote() : { userId, itemName, menuId, score }  = { %s, %s, %s, %d }",
+                        userId, itemName, menuId, score)
         );
 
-        final Item item = ofy().load().entity(new Item(itemName)).now();
-        Vote oldVote = myVote(userId, itemName);
-        if (oldVote == null) {
-            item.addScore(score);
-        } else {
-            item.editScore(score, oldVote.getScore());
-        }
-
-        final Vote vote = new Vote(new User(userId), item, new Menu(menuId));
-        vote.setScore(score);
-
-		// 데이터 저장시 transaction 처리
+        // 데이터 저장시 transaction 처리
         ofy().transact(new VoidWork() {
             @Override
             public void vrun() {
-                ofy().save().entity(vote);
-                ofy().save().entity(item);
+                Item item = ofy().load().type(Item.class).id(itemName).now();
+                User user = new User(userId);
+
+                Vote vote = ofy().load().type(Vote.class).ancestor(item).filter("user", user).first().now();
+                logger.info("vote = " + vote);
+                if (vote != null) {
+                    logger.info("Vote exists. Updates score");
+                    item.editScore(score, vote.getScore());
+                } else {
+                    logger.info("no oldVote. Just adds score");
+                    vote = new Vote(new User(userId), item, new Menu(menuId));
+                    item.addScore(score);
+                }
+                vote.setScore(score);
+
+                ofy().save().entities(vote, item).now();
             }
         });
 
@@ -123,11 +126,13 @@ public class MenuEndpoint extends BaseEndpoint {
     )
     public Vote myVote(@Named("userId") final Long userId, @Named("itemName") final String itemName) {
         logger.info(String.format(
-                "Executing myVote() : { userId, itemName } = { %s, %s }",
-                userId, itemName)
+                        "Executing myVote() : { userId, itemName } = { %s, %s }",
+                        userId, itemName)
         );
 
-        Vote vote = ofy().load().type(Vote.class).filter("user", userId).filter("item", itemName).first().now();
+        Vote vote = ofy().load().type(Vote.class).ancestor(new Item(itemName))
+                .filter("user", new User(userId)).first().now();
+        logger.info("myVote() vote = " + vote);
         return vote;
     }
 }
