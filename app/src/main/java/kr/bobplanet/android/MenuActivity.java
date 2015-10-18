@@ -16,11 +16,8 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.RatingBar;
-import android.widget.Toast;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
@@ -34,6 +31,7 @@ import hugo.weaving.DebugLog;
 import kr.bobplanet.android.event.GoogleSigninEvent;
 import kr.bobplanet.android.event.UserLogEvent;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
+import kr.bobplanet.backend.bobplanetApi.model.Vote;
 
 /**
  * 메뉴 상세화면을 담당하는 activity.
@@ -41,7 +39,7 @@ import kr.bobplanet.backend.bobplanetApi.model.Menu;
  * - 메뉴 개요 탭(MenuFragment)과 세부평가 탭(MenuScoreFragment)의 2개 탭으로 구성.
  * - 메뉴정보는 intent에 통째로 넣어서 받는다. (푸쉬메시지 수신한 경우, extra에 넣어서 본 화면 호출해야 함)
  * - 메뉴에 점수를 매긴 경우 점수데이터를 다시 불러와야 하므로 ApiProxy.OnEntityLoadListener 구현 필요
- *
+ * <p/>
  * 로그인 여부에 따른 flow
  * - 로그인유저: 투표 dialog -> uploadVote()
  * - 비로그인유저: 투표 dialog -> 로그인 dialog -> requestGoogleSignin() -> onEvent() -> uploadVote()
@@ -51,7 +49,7 @@ import kr.bobplanet.backend.bobplanetApi.model.Menu;
  * @author heonkyu.jin
  * @version 2015. 10. 10
  */
-public class MenuActivity extends BaseActivity implements Constants, ApiProxy.OnEntityLoadListener<Menu> {
+public class MenuActivity extends BaseActivity implements Constants {
     @SuppressWarnings("UnusedDeclaration")
     private static final String TAG = MenuActivity.class.getSimpleName();
 
@@ -59,6 +57,9 @@ public class MenuActivity extends BaseActivity implements Constants, ApiProxy.On
 
     private Menu menu;
 
+    /**
+     * 유저가 매긴 점수
+     */
     private int myScore;
 
     @Override
@@ -70,6 +71,15 @@ public class MenuActivity extends BaseActivity implements Constants, ApiProxy.On
 
         EventBus.getDefault().register(this);
 
+        initLayout();
+
+        requestMyScore();
+    }
+
+    /**
+     * 화면 초기화.
+     */
+    private void initLayout() {
         Toolbar toolbar = ButterKnife.findById(this, R.id.toolbar);
         toolbar.setTitle(menu.getItem().getId());
         setSupportActionBar(toolbar);
@@ -99,20 +109,29 @@ public class MenuActivity extends BaseActivity implements Constants, ApiProxy.On
         });
     }
 
+    /**
+     * 유저가 과거에 매긴 점수 가져옴.
+     */
+    private void requestMyScore() {
+        UserManager um = App.getInstance().getUserManager();
+        if (um.hasAccount()) {
+            App.getInstance().getApiProxy().myVote(um.getUserId(), menu,
+                    new ApiProxy.OnEntityLoadListener<Vote>() {
+                        @Override
+                        public void onEntityLoad(Vote result) {
+                            if (result != null) {
+                                myScore = result.getScore();
+                            }
+                        }
+                    });
+        }
+
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-    }
-
-    /**
-     * 사용자가 점수를 매기고 나면 서버에서 다시 메뉴정보를 받아옴. 그때 호출되는 callback.
-     *
-     * @param result
-     */
-    @Override
-    public void onEntityLoad(Menu result) {
-        this.menu = menu;
     }
 
     /**
@@ -121,6 +140,7 @@ public class MenuActivity extends BaseActivity implements Constants, ApiProxy.On
     private void showRatingDialog() {
         View ratingBarHolder = getLayoutInflater().inflate(R.layout.menu_rating_dialog, null);
         final RatingBar ratingBar = ButterKnife.findById(ratingBarHolder, R.id.rating);
+        ratingBar.setRating(myScore);
 
         new AlertDialog.Builder(this)
                 .setTitle(R.string.dialog_rating_label)
@@ -129,7 +149,6 @@ public class MenuActivity extends BaseActivity implements Constants, ApiProxy.On
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 myScore = (int) ratingBar.getRating();
-                                Log.d(TAG, "score = " + myScore);
 
                                 if (App.getInstance().getUserManager().hasAccount()) {
                                     uploadVote();
@@ -142,6 +161,34 @@ public class MenuActivity extends BaseActivity implements Constants, ApiProxy.On
                 .setNegativeButton(R.string.button_cancel, null).show();
 
         UserLogEvent.dialogView(getString(R.string.dialog_rating_label));
+    }
+
+    /**
+     * 평가결과를 서버로 전송.
+     */
+    @DebugLog
+    private void uploadVote() {
+        if (myScore > 0) {
+            ApiProxy proxy = App.getInstance().getApiProxy();
+            proxy.vote(App.getInstance().getUserManager().getUserId(), menu, myScore,
+                    new ApiProxy.OnEntityLoadListener<Menu>() {
+                        @Override
+                        public void onEntityLoad(Menu result) {
+                            MenuActivity.this.menu = result;
+                        }
+                    });
+        }
+
+        Resources r = getResources();
+        String[] levels = r.getStringArray(R.array.rating_level);
+        String message = String.format(r.getString(R.string.rating_notice_fmt),
+                menu.getItem().getId(),
+                Util.endsWithConsonant(menu.getItem().getId()) ? "을" : "를",
+                levels[myScore - 1],
+                Util.endsWithConsonant(levels[myScore - 1]) ? "이" : ""
+        );
+        CoordinatorLayout layout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
+        Snackbar.make(layout, message, Snackbar.LENGTH_LONG).show();
     }
 
     /**
@@ -167,27 +214,8 @@ public class MenuActivity extends BaseActivity implements Constants, ApiProxy.On
     }
 
     /**
-     * 평가결과를 서버로 전송.
-     */
-    @DebugLog
-    private void uploadVote() {
-        if (myScore > 0) {
-            ApiProxy proxy = App.getInstance().getApiProxy();
-            proxy.vote(App.getInstance().getUserManager().getUserId(), menu, myScore, this);
-        }
-
-        Resources r = getResources();
-        String[] levels = r.getStringArray(R.array.rating_level);
-        String message = String.format(r.getString(R.string.rating_notice_fmt),
-                menu.getItem().getId(),
-                Util.endsWithConsonant(menu.getItem().getId()) ? "을" : "를",
-                levels[myScore - 1]);
-        CoordinatorLayout layout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
-        Snackbar.make(layout, message, Snackbar.LENGTH_LONG).show();
-    }
-
-    /**
      * 구글 로그인이 완료되었을 때 호출되는 callback.
+     *
      * @param event
      */
     @DebugLog

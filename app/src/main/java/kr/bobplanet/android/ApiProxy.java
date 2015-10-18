@@ -20,11 +20,12 @@ import kr.bobplanet.backend.bobplanetApi.BobplanetApi;
 import kr.bobplanet.backend.bobplanetApi.model.DailyMenu;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
 import kr.bobplanet.backend.bobplanetApi.model.User;
+import kr.bobplanet.backend.bobplanetApi.model.Vote;
 
 /**
  * Google AppEngine으로부터 가져오는 데이터를 LruCache를 이용해 한차례 caching하는 객체저장소.
  * ContentProvider를 만들자니 JSON serialization이 귀찮아서 JSON 문자열을 통째로 캐슁하도록 구현함.
- *
+ * <p/>
  * - 실제 Bobplanet 서버 API를 호출하는 로직은 이쪽으로 집중함
  * - Activity나 Fragment에서 AsyncTask 만들 필요가 없도록 AsyncTask는 이 클래스에 내장
  * - 싱글턴 관리는 MainApplication에 위임
@@ -40,35 +41,35 @@ import kr.bobplanet.backend.bobplanetApi.model.User;
  */
 public class ApiProxy implements Constants {
     private static final String TAG = ApiProxy.class.getSimpleName();
-	
-	/**
-	 * Google Cloud Endpoint에 의해 만들어지는 서버사이드 API의 wrapper.
-	 */
+
+    /**
+     * Google Cloud Endpoint에 의해 만들어지는 서버사이드 API의 wrapper.
+     */
     private BobplanetApi api;
 
-	/**
-	 * 캐쉬 최대 사이즈. 현재는 1MB.
-	 */
+    /**
+     * 캐쉬 최대 사이즈. 현재는 1MB.
+     */
     private static final int MAX_SIZE = 1024 * 1024;
 
     /**
      * 캐쉬 유효기간. 현재는 2분.
      */
     private static final int CACHE_EXPIRE_SECONDS = 2 * 60;
-	
-	/**
-	 * LruCache 키값에서 클래스명과 ID를 연결하는 separator
-	 */
+
+    /**
+     * LruCache 키값에서 클래스명과 ID를 연결하는 separator
+     */
     private static final char KEY_SEPARATOR = ':';
 
-	/**
-	 * JSON 문자열을 저장할 LruCache.
-	 */
+    /**
+     * JSON 문자열을 저장할 LruCache.
+     */
     private final LruCache<String, Pair<Long, String>> jsonCache;
-	
-	/**
-	 * 기본 생성자.
-	 */
+
+    /**
+     * 기본 생성자.
+     */
     protected ApiProxy() {
         this.api = new BobplanetApi.Builder(
                 AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
@@ -77,13 +78,13 @@ public class ApiProxy implements Constants {
         this.jsonCache = new LruCache<>(MAX_SIZE);
     }
 
-	/**
-	 * 특정 일자의 메뉴리스트를 로드한다.
-	 * DayViewFragment에서 주로 사용.
+    /**
+     * 특정 일자의 메뉴리스트를 로드한다.
+     * DayViewFragment에서 주로 사용.
      *
-     * @param date 대상 날짜
+     * @param date     대상 날짜
      * @param listener 데이터로드 후처리를 담당할 listener
-	 */
+     */
     public void loadMenuOfDate(final String date, OnEntityLoadListener<DailyMenu> listener) {
         RemoteApiLoader<DailyMenu> remote = new RemoteApiLoader<DailyMenu>() {
             @Override
@@ -92,13 +93,14 @@ public class ApiProxy implements Constants {
             }
         };
 
-        new ApiLoader<>(DailyMenu.class, remote, listener, "menuOfDate").execute(date);
+        new ApiLoader<>(DailyMenu.class, remote, listener, "menuOfDate").execute(
+                new CachingOption(date));
     }
 
     /**
-     * 주어진 메뉴번호로 메뉴를 가져온다. 
-	 * MenuDetailViewActivity와 GcmServices.MessageListener에서 주로 사용.
-	 *
+     * 주어진 메뉴번호로 메뉴를 가져온다.
+     * MenuDetailViewActivity와 GcmServices.MessageListener에서 주로 사용.
+     *
      * @param id
      * @param listener 데이터로드 후처리를 담당할 listener
      */
@@ -110,11 +112,13 @@ public class ApiProxy implements Constants {
             }
         };
 
-        new ApiLoader<>(Menu.class, remote, listener, "menu").execute(id);
+        new ApiLoader<>(Menu.class, remote, listener, "menu").execute(
+                new CachingOption(id));
     }
 
     /**
      * 사용자 등록.
+     *
      * @param user
      * @param listener
      */
@@ -127,11 +131,13 @@ public class ApiProxy implements Constants {
             }
         };
 
-        new ApiLoader<>(User.class, remote, listener, "registerUser").execute();
+        new ApiLoader<>(User.class, remote, listener, "registerUser").execute(
+                CachingOption.NO_CACHE);
     }
 
     /**
      * 사용자정보 업데이트.
+     *
      * @param user
      */
     @DebugLog
@@ -143,11 +149,13 @@ public class ApiProxy implements Constants {
             }
         };
 
-        new ApiLoader<>(Void.class, remote, null, "updateUser").execute();
+        new ApiLoader<>(Void.class, remote, null, "updateUser").execute(
+                CachingOption.NO_CACHE);
     }
 
     /**
      * 메뉴 평가.
+     *
      * @param userId
      * @param menu
      * @param score
@@ -163,18 +171,39 @@ public class ApiProxy implements Constants {
             }
         };
 
-        new ApiLoader<>(Menu.class, remote, listener, "vote").execute();
+        new ApiLoader<>(Menu.class, remote, listener, "vote").execute(
+                new CachingOption(menu.getId(), false, true));
     }
 
-	/**
-	 * 캐쉬 조회 및 네트웤API 호출을 담당하는 AsyncTask.
-	 * 
-	 * - 생성자에는 서버API호출로직을 담은 RemoteApiLoader와, 데이터로딩 완료 후처리를 담당할 OnEntityLoadListener 전달
-	 * - execute()에는 결과값의 Entity class와 서버 API에 전달할 key값을 패러미터로 전달
-	 * - doInBackground()에서 캐쉬 조회 및 네트웤API 호출, 캐쉬 업데이트 등을 수행
-	 * - onPostExecute()에서 listener의 onEntityLoad() 메소드를 호출하여 데이터로딩 후처리 진행
-	 */
-    private class ApiLoader<T> extends AsyncTask<Object, Void, T> {
+    /**
+     * 내 평가점수 가져오기.
+     *
+     * @param userId
+     * @param menu
+     * @param listener
+     */
+    @DebugLog
+    public void myVote(final Long userId, final Menu menu, OnEntityLoadListener<Vote> listener) {
+        RemoteApiLoader<Vote> remote = new RemoteApiLoader<Vote>() {
+            @Override
+            public Vote fromRemoteApi() throws IOException {
+                return api.myVote(userId, menu.getItem().getId()).execute();
+            }
+        };
+
+        new ApiLoader<>(Vote.class, remote, listener, "myVote").execute(
+                CachingOption.NO_CACHE);
+    }
+
+    /**
+     * 캐쉬 조회 및 네트웤API 호출을 담당하는 AsyncTask.
+     * <p/>
+     * - 생성자에는 서버API호출로직을 담은 RemoteApiLoader와, 데이터로딩 완료 후처리를 담당할 OnEntityLoadListener 전달
+     * - execute()에는 결과값의 Entity class와 서버 API에 전달할 key값을 패러미터로 전달
+     * - doInBackground()에서 캐쉬 조회 및 네트웤API 호출, 캐쉬 업데이트 등을 수행
+     * - onPostExecute()에서 listener의 onEntityLoad() 메소드를 호출하여 데이터로딩 후처리 진행
+     */
+    private class ApiLoader<T> extends AsyncTask<CachingOption, Void, T> {
         private final Class<T> type;
         private final RemoteApiLoader<T> remote;
         private final OnEntityLoadListener<T> listener;
@@ -182,8 +211,8 @@ public class ApiProxy implements Constants {
 
         /**
          * 생성자.
-		 *
-         * @param remote BobplanetApi 호출로직
+         *
+         * @param remote   BobplanetApi 호출로직
          * @param listener 데이터 로딩 뒤 후처리로직
          */
         ApiLoader(Class<T> type, RemoteApiLoader<T> remote, @Nullable OnEntityLoadListener<T> listener,
@@ -194,18 +223,18 @@ public class ApiProxy implements Constants {
             this.apiName = apiName;
         }
 
-		/**
-		 * 캐쉬에서 객체 조회하고 없거나 이미 expire되었으면 네트웤API를 호출해서 가져옴
-		 */
+        /**
+         * 캐쉬에서 객체 조회하고 없거나 이미 expire되었으면 네트웤API를 호출해서 가져옴
+         */
         @Override
         @DebugLog
-        protected T doInBackground(Object... params) {
+        protected T doInBackground(CachingOption... params) {
             try {
                 long now = new Date().getTime();
-                String cacheKey = "";
+                CachingOption opt = params[0];
 
-                if (params.length > 0) {
-                    cacheKey = type.getSimpleName() + KEY_SEPARATOR + params[0];
+                String cacheKey = type.getSimpleName() + KEY_SEPARATOR + opt.key;
+                if (opt.isReadable()) {
                     Pair<Long, String> cachedObj = jsonCache.get(cacheKey);
 
                     if (cachedObj != null) {
@@ -226,7 +255,7 @@ public class ApiProxy implements Constants {
                 MeasureLogEvent.measure(MeasureLogEvent.Metric.API_LATENCY,
                         apiName, new Date().getTime() - now).submit();
 
-                if (params.length > 0) {
+                if (opt.isWritable()) {
                     jsonCache.put(cacheKey, new Pair<>(now, EntityParser.toString(result)));
                 }
 
@@ -246,17 +275,43 @@ public class ApiProxy implements Constants {
         }
     }
 
-	/**
-	 * 서버API 호출로직.
-	 * BobplanetApi 객체가 갖고있는 적절한 method를 호출.
-	 */
+    private static class CachingOption {
+        private static final CachingOption NO_CACHE = new CachingOption(null, false, false);
+
+        Object key;
+        boolean readable = true;
+        boolean writable = true;
+
+        private CachingOption(Object key) {
+            this.key = key;
+        }
+
+        private CachingOption(Object key, boolean readable, boolean writable) {
+            this.key = key;
+            this.readable = readable;
+            this.writable = writable;
+        }
+
+        private boolean isReadable() {
+            return readable;
+        }
+
+        private boolean isWritable() {
+            return writable;
+        }
+    }
+
+    /**
+     * 서버API 호출로직.
+     * BobplanetApi 객체가 갖고있는 적절한 method를 호출.
+     */
     private interface RemoteApiLoader<T> {
         T fromRemoteApi() throws IOException;
     }
 
-	/**
-	 * 데이터 로딩이 끝난 뒤의 후처리 로직.
-	 */
+    /**
+     * 데이터 로딩이 끝난 뒤의 후처리 로직.
+     */
     public interface OnEntityLoadListener<T> {
         void onEntityLoad(T result);
     }

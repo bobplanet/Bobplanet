@@ -30,7 +30,7 @@
         <item>맛있다</item>
         <item>아주 맛있다</item>
     </string-array>
-	<string name="rating_notice_fmt" formatted="false">%s%s \"%s\"라고 평가해주셨네요. 생각이 바뀌시면 재평가도 가능합니다</string>
+	<string name="rating_notice_fmt" formatted="false">%s%s \"%s\"%s라고 평가해주셨네요~\n점수는 언제든 재평가 가능합니다 :)</string>
 
     <!-- 구글 로그인 Dialog -->
     <string name="dialog_login_label">로그인 필요</string>
