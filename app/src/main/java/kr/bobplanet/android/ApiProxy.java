@@ -18,6 +18,7 @@ import kr.bobplanet.android.event.MeasureLogEvent;
 import kr.bobplanet.android.event.NetworkExceptionEvent;
 import kr.bobplanet.backend.bobplanetApi.BobplanetApi;
 import kr.bobplanet.backend.bobplanetApi.model.DailyMenu;
+import kr.bobplanet.backend.bobplanetApi.model.Item;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
 import kr.bobplanet.backend.bobplanetApi.model.User;
 import kr.bobplanet.backend.bobplanetApi.model.Vote;
@@ -85,7 +86,7 @@ public class ApiProxy implements Constants {
      * @param date     대상 날짜
      * @param listener 데이터로드 후처리를 담당할 listener
      */
-    public void loadMenuOfDate(final String date, OnEntityLoadListener<DailyMenu> listener) {
+    public void loadMenuOfDate(final String date, ApiResultListener<DailyMenu> listener) {
         RemoteApiLoader<DailyMenu> remote = new RemoteApiLoader<DailyMenu>() {
             @Override
             public DailyMenu fromRemoteApi() throws IOException {
@@ -104,7 +105,7 @@ public class ApiProxy implements Constants {
      * @param id
      * @param listener 데이터로드 후처리를 담당할 listener
      */
-    public void loadMenu(final long id, OnEntityLoadListener<Menu> listener) {
+    public void loadMenu(final long id, ApiResultListener<Menu> listener) {
         RemoteApiLoader<Menu> remote = new RemoteApiLoader<Menu>() {
             @Override
             public Menu fromRemoteApi() throws IOException {
@@ -123,7 +124,7 @@ public class ApiProxy implements Constants {
      * @param listener
      */
     @DebugLog
-    public void registerUser(final User user, OnEntityLoadListener<User> listener) {
+    public void registerUser(final User user, ApiResultListener<User> listener) {
         RemoteApiLoader<User> remote = new RemoteApiLoader<User>() {
             @Override
             public User fromRemoteApi() throws IOException {
@@ -162,16 +163,16 @@ public class ApiProxy implements Constants {
      * @param listener
      */
     @DebugLog
-    public void vote(final Long userId, final Menu menu, final int score, OnEntityLoadListener<Menu> listener) {
+    public void vote(final Long userId, final Menu menu, final int score, ApiResultListener<Item> listener) {
         Log.v(TAG, "score = " + score);
-        RemoteApiLoader<Menu> remote = new RemoteApiLoader<Menu>() {
+        RemoteApiLoader<Item> remote = new RemoteApiLoader<Item>() {
             @Override
-            public Menu fromRemoteApi() throws IOException {
+            public Item fromRemoteApi() throws IOException {
                 return api.vote(userId, menu.getItem().getId(), menu.getId(), score).execute();
             }
         };
 
-        new ApiLoader<>(Menu.class, remote, listener, "vote").execute(
+        new ApiLoader<>(Item.class, remote, listener, "vote").execute(
                 new CachingOption(menu.getId(), false, true));
     }
 
@@ -183,7 +184,7 @@ public class ApiProxy implements Constants {
      * @param listener
      */
     @DebugLog
-    public void myVote(final Long userId, final Menu menu, OnEntityLoadListener<Vote> listener) {
+    public void myVote(final Long userId, final Menu menu, ApiResultListener<Vote> listener) {
         RemoteApiLoader<Vote> remote = new RemoteApiLoader<Vote>() {
             @Override
             public Vote fromRemoteApi() throws IOException {
@@ -198,15 +199,15 @@ public class ApiProxy implements Constants {
     /**
      * 캐쉬 조회 및 네트웤API 호출을 담당하는 AsyncTask.
      * <p/>
-     * - 생성자에는 서버API호출로직을 담은 RemoteApiLoader와, 데이터로딩 완료 후처리를 담당할 OnEntityLoadListener 전달
+     * - 생성자에는 서버API호출로직을 담은 RemoteApiLoader와, 데이터로딩 완료 후처리를 담당할 ApiResultListener 전달
      * - execute()에는 결과값의 Entity class와 서버 API에 전달할 key값을 패러미터로 전달
      * - doInBackground()에서 캐쉬 조회 및 네트웤API 호출, 캐쉬 업데이트 등을 수행
-     * - onPostExecute()에서 listener의 onEntityLoad() 메소드를 호출하여 데이터로딩 후처리 진행
+     * - onPostExecute()에서 listener의 onApiResult() 메소드를 호출하여 데이터로딩 후처리 진행
      */
     private class ApiLoader<T> extends AsyncTask<CachingOption, Void, T> {
         private final Class<T> type;
         private final RemoteApiLoader<T> remote;
-        private final OnEntityLoadListener<T> listener;
+        private final ApiResultListener<T> listener;
         private String apiName;
 
         /**
@@ -215,7 +216,7 @@ public class ApiProxy implements Constants {
          * @param remote   BobplanetApi 호출로직
          * @param listener 데이터 로딩 뒤 후처리로직
          */
-        ApiLoader(Class<T> type, RemoteApiLoader<T> remote, @Nullable OnEntityLoadListener<T> listener,
+        ApiLoader(Class<T> type, RemoteApiLoader<T> remote, @Nullable ApiResultListener<T> listener,
                   String apiName) {
             this.type = type;
             this.remote = remote;
@@ -270,7 +271,7 @@ public class ApiProxy implements Constants {
         @Override
         protected void onPostExecute(T entity) {
             if (listener != null) {
-                listener.onEntityLoad(entity);
+                listener.onApiResult(entity);
             }
         }
     }
@@ -312,7 +313,7 @@ public class ApiProxy implements Constants {
     /**
      * 데이터 로딩이 끝난 뒤의 후처리 로직.
      */
-    public interface OnEntityLoadListener<T> {
-        void onEntityLoad(T result);
+    public interface ApiResultListener<T> {
+        void onApiResult(T result);
     }
 }

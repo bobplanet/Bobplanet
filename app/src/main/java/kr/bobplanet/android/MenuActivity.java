@@ -30,6 +30,7 @@ import de.greenrobot.event.EventBus;
 import hugo.weaving.DebugLog;
 import kr.bobplanet.android.event.GoogleSigninEvent;
 import kr.bobplanet.android.event.UserLogEvent;
+import kr.bobplanet.backend.bobplanetApi.model.Item;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
 import kr.bobplanet.backend.bobplanetApi.model.Vote;
 
@@ -38,7 +39,7 @@ import kr.bobplanet.backend.bobplanetApi.model.Vote;
  * <p/>
  * - 메뉴 개요 탭(MenuFragment)과 세부평가 탭(MenuScoreFragment)의 2개 탭으로 구성.
  * - 메뉴정보는 intent에 통째로 넣어서 받는다. (푸쉬메시지 수신한 경우, extra에 넣어서 본 화면 호출해야 함)
- * - 메뉴에 점수를 매긴 경우 점수데이터를 다시 불러와야 하므로 ApiProxy.OnEntityLoadListener 구현 필요
+ * - 메뉴에 점수를 매긴 경우 점수데이터를 다시 불러와야 하므로 ApiProxy.ApiResultListener 구현 필요
  * <p/>
  * 로그인 여부에 따른 flow
  * - 로그인유저: 투표 dialog -> uploadVote()
@@ -116,9 +117,9 @@ public class MenuActivity extends BaseActivity implements Constants {
         UserManager um = App.getInstance().getUserManager();
         if (um.hasAccount()) {
             App.getInstance().getApiProxy().myVote(um.getUserId(), menu,
-                    new ApiProxy.OnEntityLoadListener<Vote>() {
+                    new ApiProxy.ApiResultListener<Vote>() {
                         @Override
-                        public void onEntityLoad(Vote result) {
+                        public void onApiResult(Vote result) {
                             if (result != null) {
                                 myScore = result.getScore();
                             }
@@ -171,10 +172,10 @@ public class MenuActivity extends BaseActivity implements Constants {
         if (myScore > 0) {
             ApiProxy proxy = App.getInstance().getApiProxy();
             proxy.vote(App.getInstance().getUserManager().getUserId(), menu, myScore,
-                    new ApiProxy.OnEntityLoadListener<Menu>() {
+                    new ApiProxy.ApiResultListener<Item>() {
                         @Override
-                        public void onEntityLoad(Menu result) {
-                            MenuActivity.this.menu = result;
+                        public void onApiResult(Item result) {
+                            MenuActivity.this.menu.setItem(result);
                         }
                     });
         }
@@ -222,6 +223,11 @@ public class MenuActivity extends BaseActivity implements Constants {
     public void onEvent(GoogleSigninEvent event) {
         uploadVote();
     }
+
+    /**
+     *
+     */
+
 
     /**
      * 탭 구현용 activity를 관리할 ViewPagerAdapter 생성.

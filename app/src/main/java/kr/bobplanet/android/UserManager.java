@@ -21,7 +21,7 @@ import kr.bobplanet.backend.bobplanetApi.model.User;
  * @author heonkyu.jin
  * @version 15. 10. 18
  */
-public class UserManager implements ApiProxy.OnEntityLoadListener<User> {
+public class UserManager implements ApiProxy.ApiResultListener<User> {
     private static final String TAG = UserManager.class.getSimpleName();
 
     /**
@@ -97,7 +97,7 @@ public class UserManager implements ApiProxy.OnEntityLoadListener<User> {
      */
     @Override
     @DebugLog
-    public void onEntityLoad(User result) {
+    public void onApiResult(User result) {
         Log.v(TAG, "User registered. user = " + result);
         if (result != null) {
             user.setId(result.getId());

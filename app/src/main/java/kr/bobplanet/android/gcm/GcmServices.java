@@ -103,9 +103,9 @@ public class GcmServices implements Constants {
             ApiProxy apiProxy = App.getInstance().getApiProxy();
             final ImageLoader imageLoader = App.getInstance().getImageLoader();
 
-            apiProxy.loadMenu(menuId, new ApiProxy.OnEntityLoadListener<Menu>() {
+            apiProxy.loadMenu(menuId, new ApiProxy.ApiResultListener<Menu>() {
                 @Override
-                public void onEntityLoad(Menu result) {
+                public void onApiResult(Menu result) {
                     menu = result;
                     imageLoader.get(result.getItem().getThumbnail(), MessageListener.this);
                 }

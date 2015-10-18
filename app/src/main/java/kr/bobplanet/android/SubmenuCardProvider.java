@@ -19,7 +19,7 @@ import kr.bobplanet.backend.bobplanetApi.model.Submenu;
  *
  *
  * @author heonkyu.jin
- * @versoin 15. 10. 17
+ * @version 15. 10. 17
  */
 public class SubmenuCardProvider extends TextCardProvider<SubmenuCardProvider> {
 

@@ -3,6 +3,7 @@ package kr.bobplanet.backend.api;
 import com.google.api.server.spi.config.ApiClass;
 import com.google.api.server.spi.config.ApiMethod;
 import com.googlecode.objectify.VoidWork;
+import com.googlecode.objectify.Work;
 import com.googlecode.objectify.cmd.LoadType;
 
 import java.util.List;
@@ -87,7 +88,7 @@ public class MenuEndpoint extends BaseEndpoint {
             name = "vote",
             httpMethod = "POST"
     )
-    public Menu vote(@Named("userId") final Long userId, @Named("itemName") final String itemName,
+    public Item vote(@Named("userId") final Long userId, @Named("itemName") final String itemName,
                      @Named("menuId") final Long menuId, @Named("score") final int score) {
         logger.info(String.format(
                         "Executing vote() : { userId, itemName, menuId, score }  = { %s, %s, %s, %d }",
@@ -95,9 +96,9 @@ public class MenuEndpoint extends BaseEndpoint {
         );
 
         // 데이터 저장시 transaction 처리
-        ofy().transact(new VoidWork() {
+        return ofy().transact(new Work<Item>() {
             @Override
-            public void vrun() {
+            public Item run() {
                 Item item = ofy().load().type(Item.class).id(itemName).now();
                 User user = new User(userId);
 
@@ -114,10 +115,10 @@ public class MenuEndpoint extends BaseEndpoint {
                 vote.setScore(score);
 
                 ofy().save().entities(vote, item).now();
+
+                return item;
             }
         });
-
-        return ofy().load().type(Menu.class).id(menuId).now();
     }
 
     @ApiMethod(

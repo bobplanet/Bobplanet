@@ -20,6 +20,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
 import fr.castorflex.android.smoothprogressbar.SmoothProgressDrawable;
+import kr.bobplanet.android.event.ItemChangeEvent;
 import kr.bobplanet.android.event.NetworkExceptionEvent;
 import kr.bobplanet.backend.bobplanetApi.model.DailyMenu;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
@@ -58,6 +59,8 @@ public class DayFragment extends BaseFragment {
      * 메뉴정보를 표시하는 RecyclerView
      */
     RecyclerView recyclerView;
+
+    BaseListAdapter adapter;
 
     /**
      * 메뉴가 없을 때(식당 노는날) 대신 표시되는 View. 안내메시지 포함.
@@ -130,9 +133,9 @@ public class DayFragment extends BaseFragment {
         EventBus.getDefault().register(this);
 
         // 데이터 로딩이 끝나면 그에 맞게 UI 업데이트하고 activity에도 데이터로딩 끝났음을 전달
-        ApiProxy.OnEntityLoadListener<DailyMenu> listener = new ApiProxy.OnEntityLoadListener<DailyMenu>() {
+        ApiProxy.ApiResultListener<DailyMenu> listener = new ApiProxy.ApiResultListener<DailyMenu>() {
             @Override
-            public void onEntityLoad(DailyMenu dailyMenu) {
+            public void onApiResult(DailyMenu dailyMenu) {
                 if (dailyMenu == null) return;
 
                 menuList = dailyMenu.getMenu();
@@ -146,7 +149,7 @@ public class DayFragment extends BaseFragment {
                         }
                     };
 
-                    RecyclerView.Adapter adapter = new BaseListAdapter(factory, menuList, R.layout.day_item);
+                    adapter = new BaseListAdapter(factory, menuList, R.layout.day_item);
                     recyclerView.setAdapter(adapter);
                 } else {
                     recyclerView.setVisibility(View.GONE);
@@ -172,6 +175,10 @@ public class DayFragment extends BaseFragment {
     @SuppressWarnings("unused")
     public void onEventMainThread(NetworkExceptionEvent e) {
         Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+    }
+
+    public void onEventMainThread(ItemChangeEvent e) {
+        recyclerView.invalidate();
     }
 
     /**
