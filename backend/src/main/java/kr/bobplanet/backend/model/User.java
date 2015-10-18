@@ -14,9 +14,15 @@ public class User {
     @Id
     Long id;
 
+    String accountType;
+
     String iid;
 
     String gcmToken;
+
+    String image;
+
+    String email;
 
     String nickName;
 
@@ -49,6 +55,30 @@ public class User {
 
     public void setGcmToken(String gcmToken) {
         this.gcmToken = gcmToken;
+    }
+
+    public String getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getNickName() {

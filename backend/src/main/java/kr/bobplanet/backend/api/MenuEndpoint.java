@@ -87,10 +87,12 @@ public class MenuEndpoint extends BaseEndpoint {
             name = "vote",
             httpMethod = "POST"
     )
-    public void vote(@Named("userId") final Long userId, @Named("itemName") final String itemName,
+    public Menu vote(@Named("userId") final Long userId, @Named("itemName") final String itemName,
                      @Named("menuId") final Long menuId, @Named("score") final int score) {
-        logger.info("Executing vote() : { itemName, menuId, score }  = {" + new StringBuilder().append(itemName)
-                .append(", ").append(menuId).append(", ").append(score).append(" }"));
+        logger.info(String.format(
+                "Executing vote() : { userId, itemName, menuId, score }  = { %s, %s, %s, %d }",
+                userId, itemName, menuId, score)
+        );
 
         final Item item = ofy().load().entity(new Item(itemName)).now();
         item.addScore(score);
@@ -106,5 +108,21 @@ public class MenuEndpoint extends BaseEndpoint {
                 ofy().save().entity(item);
             }
         });
+
+        return ofy().load().type(Menu.class).id(menuId).now();
+    }
+
+    @ApiMethod(
+            name = "myVote",
+            httpMethod = "GET"
+    )
+    public Vote myVote(@Named("userId") final Long userId, @Named("itemName") final String itemName) {
+        logger.info(String.format(
+                "Executing myVote() : { userId, itemName } = { %s, %s }",
+                userId, itemName)
+        );
+
+        Vote vote = ofy().load().type(Vote.class).filter("user", userId).filter("item", itemName).first().now();
+        return vote;
     }
 }

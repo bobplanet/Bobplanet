@@ -35,4 +35,15 @@ public class UserEndpoint extends BaseEndpoint {
 
         return user;
     }
+
+    @ApiMethod(
+            name = "updateUser",
+            path = "user/update",
+            httpMethod = "POST"
+    )
+    public void updateUser(User user) {
+        logger.info("register(): user = " + user.toString());
+
+        ofy().save().entity(user).now();
+    }
 }
