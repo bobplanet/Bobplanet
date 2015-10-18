@@ -18,7 +18,7 @@
         <option name="HTTP_PORT" value="8080" />
         <option name="WAR_DIR" value="$MODULE_DIR$/build/exploded-app" />
         <option name="WEB_APP_DIR" value="$MODULE_DIR$/src/main/webapp" />
-        <option name="APPENGINE_SDKROOT" value="$USER_HOME$/.gradle/appengine-sdk/appengine-java-sdk-1.9.26" />
+        <option name="APPENGINE_SDKROOT" value="$USER_HOME$/.gradle/appengine-sdk/appengine-java-sdk-1.9.27" />
       </configuration>
     </facet>
   </component>
@@ -40,11 +40,11 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="appengine-endpoints-1.9.26" level="project" />
-    <orderEntry type="library" exported="" name="appengine-endpoints-deps-1.9.26" level="project" />
+    <orderEntry type="library" exported="" name="appengine-endpoints-1.9.27" level="project" />
+    <orderEntry type="library" exported="" name="appengine-endpoints-deps-1.9.27" level="project" />
     <orderEntry type="library" exported="" name="objectify-5.1.8" level="project" />
     <orderEntry type="library" exported="" name="servlet-api-2.5" level="project" />
-    <orderEntry type="library" exported="" name="appengine-api-1.0-sdk-1.9.26" level="project" />
+    <orderEntry type="library" exported="" name="appengine-api-1.0-sdk-1.9.27" level="project" />
     <orderEntry type="library" exported="" name="guava-18.0" level="project" />
     <orderEntry type="library" exported="" name="_Users_hkjinlee_Projects_Bobplanet_backend_build_buildConfigClasses_main" level="project" />
     <orderEntry type="library" exported="" name="_Users_hkjinlee_Projects_Bobplanet_backend_build_dependency_cache" level="project" />

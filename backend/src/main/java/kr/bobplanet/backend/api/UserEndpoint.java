@@ -28,9 +28,10 @@ public class UserEndpoint extends BaseEndpoint {
             httpMethod = "POST"
     )
     public User registerUser(User user) {
-        logger.info("register(): user = " + user.toString());
+        logger.info("registerUser(): user = " + user.toString());
 
         Key<User> userKey = ofy().save().entity(user).now();
+        logger.info("userKey = " + userKey);
         user.setId(userKey.getId());
 
         return user;
@@ -42,7 +43,7 @@ public class UserEndpoint extends BaseEndpoint {
             httpMethod = "POST"
     )
     public void updateUser(User user) {
-        logger.info("register(): user = " + user.toString());
+        logger.info("updateUser(): user = " + user.toString());
 
         ofy().save().entity(user).now();
     }
