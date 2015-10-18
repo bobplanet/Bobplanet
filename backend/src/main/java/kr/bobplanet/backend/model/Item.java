@@ -40,7 +40,7 @@ public class Item {
 	/**
 	 * 점수대별 평점자수.
 	 */
-    protected final int[] numVotesPerScore = new int[5];
+    protected int[] numVotesPerScore = new int[5];
 
     public Item() {
     }
