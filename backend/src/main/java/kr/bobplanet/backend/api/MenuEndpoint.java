@@ -96,7 +96,7 @@ public class MenuEndpoint extends BaseEndpoint {
 
         final Item item = ofy().load().entity(new Item(itemName)).now();
         Vote oldVote = myVote(userId, itemName);
-        if (oldVote != null) {
+        if (oldVote == null) {
             item.addScore(score);
         } else {
             item.editScore(score, oldVote.getScore());
