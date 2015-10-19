@@ -81,9 +81,11 @@ dependencies {
     compile 'com.github.dexafree:materiallist:3.0.1'
 }
 
-def props = new Properties()
-props.load(new FileInputStream(rootProject.file('secrets.properties')))
-android.signingConfigs.release.storeFile file(props.get('android.signingConfigs.release.storeFile'))
-android.signingConfigs.release.storePassword props.get('android.signingConfigs.release.storePassword')
-android.signingConfigs.release.keyAlias props.get('android.signingConfigs.release.keyAlias')
-android.signingConfigs.release.keyPassword props.get('android.signingConfigs.release.keyPassword')
+if (rootProject.file('secrets.properties').exists()) {
+    def props = new Properties()
+    props.load(new FileInputStream(rootProject.file('secrets.properties')))
+    android.signingConfigs.release.storeFile file(props.get('android.signingConfigs.release.storeFile'))
+    android.signingConfigs.release.storePassword props.get('android.signingConfigs.release.storePassword')
+    android.signingConfigs.release.keyAlias props.get('android.signingConfigs.release.keyAlias')
+    android.signingConfigs.release.keyPassword props.get('android.signingConfigs.release.keyPassword')
+}
