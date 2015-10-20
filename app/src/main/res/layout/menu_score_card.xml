@@ -39,11 +39,41 @@
                 android:visibility="gone"
                 tools:text="And this is the description" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/submenu_card_height"
-                android:layout_below="@+id/descriptionTextView" />
+            <TextView
+                android:id="@+id/averageScoreLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/descriptionTextView"
+                android:paddingRight="10dp"
+                android:text="@string/card_rating_average" />
+
+            <RatingBar
+                android:id="@+id/rating"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/descriptionTextView"
+                android:layout_toRightOf="@id/averageScoreLabel"
+                android:numStars="5"
+                android:theme="@style/AppTheme" />
+
+            <TextView
+                android:id="@+id/myScoreLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/averageScoreLabel"
+                android:paddingRight="10dp"
+                android:text="@string/card_rating_my" />
+
+            <RatingBar
+                android:id="@+id/myRating"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rating"
+                android:layout_toRightOf="@id/myScoreLabel"
+                android:numStars="5"
+                android:theme="@style/AppTheme" />
 
         </RelativeLayout>
 

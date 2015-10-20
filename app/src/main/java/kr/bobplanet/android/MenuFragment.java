@@ -67,9 +67,10 @@ public class MenuFragment extends BaseFragment {
         MaterialListView materialListView = ButterKnife.findById(view, R.id.material_listview);
 
         summaryCard = new Card.Builder(getContext())
-                .withProvider(BasicButtonsCardProvider.class)
+                .withProvider(MenuScoreCardProvider.class)
                 .setTitle(R.string.card_rating_label)
-                .setDescription("전체평점: " + menu.getItem().getAverageScore())
+                .setAverageScore(menu.getItem().getAverageScore())
+                .setMyScore(0)
                 .endConfig().build();
 
         Card submenuCard = new Card.Builder(getContext())

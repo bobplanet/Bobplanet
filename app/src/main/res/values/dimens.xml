@@ -16,7 +16,7 @@
 	
 	<!-- 서브메뉴 카드 -->
     <dimen name="submenu_card_height">250dp</dimen>
-	<dimen name="submenu_item_height">100dp</dimen>
+	<dimen name="submenu_item_height">90dp</dimen>
 	
     <!-- MaterializeListView 설정 -->
     <dimen name="title_size">16dp</dimen>

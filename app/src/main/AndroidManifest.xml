@@ -54,10 +54,6 @@
                 android:value=".DayActivity" />
         </activity>
 
-        <!-- 구글 로그인 Acivity -->
-        <activity
-            android:name=".GoogleLoginActivity" />
-
         <!-- 설정화면 Activity -->
 
 
