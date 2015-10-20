@@ -47,7 +47,9 @@ appengine {
 }
 
 def props = new Properties()
-props.load(new FileInputStream(rootProject.file('secrets.properties')))
+if (rootProject.file('secrets.properties').exists()) {
+    props.load(new FileInputStream(rootProject.file('secrets.properties')))
+}
 
 buildConfig {
     sourceSets {
