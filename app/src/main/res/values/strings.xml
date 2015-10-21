@@ -9,6 +9,7 @@
     <string name="closed_today">오늘은 회사식당 쉽니다.\n좌우로 화면을 넘겨보세요.\n(그런데.. 왜 휴일에 이 앱을 보고 계신가요?)</string>
     <string name="swipe_notice">좌우로 화면을 넘기면 다른 날의 메뉴도 볼 수 있어요.</string>
     <string name="swipe_notice_goaway">알았음</string>
+    <string name="last_page_notice">마지막 페이지입니다.\n메뉴는 매주 토요일 새벽에 갱신됩니다.</string>
 
     <!-- 메뉴보기 화면 -->
     <string name="title_menu">메뉴보기</string>
