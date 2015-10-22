@@ -2,6 +2,8 @@ package kr.bobplanet.backend.model;
 
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
+import com.googlecode.objectify.annotation.Unindex;
 
 /**
  * 이용자 객체.
@@ -10,6 +12,7 @@ import com.googlecode.objectify.annotation.Id;
  * @version 2015. 10. 3
  */
 @Entity
+@Index
 public class User {
     /**
      * Bobplanet 자체 사용자번호
@@ -33,13 +36,14 @@ public class User {
     String iid;
 
     /**
-     * GCM 토큰
+     * GCM 토큰.
      */
     String gcmToken;
 
     /**
      * 프로파일 이미지
      */
+    @Unindex
     String image;
 
     /**

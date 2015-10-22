@@ -31,7 +31,8 @@ public class MiscEndpoint extends BaseEndpoint {
      *
      */
     @ApiMethod(
-            name = "helloworld"
+            name = "helloworld",
+            httpMethod = "GET"
     )
     public StringHolder helloworld() {
         return new StringHolder("Hello, world!");

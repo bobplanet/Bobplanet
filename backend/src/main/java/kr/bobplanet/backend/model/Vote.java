@@ -3,6 +3,7 @@ package kr.bobplanet.backend.model;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.IgnoreLoad;
 import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Load;
 import com.googlecode.objectify.annotation.OnSave;
@@ -56,6 +57,7 @@ public class Vote {
     /**
      *
      */
+    @IgnoreLoad
     protected Date updateDate;
 
     public Vote() {

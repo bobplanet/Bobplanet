@@ -4,6 +4,8 @@ import com.google.api.server.spi.config.ApiClass;
 import com.google.api.server.spi.config.ApiMethod;
 import com.googlecode.objectify.Key;
 
+import java.util.List;
+
 import kr.bobplanet.backend.model.User;
 
 import static kr.bobplanet.backend.api.ObjectifyRegister.ofy;

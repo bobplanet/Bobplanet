@@ -5,6 +5,8 @@ import com.googlecode.objectify.ObjectifyService;
 
 import kr.bobplanet.backend.model.Item;
 import kr.bobplanet.backend.model.Menu;
+import kr.bobplanet.backend.model.BaseMessage;
+import kr.bobplanet.backend.model.NextMenuMessage;
 import kr.bobplanet.backend.model.User;
 import kr.bobplanet.backend.model.Vote;
 
@@ -25,6 +27,8 @@ public final class ObjectifyRegister {
         ObjectifyService.register(Item.class);
         ObjectifyService.register(User.class);
         ObjectifyService.register(Vote.class);
+        ObjectifyService.register(BaseMessage.class);
+        ObjectifyService.register(NextMenuMessage.class);
     }
 
     public static Objectify ofy() {

@@ -31,7 +31,9 @@ dependencies {
     compile 'com.google.appengine:appengine-endpoints:1.9.27'
     compile 'com.google.appengine:appengine-endpoints-deps:1.9.27'
     compile 'com.googlecode.objectify:objectify:5.1.8'
+    compile 'com.ganyo:gcm-server:1.0.2'
     compile 'javax.servlet:servlet-api:2.5'
+    compile 'joda-time:joda-time:2.8.2'
 }
 
 appengine {
@@ -58,6 +60,7 @@ buildConfig {
             buildConfigField "String", "CLIENTID_ANDROID_DEV", props.get("backend.clientid.android.dev")
             buildConfigField "String", "CLIENTID_ANDROID_RELEASE", props.get("backend.clientid.android.release")
             buildConfigField "String", "CLIENTID_WEB", props.get("backend.clientid.web")
+            buildConfigField "String", "GCM_API_KEY", props.get("backend.gcm.apikey")
         }
     }
 }

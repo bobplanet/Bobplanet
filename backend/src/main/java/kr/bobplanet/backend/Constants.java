@@ -10,7 +10,7 @@ public interface Constants {
 	/**
 	 * 
 	 */
-    String GCM_API_KEY = "AIzaSyCgCD6Jbj7CqraZxDlOo7ZzaG7wVlN51MU";
+    String GCM_API_KEY = BuildConfig.GCM_API_KEY;
 
 	/**
 	 *

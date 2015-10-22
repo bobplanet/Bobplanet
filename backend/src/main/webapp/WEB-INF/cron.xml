@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cronentries>
+    <cron>
+        <url>/servlets/message</url>
+        <description>Send lunch menu notification</description>
+        <schedule>every mon,tue,wed,thu,fri 11:30</schedule>
+        <timezone>Asia/Seoul</timezone>
+    </cron>
+    <cron>
+        <url>/servlets/message</url>
+        <description>Send dinner menu notification</description>
+        <schedule>every mon,tue,wed,thu,fri 17:30</schedule>
+        <timezone>Asia/Seoul</timezone>
+    </cron>
+</cronentries>
