@@ -94,8 +94,10 @@ public class ApiProxy implements Constants {
             }
         };
 
-        new ApiLoader<>(DailyMenu.class, remote, listener, "menuOfDate").execute(
-                new CachingOption(date));
+        new Builder<>(DailyMenu.class, remote, "menuOfDate")
+                .setResultListener(listener)
+                .setCacheKey(date)
+                .execute();
     }
 
     /**
@@ -113,8 +115,10 @@ public class ApiProxy implements Constants {
             }
         };
 
-        new ApiLoader<>(Menu.class, remote, listener, "menu").execute(
-                new CachingOption(id));
+        new Builder<>(Menu.class, remote, "menu")
+                .setResultListener(listener)
+                .setCacheKey(id)
+                .execute();
     }
 
     /**
@@ -132,8 +136,9 @@ public class ApiProxy implements Constants {
             }
         };
 
-        new ApiLoader<>(User.class, remote, listener, "registerUser").execute(
-                CachingOption.NO_CACHE);
+        new Builder<>(User.class, remote, "registerUser")
+                .setResultListener(listener)
+                .execute();
     }
 
     /**
@@ -150,8 +155,8 @@ public class ApiProxy implements Constants {
             }
         };
 
-        new ApiLoader<>(Void.class, remote, null, "updateUser").execute(
-                CachingOption.NO_CACHE);
+        new Builder<>(Void.class, remote, "updateUser")
+                .execute();
     }
 
     /**
@@ -172,8 +177,11 @@ public class ApiProxy implements Constants {
             }
         };
 
-        new ApiLoader<>(Item.class, remote, listener, "vote").execute(
-                new CachingOption(menu.getId(), false, true));
+        new Builder<>(Item.class, remote, "vote")
+                .setResultListener(listener)
+                .setCacheKey(menu.getId())
+                .setCacheWritable(true)
+                .execute();
     }
 
     /**
@@ -192,8 +200,9 @@ public class ApiProxy implements Constants {
             }
         };
 
-        new ApiLoader<>(Vote.class, remote, listener, "myVote").execute(
-                CachingOption.NO_CACHE);
+        new Builder<>(Vote.class, remote, "myVote")
+                .setResultListener(listener)
+                .execute();
     }
 
     /**
@@ -204,24 +213,41 @@ public class ApiProxy implements Constants {
      * - doInBackground()에서 캐쉬 조회 및 네트웤API 호출, 캐쉬 업데이트 등을 수행
      * - onPostExecute()에서 listener의 onApiResult() 메소드를 호출하여 데이터로딩 후처리 진행
      */
-    private class ApiLoader<T> extends AsyncTask<CachingOption, Void, T> {
-        private final Class<T> type;
-        private final RemoteApiLoader<T> remote;
-        private final ApiResultListener<T> listener;
-        private String apiName;
+    private class Builder<T> extends AsyncTask<Void, Void, T>{
+        private Class<T> resultType;
+        RemoteApiLoader<T> apiLoader;
+        ApiResultListener resultListener;
+        String measureApiName;
+        String cacheKey;
+        boolean cacheReadable = false;
+        boolean cacheWritable = false;
 
-        /**
-         * 생성자.
-         *
-         * @param remote   BobplanetApi 호출로직
-         * @param listener 데이터 로딩 뒤 후처리로직
-         */
-        ApiLoader(Class<T> type, RemoteApiLoader<T> remote, @Nullable ApiResultListener<T> listener,
-                  String apiName) {
-            this.type = type;
-            this.remote = remote;
-            this.listener = listener;
-            this.apiName = apiName;
+        Builder(Class<T> resultType, RemoteApiLoader<T> apiLoader, String measureApiName) {
+            this.resultType = resultType;
+            this.apiLoader = apiLoader;
+            this.measureApiName = measureApiName;
+        }
+
+        Builder<T> setResultListener(ApiResultListener<T> resultListener) {
+            this.resultListener = resultListener;
+            return this;
+        }
+
+        Builder<T> setCacheKey(Object key) {
+            this.cacheKey = resultType.getSimpleName() + KEY_SEPARATOR + key;
+            this.cacheReadable = true;
+            this.cacheWritable = true;
+            return this;
+        }
+
+        Builder<T> setCacheReadable(boolean cacheReadable) {
+            this.cacheReadable = cacheReadable;
+            return this;
+        }
+
+        Builder<T> setCacheWritable(boolean cacheWritable) {
+            this.cacheWritable = cacheWritable;
+            return this;
         }
 
         /**
@@ -229,13 +255,11 @@ public class ApiProxy implements Constants {
          */
         @Override
         @DebugLog
-        protected T doInBackground(CachingOption... params) {
+        protected T doInBackground(Void... params) {
             try {
                 long now = new Date().getTime();
-                CachingOption opt = params[0];
 
-                String cacheKey = type.getSimpleName() + KEY_SEPARATOR + opt.key;
-                if (opt.isReadable()) {
+                if (cacheReadable) {
                     Pair<Long, String> cachedObj = jsonCache.get(cacheKey);
 
                     if (cachedObj != null) {
@@ -243,20 +267,20 @@ public class ApiProxy implements Constants {
                         String json = cachedObj.second;
                         if (now - timestamp < CACHE_EXPIRE_SECONDS * 1000 && json != null) {
                             Log.v(TAG, "Get cached entry for " + cacheKey);
-                            return EntityParser.parseEntity(type, json);
+                            return EntityParser.parseEntity(resultType, json);
                         }
                         Log.v(TAG, "Cache expired for " + cacheKey);
                     }
                 }
 
                 Log.v(TAG, "Fetching from network API");
-                T result = remote.fromRemoteApi();
+                T result = apiLoader.fromRemoteApi();
                 Log.v(TAG, "result = " + result);
 
                 MeasureLogEvent.measure(MeasureLogEvent.Metric.API_LATENCY,
-                        apiName, new Date().getTime() - now).submit();
+                        measureApiName, new Date().getTime() - now).submit();
 
-                if (opt.isWritable()) {
+                if (cacheWritable) {
                     jsonCache.put(cacheKey, new Pair<>(now, EntityParser.toString(result)));
                 }
 
@@ -270,35 +294,9 @@ public class ApiProxy implements Constants {
 
         @Override
         protected void onPostExecute(T entity) {
-            if (listener != null) {
-                listener.onApiResult(entity);
+            if (resultListener != null) {
+                resultListener.onApiResult(entity);
             }
-        }
-    }
-
-    private static class CachingOption {
-        private static final CachingOption NO_CACHE = new CachingOption(null, false, false);
-
-        Object key;
-        boolean readable = true;
-        boolean writable = true;
-
-        private CachingOption(Object key) {
-            this.key = key;
-        }
-
-        private CachingOption(Object key, boolean readable, boolean writable) {
-            this.key = key;
-            this.readable = readable;
-            this.writable = writable;
-        }
-
-        private boolean isReadable() {
-            return readable;
-        }
-
-        private boolean isWritable() {
-            return writable;
         }
     }
 
