@@ -43,12 +43,7 @@ public class SubmenuCardProvider extends TextCardProvider<SubmenuCardProvider> {
     public void render(View view, Card card) {
         super.render(view, card);
 
-        BaseListAdapter.BaseViewHolderFactory factory = new BaseListAdapter.BaseViewHolderFactory() {
-            @Override
-            public BaseListAdapter.BaseViewHolder newInstance(View view) {
-                return new SubmenuViewHolder(view);
-            }
-        };
+        BaseListAdapter.BaseViewHolderFactory factory = (v) -> new SubmenuViewHolder(view);
         adapter = new BaseListAdapter(factory, submenuList, R.layout.menu_submenu_item);
 
         RecyclerView recyclerView = ButterKnife.findById(view, R.id.recycler_view);

@@ -169,14 +169,9 @@ public class DayActivity extends BaseActivity {
         }
 
         CoordinatorLayout layout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
-        Snackbar.make(
-                layout, R.string.swipe_notice, Snackbar.LENGTH_INDEFINITE)
-                .setAction(R.string.swipe_notice_goaway, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        prefs.setDismissedSwipeNotice();
-                    }
-                }).show();
+        Snackbar.make(layout, R.string.swipe_notice, Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.swipe_notice_goaway, (v) -> prefs.setDismissedSwipeNotice())
+                .show();
     }
 
     /**

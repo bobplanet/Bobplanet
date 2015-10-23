@@ -21,6 +21,9 @@
     public static int v(...);
 }
 
+# Retrolambda용 설정
+-dontwarn java.lang.invoke.*
+
 # EventBus의 callback method 이름이 바뀌지 않도록 설정
 -keepclassmembers class ** {
     public void onEvent*(***);

@@ -28,12 +28,12 @@ import kr.bobplanet.backend.bobplanetApi.model.Menu;
 /**
  * 특정 일자의 아침-점심-저녁 메뉴를 보여주는 fragment.
  * DayViewActivity에 삽입되어 실제 메뉴를 화면에 보여주는 역할을 담당함.
- * <p/>
+ * <p>
  * - 날짜 parameter는 fragment 생성시에 bundle로 전달되어 <code>getArguments()</code>를 통해 조회
  * - 서버로부터 메뉴 데이터를 가져오면 activity에도 알려줌 (좌우 fragment를 미리 만들어둘 수 있도록)
  * - 화면은 listview로 구성하고 DayViewAdapter를 이용해 UI 구성.
  * - 메뉴 데이터가 없을 경우(식당 노는 날) 안내화면 노출.
- * <p/>
+ * <p>
  * TODO ProgressBar 색상을 theme에서 지정해볼 것.
  *
  * @author heonkyu.jin
@@ -133,34 +133,26 @@ public class DayFragment extends BaseFragment {
         EventBus.getDefault().register(this);
 
         // 데이터 로딩이 끝나면 그에 맞게 UI 업데이트하고 activity에도 데이터로딩 끝났음을 전달
-        ApiProxy.ApiResultListener<DailyMenu> listener = new ApiProxy.ApiResultListener<DailyMenu>() {
-            @Override
-            public void onApiResult(DailyMenu dailyMenu) {
-                if (dailyMenu == null) return;
+        ApiProxy.ApiResultListener<DailyMenu> listener = (DailyMenu dailyMenu) -> {
+            if (dailyMenu == null) return;
 
-                menuList = dailyMenu.getMenu();
+            menuList = dailyMenu.getMenu();
 
-                // 이게 null이면 식당 노는날이라는 뜻임.
-                if (menuList != null) {
-                    BaseListAdapter.BaseViewHolderFactory factory = new BaseListAdapter.BaseViewHolderFactory() {
-                        @Override
-                        public BaseListAdapter.BaseViewHolder newInstance(View view) {
-                            return new DayViewHolder(view);
-                        }
-                    };
+            // 이게 null이면 식당 노는날이라는 뜻임.
+            if (menuList != null) {
+                BaseListAdapter.BaseViewHolderFactory factory = (View view) -> new DayViewHolder(view);
 
-                    adapter = new BaseListAdapter(factory, menuList, R.layout.day_item);
-                    recyclerView.setAdapter(adapter);
-                } else {
-                    recyclerView.setVisibility(View.GONE);
-                    emptyView.setVisibility(View.VISIBLE);
-                }
-
-                progressBar.setIndeterminate(false);
-                progressBar.setVisibility(View.INVISIBLE);
-
-                EventBus.getDefault().post(new DataLoadCompleteEvent(dailyMenu));
+                adapter = new BaseListAdapter(factory, menuList, R.layout.day_item);
+                recyclerView.setAdapter(adapter);
+            } else {
+                recyclerView.setVisibility(View.GONE);
+                emptyView.setVisibility(View.VISIBLE);
             }
+
+            progressBar.setIndeterminate(false);
+            progressBar.setVisibility(View.INVISIBLE);
+
+            EventBus.getDefault().post(new DataLoadCompleteEvent(dailyMenu));
         };
 
         App.getInstance().getApiProxy().loadMenuOfDate(getDate(false), listener);

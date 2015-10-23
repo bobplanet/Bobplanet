@@ -36,15 +36,15 @@ import kr.bobplanet.backend.bobplanetApi.model.Vote;
 
 /**
  * 메뉴 상세화면을 담당하는 activity.
- * <p/>
+ * <p>
  * - 메뉴 개요 탭(MenuFragment)과 세부평가 탭(MenuScoreFragment)의 2개 탭으로 구성.
  * - 메뉴정보는 intent에 통째로 넣어서 받는다. (푸쉬메시지 수신한 경우, extra에 넣어서 본 화면 호출해야 함)
  * - 메뉴에 점수를 매긴 경우 점수데이터를 다시 불러와야 하므로 ApiProxy.ApiResultListener 구현 필요
- * <p/>
+ * <p>
  * 로그인 여부에 따른 flow
  * - 로그인유저: 투표 dialog -> uploadVote()
  * - 비로그인유저: 투표 dialog -> 로그인 dialog -> requestGoogleSignin() -> onEvent() -> uploadVote()
- * <p/>
+ * <p>
  * TODO 화면상단의 up arrow를 눌렀을 때 DayViewActivity의 마지막 fragment로 돌아가야 함
  *
  * @author heonkyu.jin
@@ -102,12 +102,7 @@ public class MenuActivity extends BaseActivity implements Constants {
         tabLayout.setupWithViewPager(viewPager);
 
         FloatingActionButton fab = ButterKnife.findById(this, R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showRatingDialog();
-            }
-        });
+        fab.setOnClickListener((View v) -> showRatingDialog());
     }
 
     /**
@@ -117,14 +112,12 @@ public class MenuActivity extends BaseActivity implements Constants {
         UserManager um = App.getInstance().getUserManager();
         if (um.hasAccount()) {
             App.getInstance().getApiProxy().myVote(um.getUserId(), menu,
-                    new ApiProxy.ApiResultListener<Vote>() {
-                        @Override
-                        public void onApiResult(Vote result) {
-                            if (result != null) {
-                                myScore = result.getScore();
-                            }
+                    (Vote result) -> {
+                        if (result != null) {
+                            myScore = result.getScore();
                         }
-                    });
+                    }
+            );
         }
 
     }
@@ -146,16 +139,14 @@ public class MenuActivity extends BaseActivity implements Constants {
         new AlertDialog.Builder(this)
                 .setTitle(R.string.dialog_rating_label)
                 .setView(ratingBarHolder)
-                .setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                myScore = (int) ratingBar.getRating();
+                .setPositiveButton(R.string.button_ok,
+                        (DialogInterface dialog, int which) -> {
+                            myScore = (int) ratingBar.getRating();
 
-                                if (App.getInstance().getUserManager().hasAccount()) {
-                                    uploadVote();
-                                } else {
-                                    showSigninDialog();
-                                }
+                            if (App.getInstance().getUserManager().hasAccount()) {
+                                uploadVote();
+                            } else {
+                                showSigninDialog();
                             }
                         }
                 )
@@ -172,24 +163,19 @@ public class MenuActivity extends BaseActivity implements Constants {
         if (myScore > 0) {
             ApiProxy proxy = App.getInstance().getApiProxy();
             proxy.vote(App.getInstance().getUserManager().getUserId(), menu, myScore,
-                    new ApiProxy.ApiResultListener<Item>() {
-                        @Override
-                        public void onApiResult(Item result) {
-                            MenuActivity.this.menu.setItem(result);
-                        }
-                    });
-        }
+                    (Item result) -> MenuActivity.this.menu.setItem(result));
 
-        Resources r = getResources();
-        String[] levels = r.getStringArray(R.array.rating_level);
-        String message = String.format(r.getString(R.string.rating_notice_fmt),
-                menu.getItem().getId(),
-                Util.endsWithConsonant(menu.getItem().getId()) ? "을" : "를",
-                levels[myScore - 1],
-                Util.endsWithConsonant(levels[myScore - 1]) ? "이" : ""
-        );
-        CoordinatorLayout layout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
-        Snackbar.make(layout, message, Snackbar.LENGTH_LONG).show();
+            Resources r = getResources();
+            String[] levels = r.getStringArray(R.array.rating_level);
+            String message = String.format(r.getString(R.string.rating_notice_fmt),
+                    menu.getItem().getId(),
+                    Util.endsWithConsonant(menu.getItem().getId()) ? "을" : "를",
+                    levels[myScore - 1],
+                    Util.endsWithConsonant(levels[myScore - 1]) ? "이" : ""
+            );
+            CoordinatorLayout layout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
+            Snackbar.make(layout, message, Snackbar.LENGTH_LONG).show();
+        }
     }
 
     /**
@@ -202,13 +188,7 @@ public class MenuActivity extends BaseActivity implements Constants {
         new AlertDialog.Builder(this)
                 .setTitle(R.string.dialog_login_label)
                 .setView(view)
-                .setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                requestGoogleSignin();
-                            }
-                        }
-                )
+                .setPositiveButton(R.string.button_ok, (dialog, which) -> requestGoogleSignin())
                 .setNegativeButton(R.string.button_cancel, null).show();
 
         UserLogEvent.dialogView(getString(R.string.dialog_login_label));
@@ -223,11 +203,6 @@ public class MenuActivity extends BaseActivity implements Constants {
     public void onEvent(GoogleSigninEvent event) {
         uploadVote();
     }
-
-    /**
-     *
-     */
-
 
     /**
      * 탭 구현용 activity를 관리할 ViewPagerAdapter 생성.

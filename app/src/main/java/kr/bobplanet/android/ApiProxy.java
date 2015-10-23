@@ -1,7 +1,6 @@
 package kr.bobplanet.android;
 
 import android.os.AsyncTask;
-import android.support.annotation.Nullable;
 import android.support.v4.util.LruCache;
 import android.support.v4.util.Pair;
 import android.util.Log;
@@ -87,14 +86,7 @@ public class ApiProxy implements Constants {
      * @param listener 데이터로드 후처리를 담당할 listener
      */
     public void loadMenuOfDate(final String date, ApiResultListener<DailyMenu> listener) {
-        RemoteApiLoader<DailyMenu> remote = new RemoteApiLoader<DailyMenu>() {
-            @Override
-            public DailyMenu fromRemoteApi() throws IOException {
-                return api.menuOfDate(date).execute();
-            }
-        };
-
-        new Builder<>(DailyMenu.class, remote, "menuOfDate")
+        new Builder<>(DailyMenu.class, () -> api.menuOfDate(date).execute(), "menuOfDate")
                 .setResultListener(listener)
                 .setCacheKey(date)
                 .execute();
@@ -108,14 +100,7 @@ public class ApiProxy implements Constants {
      * @param listener 데이터로드 후처리를 담당할 listener
      */
     public void loadMenu(final long id, ApiResultListener<Menu> listener) {
-        RemoteApiLoader<Menu> remote = new RemoteApiLoader<Menu>() {
-            @Override
-            public Menu fromRemoteApi() throws IOException {
-                return api.menu(id).execute();
-            }
-        };
-
-        new Builder<>(Menu.class, remote, "menu")
+        new Builder<>(Menu.class, () -> api.menu(id).execute(), "menu")
                 .setResultListener(listener)
                 .setCacheKey(id)
                 .execute();
@@ -129,14 +114,7 @@ public class ApiProxy implements Constants {
      */
     @DebugLog
     public void registerUser(final User user, ApiResultListener<User> listener) {
-        RemoteApiLoader<User> remote = new RemoteApiLoader<User>() {
-            @Override
-            public User fromRemoteApi() throws IOException {
-                return api.registerUser(user).execute();
-            }
-        };
-
-        new Builder<>(User.class, remote, "registerUser")
+        new Builder<>(User.class, () -> api.registerUser(user).execute(), "registerUser")
                 .setResultListener(listener)
                 .execute();
     }
@@ -148,14 +126,7 @@ public class ApiProxy implements Constants {
      */
     @DebugLog
     public void updateUser(final User user) {
-        RemoteApiLoader<Void> remote = new RemoteApiLoader<Void>() {
-            @Override
-            public Void fromRemoteApi() throws IOException {
-                return api.updateUser(user).execute();
-            }
-        };
-
-        new Builder<>(Void.class, remote, "updateUser")
+        new Builder<>(Void.class, () -> api.updateUser(user).execute(), "updateUser")
                 .execute();
     }
 
@@ -170,14 +141,8 @@ public class ApiProxy implements Constants {
     @DebugLog
     public void vote(final Long userId, final Menu menu, final int score, ApiResultListener<Item> listener) {
         Log.v(TAG, "score = " + score);
-        RemoteApiLoader<Item> remote = new RemoteApiLoader<Item>() {
-            @Override
-            public Item fromRemoteApi() throws IOException {
-                return api.vote(userId, menu.getItem().getId(), menu.getId(), score).execute();
-            }
-        };
 
-        new Builder<>(Item.class, remote, "vote")
+        new Builder<>(Item.class, () -> api.vote(userId, menu.getItem().getId(), menu.getId(), score).execute(), "vote")
                 .setResultListener(listener)
                 .setCacheKey(menu.getId())
                 .setCacheWritable(true)
@@ -193,14 +158,7 @@ public class ApiProxy implements Constants {
      */
     @DebugLog
     public void myVote(final Long userId, final Menu menu, ApiResultListener<Vote> listener) {
-        RemoteApiLoader<Vote> remote = new RemoteApiLoader<Vote>() {
-            @Override
-            public Vote fromRemoteApi() throws IOException {
-                return api.myVote(userId, menu.getItem().getId()).execute();
-            }
-        };
-
-        new Builder<>(Vote.class, remote, "myVote")
+        new Builder<>(Vote.class, () -> api.myVote(userId, menu.getItem().getId()).execute(), "myVote")
                 .setResultListener(listener)
                 .execute();
     }
@@ -215,16 +173,16 @@ public class ApiProxy implements Constants {
      */
     private class Builder<T> extends AsyncTask<Void, Void, T>{
         private Class<T> resultType;
-        RemoteApiLoader<T> apiLoader;
+        ApiExecutor<T> apiExecutor;
         ApiResultListener resultListener;
         String measureApiName;
         String cacheKey;
         boolean cacheReadable = false;
         boolean cacheWritable = false;
 
-        Builder(Class<T> resultType, RemoteApiLoader<T> apiLoader, String measureApiName) {
+        Builder(Class<T> resultType, ApiExecutor<T> apiExecutor, String measureApiName) {
             this.resultType = resultType;
-            this.apiLoader = apiLoader;
+            this.apiExecutor = apiExecutor;
             this.measureApiName = measureApiName;
         }
 
@@ -274,7 +232,7 @@ public class ApiProxy implements Constants {
                 }
 
                 Log.v(TAG, "Fetching from network API");
-                T result = apiLoader.fromRemoteApi();
+                T result = apiExecutor.fromRemoteApi();
                 Log.v(TAG, "result = " + result);
 
                 MeasureLogEvent.measure(MeasureLogEvent.Metric.API_LATENCY,
@@ -304,7 +262,7 @@ public class ApiProxy implements Constants {
      * 서버API 호출로직.
      * BobplanetApi 객체가 갖고있는 적절한 method를 호출.
      */
-    private interface RemoteApiLoader<T> {
+    private interface ApiExecutor<T> {
         T fromRemoteApi() throws IOException;
     }
 
