@@ -1,20 +1,14 @@
 package kr.bobplanet.android;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.AttributeSet;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 
 import com.commonsware.cwac.pager.PageDescriptor;
 import com.commonsware.cwac.pager.SimplePageDescriptor;
@@ -57,7 +51,7 @@ public class DayActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // DailyViewFragment가 보내주는 데이터로딩완료 메시지 수신을 위해 EventBus 등록
+        // DayFragment가 보내주는 데이터로딩완료 메시지 수신을 위해 EventBus 등록
         EventBus.getDefault().register(this);
 
         // intent에 날짜가 있으면 그 날짜, 없으면 오늘 날짜 이용
@@ -141,14 +135,14 @@ public class DayActivity extends BaseActivity {
 	 * - startActivity()는 메인스레드(=UI스레드)에서 실행되어야 하는 것으로 보임.
 	 */
     @SuppressWarnings("unused")
-    public void onEventMainThread(MenuViewHolder.ViewClickEvent e) {
+    public void onEventMainThread(DayViewHolder.ViewClickEvent e) {
         startMenuViewActivity(e.viewHolder);
     }
 
 	/**
 	 * TODO Activity 전환 transition 효과 복구.
 	 */
-    private void startMenuViewActivity(MenuViewHolder viewHolder) {
+    private void startMenuViewActivity(DayViewHolder viewHolder) {
         Menu menu = viewHolder.menu;
 
         Intent intent = new Intent(this, MenuActivity.class);

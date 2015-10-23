@@ -145,7 +145,7 @@ public class DayFragment extends BaseFragment {
                     BaseListAdapter.BaseViewHolderFactory factory = new BaseListAdapter.BaseViewHolderFactory() {
                         @Override
                         public BaseListAdapter.BaseViewHolder newInstance(View view) {
-                            return new MenuViewHolder(view);
+                            return new DayViewHolder(view);
                         }
                     };
 

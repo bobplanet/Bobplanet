@@ -1,9 +1,6 @@
 package kr.bobplanet.android;
 
-import android.graphics.Color;
-import android.graphics.drawable.LayerDrawable;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.RatingBar;
@@ -24,7 +21,7 @@ import kr.bobplanet.backend.bobplanetApi.model.Submenu;
  * 메뉴 객체의 ViewHolder.
  * EventBus를 이용해서 @link{DayActivity}로 Onclick 이벤트 전송
  */
-public class MenuViewHolder extends BaseListAdapter.BaseViewHolder<Menu> implements View.OnClickListener {
+public class DayViewHolder extends BaseListAdapter.BaseViewHolder<Menu> implements View.OnClickListener {
     Menu menu;
 
     @Bind(R.id.when)
@@ -40,7 +37,7 @@ public class MenuViewHolder extends BaseListAdapter.BaseViewHolder<Menu> impleme
     @Bind(R.id.calories)
     TextView calories;
 
-    public MenuViewHolder(View itemView) {
+    public DayViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
 
@@ -105,12 +102,12 @@ public class MenuViewHolder extends BaseListAdapter.BaseViewHolder<Menu> impleme
 
     /**
 	 * 메뉴 클릭 이벤트.
-	 * @link MenuViewHolder
+	 * @link DayViewHolder
 	 */
     static class ViewClickEvent {
-        MenuViewHolder viewHolder;
+        DayViewHolder viewHolder;
 
-        ViewClickEvent(MenuViewHolder viewHolder) {
+        ViewClickEvent(DayViewHolder viewHolder) {
             this.viewHolder = viewHolder;
         }
     }
