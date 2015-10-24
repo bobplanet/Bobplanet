@@ -204,8 +204,11 @@ public class GcmServices implements Constants {
      * - 인스턴스ID가 달라지면 GCM 재등록이 필요하므로 Registration 서비스 호출
      */
     public static class InstanceIDListener extends InstanceIDListenerService {
+        private static final String TAG = InstanceIDListener.class.getSimpleName();
+
         @Override
         public void onTokenRefresh() {
+            Log.i(TAG, "onTokenRefresh()");
             Intent intent = new Intent(this, Registration.class);
             startService(intent);
         }

@@ -2,13 +2,8 @@ package kr.bobplanet.android;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
-import de.greenrobot.event.EventBus;
-import hugo.weaving.DebugLog;
-import kr.bobplanet.android.gcm.GcmEvent;
 import kr.bobplanet.android.gcm.GcmServices;
-import kr.bobplanet.backend.bobplanetApi.model.User;
 
 /**
  * 본 애플리케이션의 메인 액티비티.
@@ -28,8 +23,8 @@ public class StartActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!App.getInstance().getUserManager().isRegistered()) {
-            // GCM 등록
+        // GCM 등록
+        if (!App.getInstance().getUserManager().isGcmRegistered()) {
             if (DeviceEnvironment.checkPlayServices(this)) {
                 startService(new Intent(this, GcmServices.Registration.class));
             }

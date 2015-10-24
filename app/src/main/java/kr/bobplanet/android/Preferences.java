@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import kr.bobplanet.backend.bobplanetApi.model.User;
+import kr.bobplanet.backend.bobplanetApi.model.UserDevice;
 
 /**
  * SharedPreferences 키가 여기저기 흩어지는 일을 막기 위해 한군데로 몰아놓은 객체.
@@ -18,7 +18,7 @@ import kr.bobplanet.backend.bobplanetApi.model.User;
 public class Preferences {
     private static final String TAG = Preferences.class.getSimpleName();
 
-    private static final String USER = "USER";
+    private static final String DEVICE = "DEVICE";
 
     private static final String HAS_LAUNCHED = "HAS_LAUNCHED";
     private static final String HAS_DISMISSED_SWIPE_NOTICE = "HAS_DISMISSED_SWIPE_NOTICE";
@@ -30,14 +30,14 @@ public class Preferences {
         this.prefs = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
-    public User loadUser() {
-        String userString = prefs.getString(USER, null);
-        Log.v(TAG, "userString = " + userString);
-        return userString != null ? EntityParser.parseEntity(User.class, userString) : null;
+    public UserDevice loadDevice() {
+        String deviceString = prefs.getString(DEVICE, null);
+        Log.v(TAG, "deviceString = " + deviceString);
+        return deviceString != null ? EntityParser.parseEntity(UserDevice.class, deviceString) : null;
     }
 
-    public void storeUser(User user) {
-        prefs.edit().putString(USER, EntityParser.toString(user)).apply();
+    public void storeDevice(UserDevice device) {
+        prefs.edit().putString(DEVICE, EntityParser.toString(device)).apply();
     }
 
     public boolean hasDismissedSwipeNotice() {

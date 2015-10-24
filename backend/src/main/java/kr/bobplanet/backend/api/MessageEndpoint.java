@@ -16,9 +16,9 @@ import java.util.List;
 
 import kr.bobplanet.backend.Constants;
 import kr.bobplanet.backend.model.BaseMessage;
+import kr.bobplanet.backend.model.UserDevice;
 import kr.bobplanet.backend.model.Menu;
 import kr.bobplanet.backend.model.NextMenuMessage;
-import kr.bobplanet.backend.model.User;
 
 import static kr.bobplanet.backend.api.ObjectifyRegister.ofy;
 
@@ -80,17 +80,18 @@ public class MessageEndpoint extends BaseEndpoint {
                 .addData("message", "오늘은 어떤 메뉴가 나올까요?")
                 .build();
         try {
-            List<User> users = ofy().load().type(User.class).filter("gcmToken !=", null).list();
+            List<UserDevice> devices = ofy().load().type(UserDevice.class)
+                    .filter("gcmToken !=", null).filter("gcmEnabled", true).list();
 
             int errors = 0;
-            for (User user : users) {
-                Result result = sender.send(msg, user.getGcmToken(), 5);
+            for (UserDevice device : devices) {
+                Result result = sender.send(msg, device.getGcmToken(), 5);
                 if (result.getErrorCodeName() != null) {
                     errors++;
                 }
             }
 
-            message.setNumRecipients(users.size());
+            message.setNumRecipients(devices.size());
             message.setNumErrors(errors);
 
             ofy().save().entity(message);

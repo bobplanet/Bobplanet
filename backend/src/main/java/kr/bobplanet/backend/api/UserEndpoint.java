@@ -3,17 +3,17 @@ package kr.bobplanet.backend.api;
 import com.google.api.server.spi.config.ApiClass;
 import com.google.api.server.spi.config.ApiMethod;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Work;
 
-import java.util.List;
-
+import kr.bobplanet.backend.model.UserDevice;
 import kr.bobplanet.backend.model.User;
 
 import static kr.bobplanet.backend.api.ObjectifyRegister.ofy;
 
 /**
- * Google Cloud Endpoint를 이용해 서버사이드 API로 가공되는 클래스.
+ * 사용자 및 사용자의 기기를 관리하는 Endpoint.
  * <p/>
- * - 모든 데이터는 Google DataStore를 이용하며, 객체접근 위해 Objectify 라이브러리 이용
+ * - 
  * - 데이터 노출을 막기 위해 API는 클라이언트ID 기반 권한관리 (따라서, 신규 클라이언트가 추가되면 여기도 수정해줘야 함)
  *
  * @author heonkyu.jin
@@ -23,22 +23,74 @@ import static kr.bobplanet.backend.api.ObjectifyRegister.ofy;
         resource = "user"
 )
 public class UserEndpoint extends BaseEndpoint {
-
+	
+    /**
+     * 사용자의 기기를 등록. 이미 등록된 기기(AndroidId 기준)인 경우에는 업데이트함.
+     *
+     * @param device
+     * @return
+     */
     @ApiMethod(
-            name = "registerUser",
-            path = "user/register",
+            name = "registerDevice",
+            path = "device/register",
             httpMethod = "POST"
     )
-    public User registerUser(User user) {
-        logger.info("registerUser(): user = " + user.toString());
+    public UserDevice registerDevice(final UserDevice device) {
+        logger.info("registerDevice(): device = " + device.toString());
 
-        Key<User> userKey = ofy().save().entity(user).now();
-        logger.info("userKey = " + userKey);
-        user.setId(userKey.getId());
+        final UserDevice existing =
+                ofy().load().type(UserDevice.class).filter("androidId", device.getAndroidId()).first().now();
+        if (existing != null) {
+            logger.info("existing = " + existing);
+            device.setId(existing.getId());
+            device.setUser(existing.getUser());
+        }
 
-        return user;
+        UserDevice result = ofy().transact(
+                new Work<UserDevice>() {
+                    @Override
+                    public UserDevice run() {
+                        if (device.getUser() == null) {
+                            User user = new User();
+                            Key<User> userId = ofy().save().entity(user).now();
+                            user.setId(userId.getId());
+                            device.setUser(user);
+                        }
+
+                        Key <UserDevice> deviceKey = ofy().save().entity(device).now();
+                        device.setId(deviceKey.getId());
+
+                        return device;
+                    }
+                }
+        );
+
+        return result;
     }
 
+    /**
+     * 기기정보 업데이트.
+	 * GCM토큰 변경 등의 케이스에 호출됨.
+     *
+     * @param device
+     */
+    @ApiMethod(
+            name = "updateDevice",
+            path = "device/update",
+            httpMethod = "POST"
+    )
+    public void updateDevice(UserDevice device) {
+        logger.info("updateDevice(): device = " + device.toString());
+
+        ofy().save().entity(device).now();
+    }
+
+    /**
+     * 사용자정보 업데이트.
+	 * 사용자가 Google 로그인 등 account 정보를 등록했을 때 호출.
+     * 
+     * @param user
+     */
     @ApiMethod(
             name = "updateUser",
             path = "user/update",

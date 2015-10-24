@@ -1,6 +1,7 @@
 package kr.bobplanet.android;
 
 import android.content.Context;
+import android.provider.Settings;
 import android.util.Log;
 
 import com.google.android.gms.iid.InstanceID;
@@ -10,6 +11,7 @@ import de.greenrobot.event.EventBus;
 import hugo.weaving.DebugLog;
 import kr.bobplanet.android.gcm.GcmEvent;
 import kr.bobplanet.backend.bobplanetApi.model.User;
+import kr.bobplanet.backend.bobplanetApi.model.UserDevice;
 
 /**
  * 사용자 identity를 관리하는 객체.
@@ -21,15 +23,13 @@ import kr.bobplanet.backend.bobplanetApi.model.User;
  * @author heonkyu.jin
  * @version 15. 10. 18
  */
-public class UserManager implements ApiProxy.ApiResultListener<User> {
+public class UserManager implements ApiProxy.ApiResultListener<UserDevice> {
     private static final String TAG = UserManager.class.getSimpleName();
 
     /**
      * 현재 사용자. 로그인하지 않은 사용자는 Google Account 없음
      */
-    private User user;
-
-    private Context context;
+    private UserDevice device;
 
     private Preferences prefs;
 
@@ -39,27 +39,31 @@ public class UserManager implements ApiProxy.ApiResultListener<User> {
      * @param prefs
      */
     public UserManager(Context context, Preferences prefs) {
-        this.context = context;
         this.prefs = prefs;
 
         EventBus.getDefault().register(this);
 
-        initializeUser();
+        loadDeviceInfo(context);
     }
 
     /**
      * 사용자정보를 읽어온다. 없으면 서버에 등록요청.
      */
-    private void initializeUser() {
-        User u = prefs.loadUser();
-        if (u == null) {
-            Log.i(TAG, "User doesn't exists. Creating new user");
-            user = new User();
+    private void loadDeviceInfo(Context context) {
+        UserDevice d = prefs.loadDevice();
+        if (d == null) {
+            Log.i(TAG, "Device doesn't exists. Creating new device");
+            device = new UserDevice();
+            device.setGcmEnabled(true);
+            device.setAndroidId(
+                    Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID));
+            device.setIid(InstanceID.getInstance(context).getId());
 
-            App.getInstance().getApiProxy().registerUser(user, this);
+            App.getInstance().getApiProxy().registerDevice(device, this);
         } else {
-            Log.i(TAG, "User restored from prefs: " + u);
-            this.user = u;
+            Log.i(TAG, "Device restored from prefs: " + d);
+            this.device = d;
+            Log.i(TAG, "user = " + getUserId());
         }
     }
 
@@ -68,16 +72,17 @@ public class UserManager implements ApiProxy.ApiResultListener<User> {
      * @return
      */
     public Long getUserId() {
-        return user.getId();
+        return device.getUser().getId();
     }
 
     /**
-     * 사용자등록이 완료되었는지 알려준다. StartActivity에서 확인용으로 호출함.
+     * GCM 토큰 등록이 완료되었는지 알려준다. StartActivity에서 확인용으로 호출함.
      * 
      * @return
      */
-    public boolean isRegistered() {
-        return user.getId() != null;
+    public boolean isGcmRegistered() {
+        Log.d(TAG, "GCM token = " + device.getGcmToken());
+        return device.getGcmToken() != null;
     }
 
     /**
@@ -86,7 +91,7 @@ public class UserManager implements ApiProxy.ApiResultListener<User> {
      * @return
      */
     public boolean hasAccount() {
-        return user.getAccountType() != null;
+        return device.getUser().getAccountType() != null;
     }
 
     /**
@@ -97,11 +102,12 @@ public class UserManager implements ApiProxy.ApiResultListener<User> {
      */
     @Override
     @DebugLog
-    public void onApiResult(User result) {
-        Log.v(TAG, "User registered. user = " + result);
+    public void onApiResult(UserDevice result) {
+        Log.v(TAG, "Device registered : " + result);
         if (result != null) {
-            user.setId(result.getId());
-            updateUser();
+            device.setId(result.getId());
+            device.setUser(result.getUser());
+            updateDevice();
         }
     }
 
@@ -117,27 +123,13 @@ public class UserManager implements ApiProxy.ApiResultListener<User> {
             case GcmEvent.REGISTER_SUCCESS:
                 Log.d(TAG, "gcm register succeeded");
 
-                user.setGcmToken(event.getToken());
-                user.setIid(InstanceID.getInstance(context).getId());
-                updateUser();
+                device.setGcmToken(event.getToken());
+                updateDevice();
                 break;
             case GcmEvent.REGISTER_FAILURE:
                 Log.d(TAG, "gcm register failed");
                 break;
         }
-    }
-    /**
-     * 구글ID 로그인이 끝났을 때 호출해줘야 하는 함수.
-     * @param person
-     */
-    @DebugLog
-    public void updateUserGoogleAccount(Person person) {
-        user.setAccountType("Google");
-        user.setAccountId(person.getId());
-        user.setNickName(person.getNickname());
-        user.setImage(person.getImage().getUrl());
-
-        updateUser();
     }
 
     /**
@@ -145,10 +137,26 @@ public class UserManager implements ApiProxy.ApiResultListener<User> {
      * 최소한 사용자번호와 GCM토큰 둘 다가 있어야 함.
      */
     @DebugLog
-    private void updateUser() {
-        if (user.getId() != null && user.getGcmToken() != null) {
-            App.getInstance().getApiProxy().updateUser(user);
-            prefs.storeUser(user);
+    private void updateDevice() {
+        if (device.getId() != null && device.getGcmToken() != null) {
+            App.getInstance().getApiProxy().updateDevice(device);
+            prefs.storeDevice(device);
         }
+    }
+
+    /**
+     * 구글ID 로그인이 끝났을 때 호출해줘야 하는 함수.
+     * @param person
+     */
+    @DebugLog
+    public void updateUserGoogleAccount(Person person) {
+        User user = device.getUser();
+
+        user.setAccountType("Google");
+        user.setAccountId(person.getId());
+        user.setNickName(person.getDisplayName());
+        user.setImage(person.getImage().getUrl());
+
+        App.getInstance().getApiProxy().updateUser(user);
     }
 }

@@ -20,6 +20,7 @@ import kr.bobplanet.backend.bobplanetApi.model.DailyMenu;
 import kr.bobplanet.backend.bobplanetApi.model.Item;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
 import kr.bobplanet.backend.bobplanetApi.model.User;
+import kr.bobplanet.backend.bobplanetApi.model.UserDevice;
 import kr.bobplanet.backend.bobplanetApi.model.Vote;
 
 /**
@@ -107,15 +108,26 @@ public class ApiProxy implements Constants {
     }
 
     /**
-     * 사용자 등록.
+     * 기기 등록.
      *
-     * @param user
+     * @param device
      * @param listener
      */
     @DebugLog
-    public void registerUser(final User user, ApiResultListener<User> listener) {
-        new Builder<>(User.class, () -> api.registerUser(user).execute(), "registerUser")
+    public void registerDevice(final UserDevice device, ApiResultListener<UserDevice> listener) {
+        new Builder<>(UserDevice.class, () -> api.registerDevice(device).execute(), "registerDevice")
                 .setResultListener(listener)
+                .execute();
+    }
+
+    /**
+     * 사용자정보 업데이트.
+     *
+     * @param device
+     */
+    @DebugLog
+    public void updateDevice(final UserDevice device) {
+        new Builder<>(Void.class, () -> api.updateDevice(device).execute(), "updateDevice")
                 .execute();
     }
 

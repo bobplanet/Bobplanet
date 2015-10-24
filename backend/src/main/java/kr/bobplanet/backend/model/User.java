@@ -2,8 +2,12 @@ package kr.bobplanet.backend.model;
 
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.IgnoreLoad;
 import com.googlecode.objectify.annotation.Index;
+import com.googlecode.objectify.annotation.OnSave;
 import com.googlecode.objectify.annotation.Unindex;
+
+import java.util.Date;
 
 /**
  * 이용자 객체.
@@ -31,30 +35,21 @@ public class User {
     String accountId;
 
     /**
-     * Android device 내에서 생성되는 InstanceID
-     */
-    String iid;
-
-    /**
-     * GCM 토큰.
-     */
-    String gcmToken;
-
-    /**
      * 프로파일 이미지
      */
     @Unindex
     String image;
 
     /**
-     * 이메일주소
-     */
-    String email;
-
-    /**
      * 닉네임
      */
     String nickName;
+
+    /**
+     * 최종수정일시
+     */
+    @IgnoreLoad
+    Date updateDate;
 
     public User() {
     }
@@ -69,22 +64,6 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getIid() {
-        return iid;
-    }
-
-    public void setIid(String iid) {
-        this.iid = iid;
-    }
-
-    public String getGcmToken() {
-        return gcmToken;
-    }
-
-    public void setGcmToken(String gcmToken) {
-        this.gcmToken = gcmToken;
     }
 
     public String getAccountType() {
@@ -111,19 +90,21 @@ public class User {
         this.image = image;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getNickName() {
         return nickName;
     }
 
     public void setNickName(String nickName) {
         this.nickName = nickName;
+    }
+
+    @OnSave
+    public void onSave() {
+        this.updateDate = new Date();
+    }
+
+    @Override
+    public String toString() {
+        return String.format("{ id = %s }", id);
     }
 }
