@@ -94,19 +94,24 @@
 
             </LinearLayout>
 
-            <FrameLayout
-                android:id="@+id/vote_bar_holder"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:background="@color/thumb_down">
+                android:orientation="horizontal"
+                android:weightSum="1">
 
                 <View
-                    android:id="@+id/vote_bar"
-                    android:layout_width="1dp"
+                    android:id="@+id/vote_bar_up"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:background="@color/thumb_up" />
 
-            </FrameLayout>
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@color/thumb_down" />
+
+            </LinearLayout>
 
         </LinearLayout>
 

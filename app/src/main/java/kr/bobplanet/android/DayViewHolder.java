@@ -3,8 +3,10 @@ package kr.bobplanet.android;
 import android.app.ActionBar;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.Space;
 import android.widget.TextView;
@@ -26,6 +28,8 @@ import kr.bobplanet.backend.bobplanetApi.model.Submenu;
  * EventBus를 이용해서 @link{DayActivity}로 Onclick 이벤트 전송
  */
 public class DayViewHolder extends BaseListAdapter.BaseViewHolder<Menu> implements View.OnClickListener {
+    private static final String TAG = DayViewHolder.class.getSimpleName();
+
     Menu menu;
 
     @Bind(R.id.when)
@@ -38,10 +42,8 @@ public class DayViewHolder extends BaseListAdapter.BaseViewHolder<Menu> implemen
     TextView thumbUps;
     @Bind(R.id.text_thumb_downs)
     TextView thumbDowns;
-    @Bind(R.id.vote_bar_holder)
-    View voteBarHolder;
-    @Bind(R.id.vote_bar)
-    View voteBar;
+    @Bind(R.id.vote_bar_up)
+    View voteBarUp;
     @Bind(R.id.submenu)
     TextView submenu;
     @Bind(R.id.calories)
@@ -89,9 +91,9 @@ public class DayViewHolder extends BaseListAdapter.BaseViewHolder<Menu> implemen
         thumbDowns.setText(String.format("%,d", item.getNumThumbDowns()));
 
         int totalVotes = item.getNumThumbUps() + item.getNumThumbDowns();
-        int barWidth = Math.round(voteBarHolder.getWidth() *
-                totalVotes != 0 ? (item.getNumThumbUps() / totalVotes) : 0.5f);
-        voteBar.setLayoutParams(new FrameLayout.LayoutParams(barWidth, ActionBar.LayoutParams.MATCH_PARENT));
+        float barWeight = totalVotes == 0 ? 0.5f : (1f * item.getNumThumbDowns() / totalVotes);
+        voteBarUp.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.MATCH_PARENT, barWeight));
 
         // 서브메뉴는 ','로 concatenate
         List<Submenu> submenus = menu.getSubmenu();
