@@ -16,7 +16,8 @@ import java.util.Map;
  */
 @Entity(name="Message")
 abstract public class BaseMessage {
-    public static final String TYPE_NEXT_MENU = "TYPE_NEXT_MENU";
+    public static final String TYPE_NEXT_LUNCH = "TYPE_NEXT_LUNCH";
+    public static final String TYPE_NEXT_DINNER = "TYPE_NEXT_DINNER";
     public static final String TYPE_NEED_UPGRADE = "TYPE_NEED_UPGRADE";
     public static final String TYPE_SURVEY = "TYPE_SURVEY";
 

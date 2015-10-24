@@ -147,7 +147,7 @@ abstract public class BaseActivity extends AppCompatActivity implements Constant
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
-            // startActivity(new Intent(this, SettingsActivity.class));
+            startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
 

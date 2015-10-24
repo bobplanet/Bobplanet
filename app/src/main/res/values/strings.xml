@@ -34,7 +34,16 @@
 
     <!-- 설정화면 -->
     <string name="title_settings">설정</string>
-
+	<string name="settings_push_category">푸시알림</string>
+	<string name="settings_push_lunch">점심메뉴 알림</string>
+	<string name="settings_push_lunch_summary_on">점심메뉴 알림메시지를 수신합니다</string>
+	<string name="settings_push_lunch_summary_off">점심메뉴 알림메시지를 수신하지 않습니다</string>
+	<string name="settings_push_dinner">저녁메뉴 알림</string>
+	<string name="settings_push_dinner_summary_on">저녁메뉴 알림메시지를 수신합니다</string>
+	<string name="settings_push_dinner_summary_off">저녁메뉴 알림메시지를 수신하지 않습니다</string>
+	<string name="settings_etc_category">기타</string>
+	<string name="settings_etc_about">이 앱을 만든 사람들</string>
+		
     <!-- Notification -->
     <string name="notification_title">Menu notification</string>
     <string name="action_thumb_up">좋아요</string>
@@ -46,5 +55,4 @@
         <item name="when_lunch">점심</item>
         <item name="when_dinner">저녁</item>
     </string-array>
-
 </resources>

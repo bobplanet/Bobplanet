@@ -53,7 +53,13 @@ public class UserDevice {
      * 
      */
     @Index
-    boolean gcmEnabled = true;
+    boolean lunchPushEnabled = true;
+
+    /**
+     *
+     */
+    @Index
+    boolean dinnerPushEnabled = true;
 
     /**
      * 최종수정일시
@@ -81,8 +87,8 @@ public class UserDevice {
         return androidId;
     }
 
-    public void setAndroidId(String androidId) {
-        this.androidId = androidId;
+    public String getGcmToken() {
+        return gcmToken;
     }
 
     public String getIid() {
@@ -93,20 +99,20 @@ public class UserDevice {
         this.iid = iid;
     }
 
-    public String getGcmToken() {
-        return gcmToken;
+    public boolean isLunchPushEnabled() {
+        return lunchPushEnabled;
     }
 
-    public void setGcmToken(String gcmToken) {
-        this.gcmToken = gcmToken;
+    public void setLunchPushEnabled(boolean lunchPushEnabled) {
+        this.lunchPushEnabled = lunchPushEnabled;
     }
 
-    public boolean isGcmEnabled() {
-        return gcmEnabled;
+    public boolean isDinnerPushEnabled() {
+        return dinnerPushEnabled;
     }
 
-    public void setGcmEnabled(boolean gcmEnabled) {
-        this.gcmEnabled = gcmEnabled;
+    public void setDinnerPushEnabled(boolean dinnerPushEnabled) {
+        this.dinnerPushEnabled = dinnerPushEnabled;
     }
 
     @OnSave

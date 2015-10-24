@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/settings_push_category">
+
+        <CheckBoxPreference
+            android:key="LUNCH_PUSH"
+            android:title="@string/settings_push_lunch"
+            android:defaultValue="true"
+            android:summaryOn="@string/settings_push_lunch_summary_on"
+            android:summaryOff="@string/settings_push_lunch_summary_off"
+            />
+
+        <CheckBoxPreference
+            android:key="DINNER_PUSH"
+            android:title="@string/settings_push_dinner"
+            android:defaultValue="true"
+            android:summaryOn="@string/settings_push_dinner_summary_on"
+            android:summaryOff="@string/settings_push_dinner_summary_off"
+            />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/settings_etc_category">
+
+        <Preference
+            android:key="ABOUT"
+            android:title="@string/settings_etc_about" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

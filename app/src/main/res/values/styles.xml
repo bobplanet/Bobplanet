@@ -20,21 +20,16 @@
     <style name="AppTheme.Detail" parent="AppTheme">
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+	<!-- 설정화면 스타일 -->
+    <style name="AppTheme.Settings" parent="AppTheme">
+        <item name="colorAccent">@color/primary_dark</item>
+    </style>
 
+	<!-- 일반화면용 툴바의 스타일 -->
     <style name="AppTheme.Toolbar" parent="@style/AppTheme">
         <item name="android:textColorPrimary">@android:color/white</item>
         <item name="android:textColorSecondary">@android:color/white</item>
         <item name="android:background">@color/primary</item>
+		<item name="android:actionModeBackground">@android:color/white</item>
     </style>
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
-    <style name="AppTheme.Dialog" parent="Theme.AppCompat.Light.Dialog" />
-
-    <style name="AppTheme.CardTitle" parent="AppTheme">
-        <item name="android:textColor">@color/primary_dark</item>
-    </style>
-	
-	<!-- Materiallist용 스타일 -->
 </resources>

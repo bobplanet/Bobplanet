@@ -38,8 +38,6 @@ public class MessageEndpoint extends BaseEndpoint {
 	 */
     private static final DateTimeFormatter DATETIME_FORMAT_YMD = DateTimeFormat.forPattern("yyyy-MM-dd");
 
-    private static final String TO = "dfWaXIfP7bA:APA91bEqHJNEhl3gBTaBzIpfyePnRN5wKXr2z6KJBBPxoDhHhDqoDlwDGCl6Pv0E6REn0jluaGxQ-A-lgSUuacck1KIGkkeYWfL832IZqSWOcyYSNp-cWNljtyH2u1U1L_qmWgx8kczy";
-
     /**
      * 다음 메뉴 알림 메시지 발송. cron에 의해 호출됨.
      */
@@ -56,11 +54,12 @@ public class MessageEndpoint extends BaseEndpoint {
         String today = DATETIME_FORMAT_YMD.print(now);
 
         int hour = now.getHourOfDay();
+        String type = hour < 12 ? BaseMessage.TYPE_NEXT_LUNCH : BaseMessage.TYPE_NEXT_DINNER;
         String when = hour < 12 ? "점심" : "저녁";
 
         List<Menu> menuList = ofy().load().type(Menu.class).filter("date", today).filter("when", when).list();
         if (menuList.size() > 0) {
-            NextMenuMessage message = NextMenuMessage.fromMenuList(menuList);
+            NextMenuMessage message = NextMenuMessage.fromMenuList(type, menuList);
             message.setTitle("오늘의 " + when + " 메뉴 알림");
             sendMessage(message);
         }
@@ -79,9 +78,21 @@ public class MessageEndpoint extends BaseEndpoint {
                 .addData("menuId", message.getExtra("menuId"))
                 .addData("message", "오늘은 어떤 메뉴가 나올까요?")
                 .build();
+
+        String filterCol = "";
+        switch (message.getType()) {
+            case BaseMessage.TYPE_NEXT_LUNCH:
+                filterCol = "lunchPushEnabled";
+                break;
+            case BaseMessage.TYPE_NEXT_DINNER:
+                filterCol = "dinnerPushEnabled";
+                break;
+        }
         try {
             List<UserDevice> devices = ofy().load().type(UserDevice.class)
-                    .filter("gcmToken !=", null).filter("gcmEnabled", true).list();
+                    .filter("gcmToken !=", null)
+                    .filter(filterCol, true)
+                    .list();
 
             int errors = 0;
             for (UserDevice device : devices) {

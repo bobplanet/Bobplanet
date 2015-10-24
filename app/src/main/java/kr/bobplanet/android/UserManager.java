@@ -55,7 +55,8 @@ public class UserManager implements ApiProxy.ApiResultListener<UserDevice> {
         if (d == null) {
             Log.i(TAG, "Device doesn't exists. Creating new device");
             device = new UserDevice();
-            device.setGcmEnabled(true);
+            device.setLunchPushEnabled(true);
+            device.setDinnerPushEnabled(true);
             device.setAndroidId(
                     Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID));
             device.setIid(InstanceID.getInstance(context).getId());
@@ -78,7 +79,7 @@ public class UserManager implements ApiProxy.ApiResultListener<UserDevice> {
 
     /**
      * GCM 토큰 등록이 완료되었는지 알려준다. StartActivity에서 확인용으로 호출함.
-     * 
+     *
      * @return
      */
     public boolean isGcmRegistered() {
@@ -88,11 +89,15 @@ public class UserManager implements ApiProxy.ApiResultListener<UserDevice> {
 
     /**
      * 구글이나 페이스북 계정이 등록된 사용자인지 확인. MenuActivity가 호출함.
-     * 
+     *
      * @return
      */
     public boolean hasAccount() {
         return device.getUser().getAccountType() != null;
+    }
+
+    public UserDevice getDevice() {
+        return device;
     }
 
     /**
@@ -138,7 +143,7 @@ public class UserManager implements ApiProxy.ApiResultListener<UserDevice> {
      * 최소한 사용자번호와 GCM토큰 둘 다가 있어야 함.
      */
     @DebugLog
-    private void updateDevice() {
+    public void updateDevice() {
         if (device.getId() != null && device.getGcmToken() != null) {
             App.getInstance().getApiProxy().updateDevice(device);
             prefs.storeDevice(device);
