@@ -1,11 +1,8 @@
 package kr.bobplanet.backend.model;
 
-import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.IgnoreLoad;
-import com.googlecode.objectify.annotation.Load;
-import com.googlecode.objectify.annotation.OnSave;
 
 import java.util.Date;
 
@@ -26,7 +23,8 @@ public class Item {
 	/**
 	 * 메뉴명.
 	 */
-    @Id private String ID;
+    @Id
+    private String name;
 
     /**
      * 메뉴 큰 이미지.
@@ -38,15 +36,9 @@ public class Item {
 	 */
     private String thumbnail;
 
-    /**
-     * 평균점수
-     */
-    protected float averageScore;
+    protected int numThumbUps;
 
-    /**
-     * 점수대별 평점자수.
-     */
-    protected int[] numVotesPerScore = new int[5];
+    protected int numThumbDowns;
 
     /**
      * 최종수정일
@@ -57,12 +49,12 @@ public class Item {
     public Item() {
     }
 
-    public Item(String ID) {
-        this.ID = ID;
+    public Item(String name) {
+        this.name = name;
     }
 
-    public String getID() {
-        return ID;
+    public String getName() {
+        return name;
     }
 
     public String getImage() {
@@ -73,38 +65,24 @@ public class Item {
         return thumbnail;
     }
 
-    public float getAverageScore() {
-        return averageScore;
+    public int getNumThumbUps() {
+        return numThumbUps;
     }
 
-    /**
-     * 새로운 평가점수를 합산하여 평균평점에 반영
-     */
-    public void addScore(int score) {
-        numVotesPerScore[score - 1]++;
+    public int getNumThumbDowns() {
+        return numThumbDowns;
     }
 
-    /**
-     * 기존 평가자가 점수를 수정하는 경우, 기존점수는 제거하고 평균평점에 반영
-     */
-    public void editScore(int score, int oldScore) {
-        numVotesPerScore[score - 1]++;
-        numVotesPerScore[oldScore - 1]--;
+    public void applyScore(int score) {
+        applyScore(score, 0);
     }
 
-    /**
-     * 평점대별 평점자수에 기반하여 정확한 평점 계산
-     */
-    @OnSave
-    void onSave() {
-        long totalVotes = 0;
-        long totalScore = 0;
-        for (int i = 0; i < 5; i++) {
-            totalVotes += numVotesPerScore[i];
-            totalScore += (i + 1) * numVotesPerScore[i];
-        }
-        averageScore = Math.round(totalScore / (float) totalVotes);
+    public void applyScore(int score, int oldScore) {
+        if (score == oldScore) return;
 
-        updateDate = new Date();
+        numThumbUps += score > 0 ? 1 : 0;
+        numThumbDowns += score < 0 ? 1 : 0;
+        numThumbUps -= oldScore > 0 ? 1 : 0;
+        numThumbDowns -= oldScore < 0 ? 1 : 0;
     }
 }

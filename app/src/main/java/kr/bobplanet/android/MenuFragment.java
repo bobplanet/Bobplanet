@@ -69,7 +69,7 @@ public class MenuFragment extends BaseFragment {
         summaryCard = new Card.Builder(getContext())
                 .withProvider(MenuScoreCardProvider.class)
                 .setTitle(R.string.card_rating_label)
-                .setAverageScore(menu.getItem().getAverageScore())
+                .setAverageScore(0 /* TODO */)
                 .setMyScore(0)
                 .endConfig().build();
 

@@ -154,7 +154,7 @@ public class ApiProxy implements Constants {
     public void vote(final Long userId, final Menu menu, final int score, ApiResultListener<Item> listener) {
         Log.v(TAG, "score = " + score);
 
-        new Builder<>(Item.class, () -> api.vote(userId, menu.getItem().getId(), menu.getId(), score).execute(), "vote")
+        new Builder<>(Item.class, () -> api.vote(userId, menu.getItem().getName(), menu.getId(), score).execute(), "vote")
                 .setResultListener(listener)
                 .setCacheKey(menu.getId())
                 .setCacheWritable(true)
@@ -170,7 +170,7 @@ public class ApiProxy implements Constants {
      */
     @DebugLog
     public void myVote(final Long userId, final Menu menu, ApiResultListener<Vote> listener) {
-        new Builder<>(Vote.class, () -> api.myVote(userId, menu.getItem().getId()).execute(), "myVote")
+        new Builder<>(Vote.class, () -> api.myVote(userId, menu.getItem().getName()).execute(), "myVote")
                 .setResultListener(listener)
                 .execute();
     }

@@ -71,7 +71,7 @@ public class SubmenuCardProvider extends TextCardProvider<SubmenuCardProvider> {
         @Override
         public void setItem(Submenu submenu) {
             thumbnail.setImageUrl(submenu.getItem().getThumbnail(), getImageLoader());
-            title.setText(submenu.getItem().getId());
+            title.setText(submenu.getItem().getName());
         }
     }
 }

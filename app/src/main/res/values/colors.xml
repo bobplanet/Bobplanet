@@ -15,6 +15,9 @@
     <color name="window_background">#C0C0C0</color>
     <color name="progress">#FFB300</color>
 
+    <color name="thumb_up">#42A5F5</color>
+    <color name="thumb_down">#EC407A</color>
+
     <color name="calories">#666666</color>
     <color name="list_divider">#d9d9d9</color>
     <color name="list_row_start_color">#ffffff</color>

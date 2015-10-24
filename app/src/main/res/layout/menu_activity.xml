@@ -70,7 +70,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         android:clickable="true"
-        android:src="@drawable/ic_grade"
+        android:src="@drawable/ic_thumb_up"
         app:elevation="6dp"
         app:layout_anchor="@id/view_pager"
         app:layout_anchorGravity="bottom|end" />

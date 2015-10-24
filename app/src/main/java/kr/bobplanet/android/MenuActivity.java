@@ -1,12 +1,8 @@
 package kr.bobplanet.android;
 
-import android.content.DialogInterface;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,10 +10,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.util.Pair;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.RatingBar;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
@@ -26,13 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import de.greenrobot.event.EventBus;
-import hugo.weaving.DebugLog;
-import kr.bobplanet.android.event.GoogleSigninEvent;
-import kr.bobplanet.android.event.UserLogEvent;
-import kr.bobplanet.backend.bobplanetApi.model.Item;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
-import kr.bobplanet.backend.bobplanetApi.model.Vote;
 
 /**
  * 메뉴 상세화면을 담당하는 activity.
@@ -70,11 +58,7 @@ public class MenuActivity extends BaseActivity implements Constants {
 
         menu = EntityParser.parseEntity(Menu.class, getIntent().getStringExtra(KEY_MENU));
 
-        EventBus.getDefault().register(this);
-
         initLayout();
-
-        requestMyScore();
     }
 
     /**
@@ -82,7 +66,7 @@ public class MenuActivity extends BaseActivity implements Constants {
      */
     private void initLayout() {
         Toolbar toolbar = ButterKnife.findById(this, R.id.toolbar);
-        toolbar.setTitle(menu.getItem().getId());
+        toolbar.setTitle(menu.getItem().getName());
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -102,106 +86,15 @@ public class MenuActivity extends BaseActivity implements Constants {
         tabLayout.setupWithViewPager(viewPager);
 
         FloatingActionButton fab = ButterKnife.findById(this, R.id.fab);
-        fab.setOnClickListener((View v) -> showRatingDialog());
-    }
-
-    /**
-     * 유저가 과거에 매긴 점수 가져옴.
-     */
-    private void requestMyScore() {
-        UserManager um = App.getInstance().getUserManager();
-        if (um.hasAccount()) {
-            App.getInstance().getApiProxy().myVote(um.getUserId(), menu,
-                    (Vote result) -> {
-                        if (result != null) {
-                            myScore = result.getScore();
-                        }
-                    }
-            );
-        }
-
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
+        fab.setOnClickListener((View v) -> showVoteDialog());
     }
 
     /**
      * 점수주기 dialog 표시
      */
-    private void showRatingDialog() {
-        View ratingBarHolder = getLayoutInflater().inflate(R.layout.menu_rating_dialog, null);
-        final RatingBar ratingBar = ButterKnife.findById(ratingBarHolder, R.id.rating);
-        ratingBar.setRating(myScore);
-
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.dialog_rating_label)
-                .setView(ratingBarHolder)
-                .setPositiveButton(R.string.button_ok,
-                        (DialogInterface dialog, int which) -> {
-                            myScore = (int) ratingBar.getRating();
-
-                            if (App.getInstance().getUserManager().hasAccount()) {
-                                uploadVote();
-                            } else {
-                                showSigninDialog();
-                            }
-                        }
-                )
-                .setNegativeButton(R.string.button_cancel, null).show();
-
-        UserLogEvent.dialogView(getString(R.string.dialog_rating_label));
-    }
-
-    /**
-     * 평가결과를 서버로 전송.
-     */
-    @DebugLog
-    private void uploadVote() {
-        if (myScore > 0) {
-            ApiProxy proxy = App.getInstance().getApiProxy();
-            proxy.vote(App.getInstance().getUserManager().getUserId(), menu, myScore,
-                    (Item result) -> MenuActivity.this.menu.setItem(result));
-
-            Resources r = getResources();
-            String[] levels = r.getStringArray(R.array.rating_level);
-            String message = String.format(r.getString(R.string.rating_notice_fmt),
-                    menu.getItem().getId(),
-                    Util.endsWithConsonant(menu.getItem().getId()) ? "을" : "를",
-                    levels[myScore - 1],
-                    Util.endsWithConsonant(levels[myScore - 1]) ? "이" : ""
-            );
-            CoordinatorLayout layout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
-            Snackbar.make(layout, message, Snackbar.LENGTH_LONG).show();
-        }
-    }
-
-    /**
-     * 구글/페이스북 계정 등록 요청 dialog 표시
-     */
-    @DebugLog
-    private void showSigninDialog() {
-        View view = getLayoutInflater().inflate(R.layout.menu_login_dialog, null);
-
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.dialog_login_label)
-                .setView(view)
-                .setPositiveButton(R.string.button_ok, (dialog, which) -> requestGoogleSignin())
-                .setNegativeButton(R.string.button_cancel, null).show();
-
-        UserLogEvent.dialogView(getString(R.string.dialog_login_label));
-    }
-
-    /**
-     * 구글 로그인이 완료되었을 때 호출되는 callback.
-     *
-     * @param event
-     */
-    @DebugLog
-    public void onEvent(GoogleSigninEvent event) {
-        uploadVote();
+    private void showVoteDialog() {
+        VoteManager voteManager = new VoteManager(this, menu);
+        voteManager.showVoteDialog();
     }
 
     /**

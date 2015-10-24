@@ -65,7 +65,6 @@ public class DayFragment extends BaseFragment {
     /**
      * 메뉴가 없을 때(식당 노는날) 대신 표시되는 View. 안내메시지 포함.
      */
-    @Bind(R.id.empty)
     View emptyView;
 
     public DayFragment() {
@@ -96,6 +95,7 @@ public class DayFragment extends BaseFragment {
 
         recyclerView = ButterKnife.findById(view, R.id.recycler_view);
         progressBar = ButterKnife.findById(view, R.id.progress_bar);
+        emptyView = ButterKnife.findById(view, R.id.empty);
 
         return view;
     }

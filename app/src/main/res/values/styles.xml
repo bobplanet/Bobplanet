@@ -30,9 +30,7 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="AppTheme.RatingBar" parent="@android:style/Widget.RatingBar">
-        <item name="android:progressDrawable">@drawable/rating_bar_heart</item>
-    </style>
+    <style name="AppTheme.Dialog" parent="Theme.AppCompat.Light.Dialog" />
 
     <style name="AppTheme.CardTitle" parent="AppTheme">
         <item name="android:textColor">@color/primary_dark</item>

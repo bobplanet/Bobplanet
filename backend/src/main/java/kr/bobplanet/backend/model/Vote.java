@@ -23,7 +23,7 @@ public class Vote {
      * 투표번호. 별도로 지정하지 않으며 서버에서 자동으로 채번되는 인조key.
      */
     @Id
-    private Long ID;
+    private Long id;
 
     /**
      * 투표자
@@ -45,7 +45,7 @@ public class Vote {
     protected Ref<Menu> menu;
 
     /**
-     * 점수. 5점 만점.
+     * 점수. +1 or -1.
      */
     protected int score;
 
@@ -70,11 +70,11 @@ public class Vote {
     }
 
     public long getId() {
-        return ID;
+        return id;
     }
 
-    public void setId(long ID) {
-        this.ID = ID;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public int getScore() {
@@ -96,5 +96,11 @@ public class Vote {
     @OnSave
     public void onSave() {
         updateDate = new Date();
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Vote { id = %s, user = %s, itemId = %s, score = %d }",
+                id, user, item, score);
     }
 }

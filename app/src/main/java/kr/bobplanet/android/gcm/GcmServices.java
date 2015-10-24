@@ -151,7 +151,7 @@ public class GcmServices implements Constants {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra(KEY_MENU, menu.toString());
 
-            String title = getDefaultString(data, "title", menu.getDate() + ": " + menu.getItem().getId());
+            String title = getDefaultString(data, "title", menu.getDate() + ": " + menu.getItem().getName());
             String message = getDefaultString(data, "message", "Get it while you can");
             String detail = data.getString("detail");
 

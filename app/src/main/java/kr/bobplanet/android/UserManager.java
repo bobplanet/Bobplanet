@@ -1,5 +1,6 @@
 package kr.bobplanet.android;
 
+import android.app.Activity;
 import android.content.Context;
 import android.provider.Settings;
 import android.util.Log;
@@ -158,5 +159,6 @@ public class UserManager implements ApiProxy.ApiResultListener<UserDevice> {
         user.setImage(person.getImage().getUrl());
 
         App.getInstance().getApiProxy().updateUser(user);
+        updateDevice();
     }
 }

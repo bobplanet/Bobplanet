@@ -1,9 +1,12 @@
 package kr.bobplanet.android;
 
+import android.app.ActionBar;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.RatingBar;
+import android.widget.Space;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
@@ -14,6 +17,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
+import kr.bobplanet.backend.bobplanetApi.model.Item;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
 import kr.bobplanet.backend.bobplanetApi.model.Submenu;
 
@@ -30,8 +34,14 @@ public class DayViewHolder extends BaseListAdapter.BaseViewHolder<Menu> implemen
     NetworkImageView thumbnail;
     @Bind(R.id.title)
     TextView title;
-    @Bind(R.id.rating)
-    RatingBar rating;
+    @Bind(R.id.text_thumb_ups)
+    TextView thumbUps;
+    @Bind(R.id.text_thumb_downs)
+    TextView thumbDowns;
+    @Bind(R.id.vote_bar_holder)
+    View voteBarHolder;
+    @Bind(R.id.vote_bar)
+    View voteBar;
     @Bind(R.id.submenu)
     TextView submenu;
     @Bind(R.id.calories)
@@ -40,11 +50,6 @@ public class DayViewHolder extends BaseListAdapter.BaseViewHolder<Menu> implemen
     public DayViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
-
-/*
-        LayerDrawable progress = (LayerDrawable) rating.getProgressDrawable();
-        DrawableCompat.setTint(progress.getDrawable(2), Color.MAGENTA);
-*/
 
         itemView.setOnClickListener(this);
     }
@@ -70,22 +75,30 @@ public class DayViewHolder extends BaseListAdapter.BaseViewHolder<Menu> implemen
         when.setText(menu.getWhen() + (menu.getType() == null ? "" : menu.getType()));
         when.setBackgroundColor(ContextCompat.getColor(itemView.getContext(), background));
 
-        if (menu.getItem().getThumbnail() != null) {
-            thumbnail.setImageUrl(menu.getItem().getThumbnail(), getImageLoader());
+        Item item = menu.getItem();
+
+        if (item.getThumbnail() != null) {
+            thumbnail.setImageUrl(item.getThumbnail(), getImageLoader());
         } else {
             thumbnail.setDefaultImageResId(R.drawable.no_menu);
         }
 
-        title.setText(menu.getItem().getId());
+        title.setText(item.getName());
 
-        rating.setRating(menu.getItem().getAverageScore());
+        thumbUps.setText(String.format("%,d", item.getNumThumbUps()));
+        thumbDowns.setText(String.format("%,d", item.getNumThumbDowns()));
+
+        int totalVotes = item.getNumThumbUps() + item.getNumThumbDowns();
+        int barWidth = Math.round(voteBarHolder.getWidth() *
+                totalVotes != 0 ? (item.getNumThumbUps() / totalVotes) : 0.5f);
+        voteBar.setLayoutParams(new FrameLayout.LayoutParams(barWidth, ActionBar.LayoutParams.MATCH_PARENT));
 
         // 서브메뉴는 ','로 concatenate
         List<Submenu> submenus = menu.getSubmenu();
         if (submenus != null) {
             List<String> subs = new ArrayList<>();
             for (Submenu sub : submenus) {
-                subs.add(sub.getItem().getId());
+                subs.add(sub.getItem().getName());
             }
             submenu.setText(TextUtils.join(", ", subs));
         }

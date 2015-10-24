@@ -106,11 +106,11 @@ public class MenuEndpoint extends BaseEndpoint {
                 logger.info("vote = " + vote);
                 if (vote != null) {
                     logger.info("Vote exists. Updates score");
-                    item.editScore(score, vote.getScore());
+                    item.applyScore(score, vote.getScore());
                 } else {
                     logger.info("no oldVote. Just adds score");
                     vote = new Vote(new User(userId), item, new Menu(menuId));
-                    item.addScore(score);
+                    item.applyScore(score);
                 }
                 vote.setScore(score);
 

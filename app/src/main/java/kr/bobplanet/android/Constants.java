@@ -34,4 +34,7 @@ public interface Constants {
 	 */
     DateFormat DATEFORMAT_YMD = new SimpleDateFormat("yyyy-MM-dd");
     DateFormat DATEFORMAT_YMDE = new SimpleDateFormat("yyyy/MM/dd(EEE)");
+
+    int VOTE_UP = 1;
+    int VOTE_DOWN = -1;
 }
