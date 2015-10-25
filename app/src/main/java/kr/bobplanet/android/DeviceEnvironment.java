@@ -25,7 +25,7 @@ public class DeviceEnvironment {
 	 *
 	 * @return 설치여부(true면 있음. false면 없음)
 	 */
-    static boolean checkPlayServices(Activity activity) {
+    public static boolean checkPlayServices(Activity activity) {
         GoogleApiAvailability availability = GoogleApiAvailability.getInstance();
 
         int resultCode = availability.isGooglePlayServicesAvailable(activity);

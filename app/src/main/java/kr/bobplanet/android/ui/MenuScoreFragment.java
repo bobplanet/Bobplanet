@@ -1,4 +1,6 @@
-package kr.bobplanet.android;
+package kr.bobplanet.android.ui;
+
+import kr.bobplanet.android.ui.BaseFragment;
 
 /**
  *

@@ -25,14 +25,14 @@ import de.greenrobot.event.EventBus;
 import kr.bobplanet.android.ApiProxy;
 import kr.bobplanet.android.Constants;
 import kr.bobplanet.android.App;
-import kr.bobplanet.android.MenuActivity;
+import kr.bobplanet.android.ui.MenuActivity;
 import kr.bobplanet.android.R;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
 
 /**
  * Google Cloud Messaging(GCM) 처리를 위해 필요한 여러 서비스를 모아놓은 상위클래스.
  * (서비스에서 구현할 내용이 별로 많지 않아 굳이 개별 클래스로 만들 필요가 없음)
- *
+ * <p>
  * TODO 사용자토큰의 서버전송 (향후 개인별 메시지 발송기능 지원을 위해)
  *
  * @author heonkyu.jin
@@ -76,10 +76,10 @@ public class GcmServices implements Constants {
     /**
      * GCM 메시지 수신을 담당하는 서비스.
      * (아마도 디바이스에서 실행되는 구글의 BroadcastReceiver가 호출해주는 것으로 추정)
-     * <p/>
-	 * - 서버에서 받은 푸쉬메시지 내용에 기반해서 MenuViewActivity를 실행하는 notification을 생성.
-	 * - 서버는 메뉴ID만 보내주고, 위 activity에 전달할 정보는 EntityVault와 ImageLoader를 이용해서 값을 채운다.
-	 * - Volley를 이용해 async로 이미지를 띄울 수 있도록 ImageListener 구현.
+     * <p>
+     * - 서버에서 받은 푸쉬메시지 내용에 기반해서 MenuViewActivity를 실행하는 notification을 생성.
+     * - 서버는 메뉴ID만 보내주고, 위 activity에 전달할 정보는 EntityVault와 ImageLoader를 이용해서 값을 채운다.
+     * - Volley를 이용해 async로 이미지를 띄울 수 있도록 ImageListener 구현.
      */
     public static class MessageListener extends GcmListenerService implements ImageLoader.ImageListener {
         private static final String TAG = MessageListener.class.getSimpleName();
@@ -114,7 +114,7 @@ public class GcmServices implements Constants {
 
         /**
          * 이미지가 로딩되었을 때 Volley에서 호출해주는 callback.
-		 * 정확하게는 모르겠으나 두 번 호출되는 듯함. (첫번째 호출때는 image가 null이다.)
+         * 정확하게는 모르겠으나 두 번 호출되는 듯함. (첫번째 호출때는 image가 null이다.)
          *
          * @param response
          * @param isImmediate
@@ -129,7 +129,7 @@ public class GcmServices implements Constants {
 
         /**
          * Volley에서 이미지를 로딩하지 못했을 때 호출하는 callback.
-		 * 지금까지는 한번도 호출된 적이 없음.
+         * 지금까지는 한번도 호출된 적이 없음.
          *
          * @param error
          */
@@ -141,7 +141,7 @@ public class GcmServices implements Constants {
 
         /**
          * 실제 Notification을 생성/등록한다.
-         * 
+         *
          * @param menu
          * @param data
          * @param bitmap
@@ -160,7 +160,7 @@ public class GcmServices implements Constants {
 
             Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-			// 이미지가 있으면 BigPicture 스타일, 없으면 BigText 스타일.
+            // 이미지가 있으면 BigPicture 스타일, 없으면 BigText 스타일.
             NotificationCompat.Style style = bitmap != null ?
                     new NotificationCompat.BigPictureStyle()
                             .bigPicture(bitmap).setBigContentTitle(title)
@@ -182,25 +182,25 @@ public class GcmServices implements Constants {
             notificationManager.notify(0, notificationBuilder.build());
         }
 
-	    /**
-	     * 서버에서 전달받은 메시지 본문을 Bundle에서 꺼내는 유틸리티 함수.
-	     *
-	     * @param data
-	     * @param key
-	     * @param defaultValue
-	     * @return
-	     */
-	    private String getDefaultString(Bundle data, String key, String defaultValue) {
-	        String value = data.getString(key);
-	        return (value == null || value.length() == 0) ?
-	                defaultValue : value;
-	    }
+        /**
+         * 서버에서 전달받은 메시지 본문을 Bundle에서 꺼내는 유틸리티 함수.
+         *
+         * @param data
+         * @param key
+         * @param defaultValue
+         * @return
+         */
+        private String getDefaultString(Bundle data, String key, String defaultValue) {
+            String value = data.getString(key);
+            return (value == null || value.length() == 0) ?
+                    defaultValue : value;
+        }
     }
 
     /**
      * 인스턴스ID 재설정 이벤트를 수신하는 서비스.
      * (디바이스의 공장초기화나 앱 언인스톨, 앱데이터 삭제 등의 케이스에 재설정된다고 함)
-     * <p/>
+     * <p>
      * - 인스턴스ID가 달라지면 GCM 재등록이 필요하므로 Registration 서비스 호출
      */
     public static class InstanceIDListener extends InstanceIDListenerService {

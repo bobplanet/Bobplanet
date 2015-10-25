@@ -1,4 +1,4 @@
-package kr.bobplanet.android;
+package kr.bobplanet.android.ui;
 
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -20,6 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
+import kr.bobplanet.android.App;
+import kr.bobplanet.android.Constants;
+import kr.bobplanet.android.EntityParser;
+import kr.bobplanet.android.R;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
 
 /**

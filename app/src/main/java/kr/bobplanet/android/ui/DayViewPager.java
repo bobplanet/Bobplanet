@@ -1,10 +1,12 @@
-package kr.bobplanet.android;
+package kr.bobplanet.android.ui;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.Toast;
+
+import kr.bobplanet.android.R;
 
 /**
  * 일간메뉴화면에서 가장 마지막 날짜에서 오른쪽 swipe를 시도하면 toast 메시지를 보여주는 ViewPager.

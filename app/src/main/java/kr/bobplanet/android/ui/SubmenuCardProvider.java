@@ -1,4 +1,4 @@
-package kr.bobplanet.android;
+package kr.bobplanet.android.ui;
 
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +13,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import kr.bobplanet.android.R;
 import kr.bobplanet.backend.bobplanetApi.model.Submenu;
 
 /**

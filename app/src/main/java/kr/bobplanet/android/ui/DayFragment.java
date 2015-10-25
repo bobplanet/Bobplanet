@@ -1,4 +1,4 @@
-package kr.bobplanet.android;
+package kr.bobplanet.android.ui;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -20,6 +20,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
 import fr.castorflex.android.smoothprogressbar.SmoothProgressDrawable;
+import kr.bobplanet.android.ApiProxy;
+import kr.bobplanet.android.App;
+import kr.bobplanet.android.R;
 import kr.bobplanet.android.event.ItemChangeEvent;
 import kr.bobplanet.android.event.NetworkExceptionEvent;
 import kr.bobplanet.backend.bobplanetApi.model.DailyMenu;

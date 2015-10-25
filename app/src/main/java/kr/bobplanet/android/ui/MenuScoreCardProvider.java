@@ -1,12 +1,8 @@
-package kr.bobplanet.android;
+package kr.bobplanet.android.ui;
 
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.RatingBar;
-import android.widget.TextView;
 
-import com.android.volley.toolbox.NetworkImageView;
 import com.dexafree.materialList.card.Card;
 import com.dexafree.materialList.card.provider.TextCardProvider;
 
@@ -14,6 +10,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import kr.bobplanet.android.R;
 import kr.bobplanet.backend.bobplanetApi.model.Submenu;
 
 /**

@@ -1,4 +1,4 @@
-package kr.bobplanet.android;
+package kr.bobplanet.android.ui;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -10,8 +10,15 @@ import android.widget.ImageButton;
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
 import hugo.weaving.DebugLog;
+import kr.bobplanet.android.ApiProxy;
+import kr.bobplanet.android.App;
+import kr.bobplanet.android.Constants;
+import kr.bobplanet.android.R;
+import kr.bobplanet.android.UserManager;
+import kr.bobplanet.android.Util;
 import kr.bobplanet.android.event.GoogleSigninEvent;
 import kr.bobplanet.android.event.UserLogEvent;
+import kr.bobplanet.android.ui.BaseActivity;
 import kr.bobplanet.backend.bobplanetApi.model.Item;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
 import kr.bobplanet.backend.bobplanetApi.model.Vote;

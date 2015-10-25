@@ -22,7 +22,7 @@
     </android.support.design.widget.AppBarLayout>
 
     <!-- Fragment 들어갈 자리 -->
-    <kr.bobplanet.android.DayViewPager
+    <kr.bobplanet.android.ui.DayViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -1,4 +1,4 @@
-package kr.bobplanet.android;
+package kr.bobplanet.android.ui;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,12 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.dexafree.materialList.card.Card;
-import com.dexafree.materialList.card.provider.BasicButtonsCardProvider;
 import com.dexafree.materialList.view.MaterialListView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
+import kr.bobplanet.android.ApiProxy;
+import kr.bobplanet.android.App;
+import kr.bobplanet.android.EntityParser;
+import kr.bobplanet.android.R;
 import kr.bobplanet.android.event.ItemChangeEvent;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
 

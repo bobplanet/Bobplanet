@@ -1,4 +1,4 @@
-package kr.bobplanet.android;
+package kr.bobplanet.android.ui;
 
 import android.content.Intent;
 import android.content.IntentSender;
@@ -19,6 +19,9 @@ import com.google.android.gms.plus.model.people.Person;
 
 import de.greenrobot.event.EventBus;
 import hugo.weaving.DebugLog;
+import kr.bobplanet.android.App;
+import kr.bobplanet.android.Constants;
+import kr.bobplanet.android.R;
 import kr.bobplanet.android.event.GoogleSigninEvent;
 import kr.bobplanet.android.event.UserLogEvent;
 

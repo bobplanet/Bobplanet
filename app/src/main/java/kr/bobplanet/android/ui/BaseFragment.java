@@ -1,7 +1,8 @@
-package kr.bobplanet.android;
+package kr.bobplanet.android.ui;
 
 import android.support.v4.app.Fragment;
 
+import kr.bobplanet.android.Constants;
 import kr.bobplanet.android.event.UserLogEvent;
 
 /**

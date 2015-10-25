@@ -1,8 +1,10 @@
-package kr.bobplanet.android;
+package kr.bobplanet.android.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
 
+import kr.bobplanet.android.App;
+import kr.bobplanet.android.DeviceEnvironment;
 import kr.bobplanet.android.gcm.GcmServices;
 
 /**

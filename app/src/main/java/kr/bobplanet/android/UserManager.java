@@ -1,6 +1,5 @@
 package kr.bobplanet.android;
 
-import android.app.Activity;
 import android.content.Context;
 import android.provider.Settings;
 import android.util.Log;

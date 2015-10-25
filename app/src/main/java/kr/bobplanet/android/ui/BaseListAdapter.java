@@ -1,4 +1,4 @@
-package kr.bobplanet.android;
+package kr.bobplanet.android.ui;
 
 import android.support.annotation.LayoutRes;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import com.android.volley.toolbox.ImageLoader;
 
 import java.util.List;
+
+import kr.bobplanet.android.App;
 
 /**
  * 화면마다 별로 할일도 없는 Adapter들이 많아지는 것 같아 한단계 추상화한 클래스.

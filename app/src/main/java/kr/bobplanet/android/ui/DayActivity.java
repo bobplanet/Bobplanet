@@ -1,4 +1,4 @@
-package kr.bobplanet.android;
+package kr.bobplanet.android.ui;
 
 import android.content.Intent;
 import android.support.design.widget.CoordinatorLayout;
@@ -8,7 +8,6 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 
 import com.commonsware.cwac.pager.PageDescriptor;
 import com.commonsware.cwac.pager.SimplePageDescriptor;
@@ -19,6 +18,10 @@ import java.util.Date;
 import java.util.List;
 
 import de.greenrobot.event.EventBus;
+import kr.bobplanet.android.App;
+import kr.bobplanet.android.Constants;
+import kr.bobplanet.android.Preferences;
+import kr.bobplanet.android.R;
 import kr.bobplanet.backend.bobplanetApi.model.DailyMenu;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
 

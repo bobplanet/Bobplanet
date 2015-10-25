@@ -25,7 +25,7 @@ public class EntityParser {
      * 이미 JSON 문자열을 갖고있는 경우(다른 클래스로부터 전달받는 등) 사용.
      * 캐쉬나 네트웤 조회없이 JSON unserialize만 함
      */
-    protected static <T> T parseEntity(Class<T> type, String json) {
+    public static <T> T parseEntity(Class<T> type, String json) {
         try {
             return jsonFactory.fromString(json, type);
         } catch (IOException e) {
@@ -33,7 +33,7 @@ public class EntityParser {
         }
     }
 
-    protected static String toString(Object obj) {
+    public static String toString(Object obj) {
         try {
             return jsonFactory.toString(obj);
         } catch (IOException e) {

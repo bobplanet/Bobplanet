@@ -1,14 +1,9 @@
-package kr.bobplanet.android;
+package kr.bobplanet.android.ui;
 
-import android.app.ActionBar;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.RatingBar;
-import android.widget.Space;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
@@ -19,6 +14,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
+import kr.bobplanet.android.R;
 import kr.bobplanet.backend.bobplanetApi.model.Item;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
 import kr.bobplanet.backend.bobplanetApi.model.Submenu;

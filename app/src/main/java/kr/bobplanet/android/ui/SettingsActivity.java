@@ -1,4 +1,4 @@
-package kr.bobplanet.android;
+package kr.bobplanet.android.ui;
 
 
 import android.annotation.TargetApi;
@@ -13,6 +13,9 @@ import android.preference.SwitchPreference;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
+import kr.bobplanet.android.App;
+import kr.bobplanet.android.R;
+import kr.bobplanet.android.UserManager;
 import kr.bobplanet.backend.bobplanetApi.model.UserDevice;
 
 /**
