@@ -23,7 +23,7 @@ import kr.bobplanet.backend.bobplanetApi.model.UserDevice;
  * @author heonkyu.jin
  * @version 15. 10. 18
  */
-public class UserManager implements ApiProxy.ApiResultListener<UserDevice> {
+public class UserManager {
     private static final String TAG = UserManager.class.getSimpleName();
 
     /**
@@ -60,7 +60,13 @@ public class UserManager implements ApiProxy.ApiResultListener<UserDevice> {
                     Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID));
             device.setIid(InstanceID.getInstance(context).getId());
 
-            App.getInstance().getApiProxy().registerDevice(device, this);
+            App.getInstance().getApiProxy().registerDevice(device,
+                    (result) -> {
+                        Log.d(TAG, "Device registered");
+                        device.setId(result.getId());
+                        device.setUser(result.getUser());
+                        updateDevice();
+                    });
         } else {
             Log.i(TAG, "Device restored from prefs: " + d);
             this.device = d;
@@ -72,7 +78,7 @@ public class UserManager implements ApiProxy.ApiResultListener<UserDevice> {
      * 사용자번호 조회. 아무나 호출해도 됨.
      * @return
      */
-    public Long getUserId() {
+    public String getUserId() {
         return device.getUser().getId();
     }
 
@@ -100,23 +106,6 @@ public class UserManager implements ApiProxy.ApiResultListener<UserDevice> {
     }
 
     /**
-     * 서버로부터 회원등록이 완료되었을 때 호출되는 callback.
-	 * 서버에서는 회원번호만 내려옴.
-     *
-     * @param result
-     */
-    @Override
-    @DebugLog
-    public void onApiResult(UserDevice result) {
-        Log.v(TAG, "Device registered : " + result);
-        if (result != null) {
-            device.setId(result.getId());
-            device.setUser(result.getUser());
-            updateDevice();
-        }
-    }
-
-    /**
      * GCM서버 등록이 끝났을때(성공 or 실패) 호출되는 콜백.
      *
      * @param event GCM서버 등록 결과
@@ -139,7 +128,7 @@ public class UserManager implements ApiProxy.ApiResultListener<UserDevice> {
 
     /**
      * 사용자정보에 변화가 생겼을 때 prefs와 서버에 동시반영.
-     * 최소한 사용자번호와 GCM토큰 둘 다가 있어야 함.
+     * 사용자번호와 GCM토큰 둘 다 있어야 함.
      */
     @DebugLog
     public void updateDevice() {
@@ -162,7 +151,9 @@ public class UserManager implements ApiProxy.ApiResultListener<UserDevice> {
         user.setNickName(person.getDisplayName());
         user.setImage(person.getImage().getUrl());
 
-        App.getInstance().getApiProxy().updateUser(user);
-        updateDevice();
+        App.getInstance().getApiProxy().setUserAccount(user, (result) -> {
+            this.device = result;
+            updateDevice();
+        });
     }
 }

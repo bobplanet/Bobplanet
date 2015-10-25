@@ -10,6 +10,7 @@ import com.googlecode.objectify.annotation.OnSave;
 import com.googlecode.objectify.annotation.Parent;
 
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * 사용자의 기기 객체.
@@ -21,7 +22,7 @@ import java.util.Date;
 @Entity
 public class UserDevice {
     @Id
-    Long id;
+    String id;
 
     /**
      * 이 기기를 소유한 유저.
@@ -67,11 +68,11 @@ public class UserDevice {
     @IgnoreLoad
     Date updateDate;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

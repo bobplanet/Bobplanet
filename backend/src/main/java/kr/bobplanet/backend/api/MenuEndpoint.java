@@ -88,7 +88,7 @@ public class MenuEndpoint extends BaseEndpoint {
             name = "vote",
             httpMethod = "POST"
     )
-    public Item vote(@Named("userId") final Long userId, @Named("itemName") final String itemName,
+    public Item vote(@Named("userId") final String userId, @Named("itemName") final String itemName,
                      @Named("menuId") final Long menuId, @Named("score") final int score) {
         logger.info(String.format(
                         "Executing vote() : { userId, itemName, menuId, score }  = { %s, %s, %s, %d }",
@@ -125,7 +125,7 @@ public class MenuEndpoint extends BaseEndpoint {
             name = "myVote",
             httpMethod = "GET"
     )
-    public Vote myVote(@Named("userId") final Long userId, @Named("itemName") final String itemName) {
+    public Vote myVote(@Named("userId") final String userId, @Named("itemName") final String itemName) {
         logger.info(String.format(
                         "Executing myVote() : { userId, itemName } = { %s, %s }",
                         userId, itemName)

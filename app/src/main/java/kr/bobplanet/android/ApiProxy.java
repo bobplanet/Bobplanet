@@ -137,8 +137,9 @@ public class ApiProxy implements Constants {
      * @param user
      */
     @DebugLog
-    public void updateUser(final User user) {
-        new Builder<>(Void.class, () -> api.updateUser(user).execute(), "updateUser")
+    public void setUserAccount(final User user, ApiResultListener<UserDevice> listener) {
+        new Builder<>(UserDevice.class, () -> api.setUserAccount(user).execute(), "setUserAccount")
+                .setResultListener(listener)
                 .execute();
     }
 
@@ -151,7 +152,7 @@ public class ApiProxy implements Constants {
      * @param listener
      */
     @DebugLog
-    public void vote(final Long userId, final Menu menu, final int score, ApiResultListener<Item> listener) {
+    public void vote(final String userId, final Menu menu, final int score, ApiResultListener<Item> listener) {
         Log.v(TAG, "score = " + score);
 
         new Builder<>(Item.class, () -> api.vote(userId, menu.getItem().getName(), menu.getId(), score).execute(), "vote")
@@ -169,7 +170,7 @@ public class ApiProxy implements Constants {
      * @param listener
      */
     @DebugLog
-    public void myVote(final Long userId, final Menu menu, ApiResultListener<Vote> listener) {
+    public void myVote(final String userId, final Menu menu, ApiResultListener<Vote> listener) {
         new Builder<>(Vote.class, () -> api.myVote(userId, menu.getItem().getName()).execute(), "myVote")
                 .setResultListener(listener)
                 .execute();

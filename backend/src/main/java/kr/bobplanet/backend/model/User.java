@@ -8,6 +8,7 @@ import com.googlecode.objectify.annotation.OnSave;
 import com.googlecode.objectify.annotation.Unindex;
 
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * 이용자 객체.
@@ -22,7 +23,7 @@ public class User {
      * Bobplanet 자체 사용자번호
      */
     @Id
-    Long id;
+    String id;
 
     /**
      * 서비스계정 종류 (현재는 "Google"만 가능함)
@@ -54,15 +55,15 @@ public class User {
     public User() {
     }
 
-    public User(Long id) {
+    public User(String id) {
         this.id = id;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -105,6 +106,6 @@ public class User {
 
     @Override
     public String toString() {
-        return String.format("{ id = %s }", id);
+        return String.format("{ id = %s, accountId = %s }", id, accountId);
     }
 }
