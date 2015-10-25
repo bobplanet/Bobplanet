@@ -5,7 +5,7 @@ import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.widget.Button;
 
-import kr.bobplanet.android.event.UserLogEvent;
+import kr.bobplanet.android.event.DialogLogEvent;
 
 /**
  * 실행기록을 남기는 Dialog를 만들기 위한 기본 builder.
@@ -14,13 +14,12 @@ import kr.bobplanet.android.event.UserLogEvent;
  * @version 15. 10. 25
  */
 public class BaseDialogBuilder extends AlertDialog.Builder {
-    private Context context;
-    private String category;
+    private String dialogType;
     private DialogInterface.OnCancelListener onCancelListener;
 
-    public BaseDialogBuilder(Context context, String category) {
+    public BaseDialogBuilder(Context context, String dialogType) {
         super(context);
-        this.category = category;
+        this.dialogType = dialogType;
     }
 
     @Override
@@ -34,19 +33,19 @@ public class BaseDialogBuilder extends AlertDialog.Builder {
         AlertDialog instance = super.create();
 
         instance.setOnShowListener((dialog) -> {
-            UserLogEvent.dialogView(category);
+            DialogLogEvent.dialogView(dialogType);
 
             Button negativeButton = instance.getButton(DialogInterface.BUTTON_NEGATIVE);
             if (negativeButton != null)
                 negativeButton.setOnClickListener((view) -> {
-                    UserLogEvent.dialogCancel(category);
+                    DialogLogEvent.dialogCancel(dialogType);
                     instance.dismiss();
                 });
         });
 
         instance.setOnCancelListener((dialog) -> {
             if (onCancelListener != null) onCancelListener.onCancel(dialog);
-            UserLogEvent.dialogCancel(category);
+            DialogLogEvent.dialogCancel(dialogType);
         });
 
         return instance;

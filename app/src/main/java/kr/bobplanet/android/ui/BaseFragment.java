@@ -3,7 +3,7 @@ package kr.bobplanet.android.ui;
 import android.support.v4.app.Fragment;
 
 import kr.bobplanet.android.Constants;
-import kr.bobplanet.android.event.UserLogEvent;
+import kr.bobplanet.android.event.ScreenLogEvent;
 
 /**
  * 이 앱이 사용하는 모든 fragment의 엄마 클래스.
@@ -21,7 +21,7 @@ public class BaseFragment extends Fragment implements Constants {
         super.setUserVisibleHint(isVisibleToUser);
 
         if (isVisibleToUser && isResumed()) {
-            UserLogEvent.fragmentView(this);
+            ScreenLogEvent.fragmentView(this);
         }
     }
 }

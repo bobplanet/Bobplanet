@@ -75,7 +75,7 @@
             </intent-filter>
         </receiver>
 
-        <!-- Play Services의 GA가 데이터를 보낼 때 "보낼 데이터 있으면 내놔"라는 이벤트 수신용 Receiver -->
+        <!-- Play Services가 없을 때 백그라운드 전송을 위해 대타로 사용되는 리시버와 서비스 -->
         <receiver
             android:name="com.google.android.gms.analytics.AnalyticsReceiver"
             android:enabled="true" >
@@ -83,6 +83,11 @@
                 <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
             </intent-filter>
         </receiver>
+        <service
+            android:name="com.google.android.gms.analytics.AnalyticsService"
+            android:enabled="true"
+            android:exported="false" />
+
 
         <!-- GCM 등록 Service -->
         <service
@@ -106,12 +111,6 @@
                 <action android:name="com.google.android.gms.iid.InstanceID" />
             </intent-filter>
         </service>
-
-        <!-- Analytics Service -->
-        <service
-            android:name="com.google.android.gms.analytics.AnalyticsService"
-            android:enabled="true"
-            android:exported="false" />
 
         <meta-data
             android:name="com.google.android.gms.version"

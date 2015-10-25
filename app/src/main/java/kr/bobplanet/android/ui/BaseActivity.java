@@ -23,7 +23,7 @@ import kr.bobplanet.android.App;
 import kr.bobplanet.android.Constants;
 import kr.bobplanet.android.R;
 import kr.bobplanet.android.event.GoogleSigninEvent;
-import kr.bobplanet.android.event.UserLogEvent;
+import kr.bobplanet.android.event.ScreenLogEvent;
 
 /**
  * Bobplanet 앱에서 사용하는 모든 Activity들의 엄마클래스.
@@ -110,7 +110,7 @@ abstract public class BaseActivity extends AppCompatActivity implements Constant
     @Override
     protected void onResume() {
         super.onResume();
-        UserLogEvent.activityView(this);
+        ScreenLogEvent.activityView(this);
     }
 
     @Override

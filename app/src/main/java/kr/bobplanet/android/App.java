@@ -12,15 +12,10 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Logger;
 import com.google.android.gms.analytics.Tracker;
-import com.google.android.gms.iid.InstanceID;
-import com.google.android.gms.plus.model.people.Person;
 
 import de.greenrobot.event.EventBus;
-import hugo.weaving.DebugLog;
 import kr.bobplanet.android.event.MeasureLogEvent;
-import kr.bobplanet.android.event.UserLogEvent;
-import kr.bobplanet.android.gcm.GcmServices;
-import kr.bobplanet.backend.bobplanetApi.model.User;
+import kr.bobplanet.android.event.ScreenLogEvent;
 
 /**
  * 커스텀 애플리케이션 클래스.
@@ -85,8 +80,6 @@ public class App extends Application {
         userManager = new UserManager(this, prefs);
 
         initializeTracker();
-
-        EventBus.getDefault().register(this);
     }
 
     private void initializeTracker() {
@@ -103,6 +96,10 @@ public class App extends Application {
      */
     public UserManager getUserManager() {
         return userManager;
+    }
+
+    public Tracker getTracker() {
+        return tracker;
     }
 
     /**
@@ -150,35 +147,5 @@ public class App extends Application {
         if (requestQueue != null) {
             requestQueue.cancelAll(tag);
         }
-    }
-
-    /**
-     * @param logEvent
-     */
-    @SuppressWarnings("unused")
-    public void onEvent(UserLogEvent logEvent) {
-        Log.v(TAG, "UserLogEvent: " + logEvent.source);
-        if (logEvent.isScreenView()) {
-            tracker.setScreenName(logEvent.source);
-            tracker.send(new HitBuilders.ScreenViewBuilder().build());
-        } else {
-            tracker.send(new HitBuilders.EventBuilder()
-                    .setCategory(logEvent.source)
-                    .setAction(logEvent.category)
-                    .build());
-        }
-    }
-
-    /**
-     * @param logEvent
-     */
-    @SuppressWarnings("unused")
-    public void onEvent(MeasureLogEvent logEvent) {
-        Log.v(TAG, String.format("MeasureLogEvent: %s (%s)", logEvent.source, logEvent.label));
-        tracker.send(new HitBuilders.TimingBuilder()
-                .setCategory(logEvent.source)
-                .setLabel(logEvent.label)
-                .setValue(logEvent.value)
-                .build());
     }
 }
