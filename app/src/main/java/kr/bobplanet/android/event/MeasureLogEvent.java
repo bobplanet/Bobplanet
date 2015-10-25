@@ -37,10 +37,9 @@ public class MeasureLogEvent extends LogEvent {
      * @param category 측정종류(대분류)
      * @param label 측정대상(소분류)
      * @param metric 측정값
-     * @return
      */
-    public static MeasureLogEvent measure(Metric category, String label, long metric) {
-        return new MeasureLogEvent(category, label, metric);
+    public static void measure(Metric category, String label, long metric) {
+        new MeasureLogEvent(category, label, metric).submit();
     }
 
     /**

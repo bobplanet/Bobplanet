@@ -2,7 +2,6 @@ package kr.bobplanet.android.ui;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
@@ -18,7 +17,6 @@ import kr.bobplanet.android.UserManager;
 import kr.bobplanet.android.Util;
 import kr.bobplanet.android.event.GoogleSigninEvent;
 import kr.bobplanet.android.event.UserLogEvent;
-import kr.bobplanet.android.ui.BaseActivity;
 import kr.bobplanet.backend.bobplanetApi.model.Item;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
 import kr.bobplanet.backend.bobplanetApi.model.Vote;
@@ -28,6 +26,9 @@ import kr.bobplanet.backend.bobplanetApi.model.Vote;
  * @version 15. 10. 24
  */
 public class VoteManager {
+    private static final String DIALOG_VOTE = "DIALOG_VOTE";
+    private static final String DIALOG_LOGIN = "DIALOG_LOGIN";
+
     private BaseActivity activity;
     private Context context;
 
@@ -50,7 +51,7 @@ public class VoteManager {
 
         View view = LayoutInflater.from(context).inflate(R.layout.vote_dialog, null);
 
-        Dialog voteDialog = new AlertDialog.Builder(activity)
+        Dialog voteDialog = new BaseDialogBuilder(activity, DIALOG_VOTE)
                 .setTitle(R.string.dialog_vote_label)
                 .setView(view)
                 .setNegativeButton(R.string.button_cancel, null)
@@ -62,8 +63,6 @@ public class VoteManager {
         buttonDown.setOnClickListener(v -> voteOrRequestSignin(Constants.VOTE_DOWN, voteDialog));
 
         voteDialog.show();
-
-        UserLogEvent.dialogView(context.getString(R.string.dialog_vote_label));
     }
 
     /**
@@ -119,13 +118,12 @@ public class VoteManager {
      */
     @DebugLog
     private void showSigninDialog() {
-        new AlertDialog.Builder(activity)
+        new BaseDialogBuilder(activity, DIALOG_LOGIN)
                 .setTitle(R.string.dialog_login_label)
                 .setView(R.layout.login_dialog)
-                .setPositiveButton(R.string.button_ok, (dialog, which) -> activity.requestGoogleSignin())
-                .setNegativeButton(R.string.button_cancel, null).show();
-
-        UserLogEvent.dialogView(context.getString(R.string.dialog_login_label));
+                .setPositiveButton(R.string.button_ok, (dialog, which) ->
+                        activity.requestGoogleSignin())
+                .setNegativeButton(R.string.button_cancel, null);
     }
 
     /**
@@ -136,6 +134,7 @@ public class VoteManager {
     @SuppressWarnings("UnusedDeclaration")
     @DebugLog
     public void onEvent(GoogleSigninEvent event) {
+        UserLogEvent.login("Google");
         uploadVote();
     }
 

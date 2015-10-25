@@ -14,6 +14,8 @@ public final class UserLogEvent extends LogEvent {
     private static final String ACTIVITY_VIEW = "ACTIVITY_VIEW";
     private static final String FRAGMENT_VIEW = "FRAGMENT_VIEW";
     private static final String DIALOG_VIEW = "DIALOG_VIEW";
+    private static final String DIALOG_CANCEL = "DIALOG_CANCEL";
+    private static final String LOGIN = "LOGIN";
 
     private UserLogEvent(String category, String label) {
         super(category, label);
@@ -23,20 +25,28 @@ public final class UserLogEvent extends LogEvent {
      * Activity가 실행될 때 onResume() 안에서 호출.
      *
      */
-    public static UserLogEvent activityView(Activity src) {
-        return new UserLogEvent(ACTIVITY_VIEW, src.getClass().getName());
+    public static void activityView(Activity src) {
+        new UserLogEvent(ACTIVITY_VIEW, src.getClass().getName()).submit();
     }
 
     /**
      * Fragment가 실행될 때 onResume() 안에서 호출.
      *
      */
-    public static UserLogEvent fragmentView(Fragment src) {
-        return new UserLogEvent(FRAGMENT_VIEW, src.getClass().getName());
+    public static void fragmentView(Fragment src) {
+        new UserLogEvent(FRAGMENT_VIEW, src.getClass().getName()).submit();
     }
 
-    public static UserLogEvent dialogView(String label) {
-        return new UserLogEvent(DIALOG_VIEW, label);
+    public static void dialogView(String label) {
+        new UserLogEvent(DIALOG_VIEW, label).submit();
+    }
+
+    public static void dialogCancel(String label) {
+        new UserLogEvent(DIALOG_CANCEL, label).submit();
+    }
+
+    public static void login(String accountType) {
+        new UserLogEvent(LOGIN, accountType).submit();
     }
 
     /**

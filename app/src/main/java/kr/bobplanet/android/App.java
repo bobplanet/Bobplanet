@@ -25,7 +25,7 @@ import kr.bobplanet.backend.bobplanetApi.model.User;
 /**
  * 커스텀 애플리케이션 클래스.
  * 애플리케이션 전체 scope에서 관리해야 할 ApiProxy, Volley, Google Analytics 등을 관리.
- * <p/>
+ * <p>
  * - EntityVault의 싱글턴은 여기에서 관리함
  * - 공용 유틸리티 로직 제공을 위해 Singleton 인터페이스 제공함 (casting 없어도 되는 장점)
  * - GA Tracker는 여러개 생성하면 PV가 n배로 잡히므로 이 Singleton 내에서 관리.
@@ -161,6 +161,11 @@ public class App extends Application {
         if (logEvent.isScreenView()) {
             tracker.setScreenName(logEvent.source);
             tracker.send(new HitBuilders.ScreenViewBuilder().build());
+        } else {
+            tracker.send(new HitBuilders.EventBuilder()
+                    .setCategory(logEvent.source)
+                    .setAction(logEvent.category)
+                    .build());
         }
     }
 
@@ -170,9 +175,8 @@ public class App extends Application {
     @SuppressWarnings("unused")
     public void onEvent(MeasureLogEvent logEvent) {
         Log.v(TAG, String.format("MeasureLogEvent: %s (%s)", logEvent.source, logEvent.label));
-        tracker.send(new HitBuilders.EventBuilder()
-                .setCategory("measure")
-                .setAction(logEvent.source)
+        tracker.send(new HitBuilders.TimingBuilder()
+                .setCategory(logEvent.source)
                 .setLabel(logEvent.label)
                 .setValue(logEvent.value)
                 .build());

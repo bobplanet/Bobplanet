@@ -21,7 +21,7 @@ public class BaseFragment extends Fragment implements Constants {
         super.setUserVisibleHint(isVisibleToUser);
 
         if (isVisibleToUser && isResumed()) {
-            UserLogEvent.fragmentView(this).submit();
+            UserLogEvent.fragmentView(this);
         }
     }
 }

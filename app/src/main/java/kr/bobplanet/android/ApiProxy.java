@@ -249,7 +249,7 @@ public class ApiProxy implements Constants {
                 Log.v(TAG, "result = " + result);
 
                 MeasureLogEvent.measure(MeasureLogEvent.Metric.API_LATENCY,
-                        measureApiName, new Date().getTime() - now).submit();
+                        measureApiName, new Date().getTime() - now);
 
                 if (cacheWritable) {
                     jsonCache.put(cacheKey, new Pair<>(now, EntityTranslator.toString(result)));

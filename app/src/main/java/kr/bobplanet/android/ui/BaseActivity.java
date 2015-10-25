@@ -110,7 +110,7 @@ abstract public class BaseActivity extends AppCompatActivity implements Constant
     @Override
     protected void onResume() {
         super.onResume();
-        UserLogEvent.activityView(this).submit();
+        UserLogEvent.activityView(this);
     }
 
     @Override
