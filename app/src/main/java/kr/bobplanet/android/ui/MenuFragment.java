@@ -14,7 +14,7 @@ import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
 import kr.bobplanet.android.ApiProxy;
 import kr.bobplanet.android.App;
-import kr.bobplanet.android.EntityParser;
+import kr.bobplanet.android.EntityTranslator;
 import kr.bobplanet.android.R;
 import kr.bobplanet.android.event.ItemChangeEvent;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
@@ -46,7 +46,7 @@ public class MenuFragment extends BaseFragment {
 
         ApiProxy apiProxy = App.getInstance().getApiProxy();
         String menu_json = getActivity().getIntent().getStringExtra(KEY_MENU);
-        menu = EntityParser.parseEntity(Menu.class, menu_json);
+        menu = EntityTranslator.parseEntity(Menu.class, menu_json);
 
         EventBus.getDefault().register(this);
     }

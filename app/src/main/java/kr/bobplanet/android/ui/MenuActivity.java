@@ -22,7 +22,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import kr.bobplanet.android.App;
 import kr.bobplanet.android.Constants;
-import kr.bobplanet.android.EntityParser;
+import kr.bobplanet.android.EntityTranslator;
 import kr.bobplanet.android.R;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
 
@@ -60,7 +60,7 @@ public class MenuActivity extends BaseActivity implements Constants {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu_activity);
 
-        menu = EntityParser.parseEntity(Menu.class, getIntent().getStringExtra(KEY_MENU));
+        menu = EntityTranslator.parseEntity(Menu.class, getIntent().getStringExtra(KEY_MENU));
 
         initLayout();
     }

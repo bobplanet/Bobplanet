@@ -1,7 +1,6 @@
 package kr.bobplanet.android;
 
 import android.content.Context;
-import android.content.Entity;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -33,11 +32,11 @@ public class Preferences {
     public UserDevice loadDevice() {
         String deviceString = prefs.getString(DEVICE, null);
         Log.v(TAG, "deviceString = " + deviceString);
-        return deviceString != null ? EntityParser.parseEntity(UserDevice.class, deviceString) : null;
+        return deviceString != null ? EntityTranslator.parseEntity(UserDevice.class, deviceString) : null;
     }
 
     public void storeDevice(UserDevice device) {
-        prefs.edit().putString(DEVICE, EntityParser.toString(device)).apply();
+        prefs.edit().putString(DEVICE, EntityTranslator.toString(device)).apply();
     }
 
     public boolean hasDismissedSwipeNotice() {

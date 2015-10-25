@@ -238,7 +238,7 @@ public class ApiProxy implements Constants {
                         String json = cachedObj.second;
                         if (now - timestamp < CACHE_EXPIRE_SECONDS * 1000 && json != null) {
                             Log.v(TAG, "Get cached entry for " + cacheKey);
-                            return EntityParser.parseEntity(resultType, json);
+                            return EntityTranslator.parseEntity(resultType, json);
                         }
                         Log.v(TAG, "Cache expired for " + cacheKey);
                     }
@@ -252,7 +252,7 @@ public class ApiProxy implements Constants {
                         measureApiName, new Date().getTime() - now).submit();
 
                 if (cacheWritable) {
-                    jsonCache.put(cacheKey, new Pair<>(now, EntityParser.toString(result)));
+                    jsonCache.put(cacheKey, new Pair<>(now, EntityTranslator.toString(result)));
                 }
 
                 return result;
