@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
@@ -26,12 +27,14 @@ import kr.bobplanet.backend.bobplanetApi.model.UserDevice;
  * @author heonkyu.jin
  * @version 2015. 10. 24.
  */
-public class SettingsActivity extends BaseActivity {
+public class SettingsActivity extends BaseActivity implements EmptyOptionsMenu {
     private static final String TAG = SettingsActivity.class.getSimpleName();
 
     private static final String PREF_ABOUT = "ABOUT";
     private static final String PREF_LUNCH_PUSH = "LUNCH_PUSH";
     private static final String PREF_DINNER_PUSH = "DINNER_PUSH";
+    private static final String PREF_DEVICE_ID = "DEVICE_ID";
+    private static final String PREF_USER_ID = "USER_ID";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +74,9 @@ public class SettingsActivity extends BaseActivity {
             UserDevice device = App.getInstance().getUserManager().getDevice();
             prefHandler.setChecked(PREF_LUNCH_PUSH, device.getLunchPushEnabled());
             prefHandler.setChecked(PREF_DINNER_PUSH, device.getDinnerPushEnabled());
+
+            findPreference(PREF_DEVICE_ID).setSummary(device.getId());
+            findPreference(PREF_USER_ID).setSummary(device.getUser().getId());
         }
 
         /**
@@ -95,31 +101,9 @@ public class SettingsActivity extends BaseActivity {
                     device.setDinnerPushEnabled(prefHandler.isChecked(pref.getKey()));
                     userManager.updateDevice();
                     return true;
-                case PREF_ABOUT:
-                    showAboutDialog();
-                    return true;
             }
 
             return super.onPreferenceTreeClick(screen, pref);
-        }
-
-        /**
-         * Shows about dialog.
-         */
-        private void showAboutDialog() {
-/*
-            View dialog_view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_about, null, false);
-            TextView textview_credit = (TextView) dialog_view.findViewById(R.id.textview_credit);
-            String html = new AndDown().markdownToHtml(getString(R.string.message_credit));
-            textview_credit.setText(Html.fromHtml(html));
-
-            new AlertDialog.Builder(getActivity())
-                    .setTitle(R.string.title_about)
-                    .setIcon(R.mipmap.ic_launcher)
-                    .setView(dialog_view)
-                    .create()
-                    .show();
-*/
         }
     }
 

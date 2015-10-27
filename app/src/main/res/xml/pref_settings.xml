@@ -1,32 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory
-        android:title="@string/settings_push_category">
+    <PreferenceCategory android:title="@string/settings_push_category">
 
         <CheckBoxPreference
+            android:defaultValue="true"
             android:key="LUNCH_PUSH"
-            android:title="@string/settings_push_lunch"
-            android:defaultValue="true"
-            android:summaryOn="@string/settings_push_lunch_summary_on"
             android:summaryOff="@string/settings_push_lunch_summary_off"
-            />
+            android:summaryOn="@string/settings_push_lunch_summary_on"
+            android:title="@string/settings_push_lunch" />
 
         <CheckBoxPreference
-            android:key="DINNER_PUSH"
-            android:title="@string/settings_push_dinner"
             android:defaultValue="true"
-            android:summaryOn="@string/settings_push_dinner_summary_on"
+            android:key="DINNER_PUSH"
             android:summaryOff="@string/settings_push_dinner_summary_off"
-            />
+            android:summaryOn="@string/settings_push_dinner_summary_on"
+            android:title="@string/settings_push_dinner" />
 
     </PreferenceCategory>
 
-    <PreferenceCategory
-        android:title="@string/settings_etc_category">
+    <PreferenceCategory android:title="@string/settings_dev_category">
+
+        <EditTextPreference
+            android:key="USER_ID"
+            android:title="@string/settings_dev_user_id" />
+
+        <EditTextPreference
+            android:key="DEVICE_ID"
+            android:title="@string/settings_dev_device_id" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/settings_etc_category">
 
         <Preference
             android:key="ABOUT"
-            android:title="@string/settings_etc_about" />
+            android:title="@string/settings_etc_about">
+            <intent
+                android:action="kr.bobplanet.android.ACTION_WEBVIEW"
+                android:data="@string/bobplanet_about_url"
+                android:targetClass="kr.bobplanet.android.ui.WebViewActivity" />
+        </Preference>
 
     </PreferenceCategory>
 

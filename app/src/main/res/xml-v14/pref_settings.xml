@@ -21,12 +21,29 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="@string/settings_dev_category">
+
+        <EditTextPreference
+            android:key="USER_ID"
+            android:title="@string/settings_dev_user_id" />
+
+        <EditTextPreference
+            android:key="DEVICE_ID"
+            android:title="@string/settings_dev_device_id" />
+
+    </PreferenceCategory>
+
     <PreferenceCategory
         android:title="@string/settings_etc_category">
 
         <Preference
             android:key="ABOUT"
-            android:title="@string/settings_etc_about" />
+            android:title="@string/settings_etc_about">
+            <intent
+                android:action="kr.bobplanet.android.ACTION_WEBVIEW"
+                android:data="@string/bobplanet_about_url"
+                android:targetClass="kr.bobplanet.android.ui.WebViewActivity" />
+        </Preference>
 
     </PreferenceCategory>
 

@@ -62,6 +62,16 @@
             android:label="@string/title_settings"
             android:theme="@style/AppTheme.Settings" />
 
+        <!-- -->
+        <activity android:name=".ui.WebViewActivity">
+            <intent-filter>
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <action android:name="kr.bobplanet.android.ACTION_WEBVIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <!-- GCM 메시지를 수신하는 Receiver -->
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
@@ -87,7 +97,6 @@
             android:name="com.google.android.gms.analytics.AnalyticsService"
             android:enabled="true"
             android:exported="false" />
-
 
         <!-- GCM 등록 Service -->
         <service
