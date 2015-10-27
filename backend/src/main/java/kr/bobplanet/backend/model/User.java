@@ -8,10 +8,10 @@ import com.googlecode.objectify.annotation.OnSave;
 import com.googlecode.objectify.annotation.Unindex;
 
 import java.util.Date;
-import java.util.UUID;
 
 /**
  * 이용자 객체.
+ * Google이나 Facebook 로그인을 할 때 생성된다.
  *
  * @author heonkyu.jin
  * @version 2015. 10. 3
@@ -20,7 +20,7 @@ import java.util.UUID;
 @Index
 public class User {
     /**
-     * Bobplanet 자체 사용자번호
+     * Bobplanet 자체 사용자번호. UUID. 클라이언트에서 생성됨.
      */
     @Id
     String id;
@@ -52,8 +52,7 @@ public class User {
     @IgnoreLoad
     Date updateDate;
 
-    public User() {
-    }
+    public User() { }
 
     public User(String id) {
         this.id = id;

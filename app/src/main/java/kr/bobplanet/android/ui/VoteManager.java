@@ -70,6 +70,7 @@ public class VoteManager {
     /**
      * 유저가 과거에 매긴 점수 가져옴.
      */
+    @DebugLog
     private void requestMyScore() {
         UserManager um = App.getInstance().getUserManager();
         if (um.hasAccount()) {
@@ -84,6 +85,7 @@ public class VoteManager {
         }
     }
 
+    @DebugLog
     private void voteOrRequestSignin(int score, Dialog voteDialog) {
         myScore = score;
 
@@ -125,7 +127,7 @@ public class VoteManager {
                 .setView(R.layout.login_dialog)
                 .setPositiveButton(R.string.button_ok, (dialog, which) ->
                         activity.requestGoogleSignin())
-                .setNegativeButton(R.string.button_cancel, null);
+                .setNegativeButton(R.string.button_cancel, null).show();
     }
 
     /**

@@ -25,12 +25,12 @@ public class StartActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // GCM 등록
-        if (!App.getInstance().getUserManager().isGcmRegistered()) {
-            if (DeviceEnvironment.checkPlayServices(this)) {
-                startService(new Intent(this, GcmServices.Registration.class));
-            }
+        // Google Play Services가 있는지 확인. 없을 경우 종료.
+        if (!DeviceEnvironment.checkPlayServices(this)) {
+            finish();
         }
+
+        App.getInstance().getUserManager().loadDevice();
 
         startActivity(new Intent(this, DayActivity.class));
         finish();

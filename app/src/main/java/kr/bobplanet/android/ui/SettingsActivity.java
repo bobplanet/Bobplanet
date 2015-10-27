@@ -76,7 +76,8 @@ public class SettingsActivity extends BaseActivity implements EmptyOptionsMenu {
             prefHandler.setChecked(PREF_DINNER_PUSH, device.getDinnerPushEnabled());
 
             findPreference(PREF_DEVICE_ID).setSummary(device.getId());
-            findPreference(PREF_USER_ID).setSummary(device.getUser().getId());
+            findPreference(PREF_USER_ID).setSummary(device.getUser() != null ?
+                    device.getUser().getId() : getString(R.string.settings_dev_user_null));
         }
 
         /**

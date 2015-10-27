@@ -1,95 +1,121 @@
 package kr.bobplanet.android;
 
 import android.content.Context;
+import android.content.Intent;
 import android.provider.Settings;
 import android.util.Log;
 
 import com.google.android.gms.iid.InstanceID;
 import com.google.android.gms.plus.model.people.Person;
 
+import java.util.UUID;
+
 import de.greenrobot.event.EventBus;
 import hugo.weaving.DebugLog;
+import kr.bobplanet.android.event.GoogleSigninEvent;
 import kr.bobplanet.android.gcm.GcmEvent;
+import kr.bobplanet.android.gcm.GcmServices;
 import kr.bobplanet.backend.bobplanetApi.model.User;
 import kr.bobplanet.backend.bobplanetApi.model.UserDevice;
 
 /**
  * 사용자 identity를 관리하는 객체.
- *
- * - 앱이 실행되면 가장 먼저 Bobplanet 서버에 신규사용자ID(long)를 요청
- * - 거의 동시에 StartActivity는 Gcm 토큰 등록요청
- * - 위 두 작업이 모두 끝나면 preference와 서버에 사용자정보를 저장
+ * <p>
+ * - 앱이 실행되면 가장 먼저 기기번호(UUID)를 직접 생성한 뒤 서버에 등록 요청
+ * - 서버가 기기정보를 내려줌: 이미 동일한 androidId의 기기가 존재할 경우 이를 재활용
+ * - 기기정보 등록이 완료되면 서버에 GCM토큰 업로드
+ * - GCM토큰 업로드까지 끝나면 preference에 사용자정보 저장
  *
  * @author heonkyu.jin
  * @version 15. 10. 18
  */
-public class UserManager {
+public class UserManager implements ApiProxy.ApiResultListener<UserDevice> {
     private static final String TAG = UserManager.class.getSimpleName();
 
+    private Context context;
+
     /**
-     * 현재 사용자. 로그인하지 않은 사용자는 Google Account 없음
+     * 현재 사용자. 로그인하지 않은 사용자는 UseDevice만 있고, User는 없음
      */
     private UserDevice device;
 
     private Preferences prefs;
 
     /**
-     *
      * @param context
      * @param prefs
      */
     public UserManager(Context context, Preferences prefs) {
+        this.context = context;
         this.prefs = prefs;
 
         EventBus.getDefault().register(this);
 
-        loadDeviceInfo(context);
+        loadDevice();
     }
 
     /**
      * 사용자정보를 읽어온다. 없으면 서버에 등록요청.
      */
-    private void loadDeviceInfo(Context context) {
-        UserDevice d = prefs.loadDevice();
-        if (d == null) {
+    public void loadDevice() {
+        UserDevice loaded = prefs.loadDevice();
+        if (loaded == null) {
             Log.i(TAG, "Device doesn't exists. Creating new device");
-            device = new UserDevice();
-            device.setLunchPushEnabled(true);
-            device.setDinnerPushEnabled(true);
-            device.setAndroidId(
-                    Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID));
-            device.setIid(InstanceID.getInstance(context).getId());
+            this.device = createUserDevice();
 
-            App.getInstance().getApiProxy().registerDevice(device,
-                    (result) -> {
-                        Log.d(TAG, "Device registered");
-                        device.setId(result.getId());
-                        device.setUser(result.getUser());
-                        updateDevice();
-                    });
+            App.getInstance().getApiProxy().registerDevice(device, this);
         } else {
-            Log.i(TAG, "Device restored from prefs: " + d);
-            this.device = d;
-            Log.i(TAG, "user = " + getUserId());
+            Log.i(TAG, "Device restored from prefs: " + loaded);
+            this.device = loaded;
+
+            if (device.getGcmToken() == null) {
+                requestGcmToken();
+            }
         }
     }
 
     /**
+     * 서버에 등록할 사용자 기기정보를 생성
+     */
+    private UserDevice createUserDevice() {
+        UserDevice device = new UserDevice()
+                .setId(UUID.randomUUID().toString())
+                .setLunchPushEnabled(true)
+                .setDinnerPushEnabled(true)
+                .setAndroidId(
+                        Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID))
+                .setIid(InstanceID.getInstance(context).getId());
+
+        return device;
+    }
+
+    /**
+     * 사용자 기기정보가 서버에 등록되었을 때 호출되는 callback
+     */
+    @Override
+    public void onApiResult(UserDevice result) {
+        if (result != null) {
+            Log.d(TAG, "Device registered");
+
+            this.device.setId(result.getId()).setUser(result.getUser());
+
+            requestGcmToken();
+        } else {
+            Log.w(TAG, "registerDevice's result is NULL");
+        }
+    }
+
+    private void requestGcmToken() {
+        context.startService(new Intent(context, GcmServices.Registration.class));
+    }
+
+    /**
      * 사용자번호 조회. 아무나 호출해도 됨.
+     *
      * @return
      */
     public String getUserId() {
         return device.getUser().getId();
-    }
-
-    /**
-     * GCM 토큰 등록이 완료되었는지 알려준다. StartActivity에서 확인용으로 호출함.
-     *
-     * @return
-     */
-    public boolean isGcmRegistered() {
-        Log.d(TAG, "GCM token = " + device.getGcmToken());
-        return device.getGcmToken() != null;
     }
 
     /**
@@ -98,7 +124,7 @@ public class UserManager {
      * @return
      */
     public boolean hasAccount() {
-        return device.getUser().getAccountType() != null;
+        return device.getUser() != null && device.getUser().getAccountType() != null;
     }
 
     public UserDevice getDevice() {
@@ -115,13 +141,13 @@ public class UserManager {
     public void onEvent(GcmEvent event) {
         switch (event.getType()) {
             case GcmEvent.REGISTER_SUCCESS:
-                Log.d(TAG, "gcm register succeeded");
+                Log.i(TAG, "gcm register succeeded");
 
                 device.setGcmToken(event.getToken());
                 updateDevice();
                 break;
             case GcmEvent.REGISTER_FAILURE:
-                Log.d(TAG, "gcm register failed");
+                Log.i(TAG, "gcm register failed");
                 break;
         }
     }
@@ -140,20 +166,25 @@ public class UserManager {
 
     /**
      * 구글ID 로그인이 끝났을 때 호출해줘야 하는 함수.
+     *
      * @param person
      */
     @DebugLog
-    public void updateUserGoogleAccount(Person person) {
-        User user = device.getUser();
+    public void registerGoogleAccount(Person person) {
+        User user = new User()
+                .setId(UUID.randomUUID().toString())
+                .setAccountType("Google")
+                .setAccountId(person.getId())
+                .setNickName(person.getDisplayName())
+                .setImage(person.getImage().getUrl());
 
-        user.setAccountType("Google");
-        user.setAccountId(person.getId());
-        user.setNickName(person.getDisplayName());
-        user.setImage(person.getImage().getUrl());
+        device.setUser(user);
 
-        App.getInstance().getApiProxy().setUserAccount(user, (result) -> {
+        App.getInstance().getApiProxy().registerUser(device, (result) -> {
             this.device = result;
-            updateDevice();
+            prefs.storeDevice(device);
+
+            EventBus.getDefault().post(new GoogleSigninEvent());
         });
     }
 }

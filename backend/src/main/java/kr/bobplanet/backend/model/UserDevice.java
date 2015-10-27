@@ -10,7 +10,6 @@ import com.googlecode.objectify.annotation.OnSave;
 import com.googlecode.objectify.annotation.Parent;
 
 import java.util.Date;
-import java.util.UUID;
 
 /**
  * 사용자의 기기 객체.
@@ -21,11 +20,14 @@ import java.util.UUID;
  */
 @Entity
 public class UserDevice {
+    /**
+     * 기기번호. UUID. 클라이언트에서 생성.
+     */
     @Id
     String id;
 
     /**
-     * 이 기기를 소유한 유저.
+     * 이 기기를 소유한 유저. 로그인하기 전까지는 null.
      */
     @Parent
     @Load
@@ -51,13 +53,13 @@ public class UserDevice {
     String gcmToken;
 
     /**
-     * 
+     * 점심메뉴 알림메시지 수신여부
      */
     @Index
     boolean lunchPushEnabled = true;
 
     /**
-     *
+     * 저녁메뉴 알림메시지 수신여부
      */
     @Index
     boolean dinnerPushEnabled = true;
@@ -67,6 +69,12 @@ public class UserDevice {
      */
     @IgnoreLoad
     Date updateDate;
+
+    public UserDevice() { }
+
+    public UserDevice(String id) {
+        this.id = id;
+    }
 
     public String getId() {
         return id;
@@ -81,7 +89,7 @@ public class UserDevice {
     }
 
     public void setUser(User user) {
-        this.user = Ref.create(user);
+        this.user = user != null ? Ref.create(user) : null;
     }
 
     public String getAndroidId() {
@@ -124,7 +132,7 @@ public class UserDevice {
     @Override
     public String toString() {
         User user = getUser();
-        return String.format("{ id = %s, user = %s, androidId = %s",
-                id, user == null ? "null" : user.toString(), androidId);
+        return String.format("{ id = %s, user = %s, gcmToken = %s, androidId = %s",
+                id, user == null ? "null" : user.toString(), gcmToken, androidId);
     }
 }

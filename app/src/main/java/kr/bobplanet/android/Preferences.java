@@ -3,6 +3,7 @@ package kr.bobplanet.android;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.util.Log;
 
 import kr.bobplanet.backend.bobplanetApi.model.UserDevice;
@@ -32,7 +33,7 @@ public class Preferences {
     public UserDevice loadDevice() {
         String deviceString = prefs.getString(DEVICE, null);
         Log.v(TAG, "deviceString = " + deviceString);
-        return deviceString != null ? EntityTranslator.parseEntity(UserDevice.class, deviceString) : null;
+        return !TextUtils.isEmpty(deviceString) ? EntityTranslator.parseEntity(UserDevice.class, deviceString) : null;
     }
 
     public void storeDevice(UserDevice device) {

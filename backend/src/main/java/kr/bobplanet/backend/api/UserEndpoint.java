@@ -2,6 +2,7 @@ package kr.bobplanet.backend.api;
 
 import com.google.api.server.spi.config.ApiClass;
 import com.google.api.server.spi.config.ApiMethod;
+import com.google.api.server.spi.config.Named;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.VoidWork;
 import com.googlecode.objectify.Work;
@@ -50,12 +51,7 @@ public class UserEndpoint extends BaseEndpoint {
 
             ofy().save().entity(device).now();
         } else {
-            device.setId(UUID.randomUUID().toString());
-            User user = new User();
-            user.setId(UUID.randomUUID().toString());
-            device.setUser(user);
-
-            ofy().save().entities(device, user).now();
+            ofy().save().entities(device).now();
         }
 
         return device;
@@ -79,44 +75,42 @@ public class UserEndpoint extends BaseEndpoint {
     }
 
     /**
-     * 사용자정보 업데이트.
-     * 사용자가 Google 로그인 등 account 정보를 등록했을 때 호출.
-     * 이미 존재하는 Google 계정인 경우 해당 계정으로 통합하고 결과를 반환.
-     *
+     * 사용자 등록. 사용자가 Google 로그인 등 account 정보를 등록했을 때 호출.
+     * 
+     * @param deviceId
      * @param user
      */
     @ApiMethod(
-            name = "setUserAccount",
-            path = "user/account",
+            name = "registerUser",
+            path = "user/register",
             httpMethod = "POST"
     )
-    public UserDevice setUserAccount(final User user) {
-        logger.info("setUserAccount(): user = " + user.toString());
+    public UserDevice registerUser(@Named("deviceId") final String deviceId, final User user) {
+        logger.info(String.format("registerUser(): deviceId = %s, user = %s", deviceId, user));
 
-        // 이미 존재하는 계정인지 체크
+        // 이미 존재하는 계정?
         final User existingUser = ofy().load().type(User.class)
                 .filter("accountType", user.getAccountType())
                 .filter("accountId", user.getAccountId())
                 .first().now();
 
-        final UserDevice currentDevice = ofy().load().type(UserDevice.class).ancestor(user).first().now();
+        return ofy().transact(new Work<UserDevice>() {
+            @Override
+            public UserDevice run() {
+                UserDevice device = new UserDevice(deviceId);
+                ofy().delete().entity(device).now();
 
-        // 기존 유저와 신규 유저 병합
-        if (existingUser != null) {
-            return ofy().transact(new Work<UserDevice>() {
-                @Override
-                public UserDevice run() {
-                    ofy().delete().entities(user, currentDevice).now();
-                    currentDevice.setUser(existingUser);
-                    ofy().save().entity(currentDevice).now();
-
-                    return currentDevice;
+                // 디바이스도 기존 유저를 기준으로 업데이트
+                if (existingUser != null) {
+                    device.setUser(existingUser);
+                    ofy().save().entity(device);
+                } else {
+                    device.setUser(user);
+                    ofy().save().entities(device, user).now();
                 }
-            });
-        } else {
-            ofy().save().entity(user).now();
-            return currentDevice;
-        }
 
+                return device;
+            }
+        });
     }
 }

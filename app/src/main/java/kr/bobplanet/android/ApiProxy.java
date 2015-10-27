@@ -35,7 +35,8 @@ import kr.bobplanet.backend.bobplanetApi.model.Vote;
  * - 캐쉬에서 객체를 찾아보고, 없으면 API를 호출해 가져온 뒤 캐쉬에 저장하는 반복코딩 줄이기 위해 generics 이용
  * - 네트웤에서 데이터를 가져올 경우 시간이 소요되므로 async 방식으로 데이터 조회
  * - 이미 JSON 문자열을 갖고있는 경우에는 <code>parseEntity()</code>를 이용해서 unserialize만 해도 됨
- * - callee는 OnEntityLoader를 전달하여, 데이터 로딩이 끝나면 UI업데이트 등을 수행해야 함
+ * - callee는 ApiResultLoader를 전달하여, 데이터 로딩이 끝나면 UI업데이트 등을 수행해야 함
+ * - 주의사항: 네트웤 에러가 발생할 경우 ApiResultLoader의 결과값이 null일 수 있으므로 방어로직 필요
  *
  * @author hkjinlee
  * @version 2015. 10. 7
@@ -121,7 +122,7 @@ public class ApiProxy implements Constants {
     }
 
     /**
-     * 사용자정보 업데이트.
+     * 기기정보 업데이트.
      *
      * @param device
      */
@@ -132,13 +133,14 @@ public class ApiProxy implements Constants {
     }
 
     /**
-     * 사용자정보 업데이트.
+     * 사용자 등록.
      *
-     * @param user
+     * @param device
      */
     @DebugLog
-    public void setUserAccount(final User user, ApiResultListener<UserDevice> listener) {
-        new Builder<>(UserDevice.class, () -> api.setUserAccount(user).execute(), "setUserAccount")
+    public void registerUser(final UserDevice device, ApiResultListener<UserDevice> listener) {
+        new Builder<>(UserDevice.class, () ->
+                api.registerUser(device.getId(), device.getUser()).execute(), "registerUser")
                 .setResultListener(listener)
                 .execute();
     }

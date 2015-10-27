@@ -43,6 +43,7 @@
 	<string name="settings_push_dinner_summary_off">저녁메뉴 알림메시지를 수신하지 않습니다</string>
     <string name="settings_dev_category">개발자정보</string>
     <string name="settings_dev_user_id">회원번호</string>
+    <string name="settings_dev_user_null">(회원등록 전)</string>
     <string name="settings_dev_device_id">기기번호</string>
 	<string name="settings_etc_category">기타</string>
 	<string name="settings_etc_about">이 앱을 만든 사람들</string>

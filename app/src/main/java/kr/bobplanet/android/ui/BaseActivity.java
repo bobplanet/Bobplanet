@@ -17,12 +17,10 @@ import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 
-import de.greenrobot.event.EventBus;
 import hugo.weaving.DebugLog;
 import kr.bobplanet.android.App;
 import kr.bobplanet.android.Constants;
 import kr.bobplanet.android.R;
-import kr.bobplanet.android.event.GoogleSigninEvent;
 import kr.bobplanet.android.event.ScreenLogEvent;
 
 /**
@@ -99,9 +97,7 @@ abstract public class BaseActivity extends AppCompatActivity implements Constant
     public void onConnected(Bundle bundle) {
         Person person = Plus.PeopleApi.getCurrentPerson(googleApiClient);
 
-        App.getInstance().getUserManager().updateUserGoogleAccount(person);
-
-        EventBus.getDefault().post(new GoogleSigninEvent());
+        App.getInstance().getUserManager().registerGoogleAccount(person);
     }
 
     /**
@@ -140,20 +136,27 @@ abstract public class BaseActivity extends AppCompatActivity implements Constant
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_common, menu);
-        return true;
+        if (!(this instanceof EmptyOptionsMenu)) {
+            getMenuInflater().inflate(R.menu.menu_common, menu);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
+        if (!(this instanceof EmptyOptionsMenu)) {
+            int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
-            return true;
+            if (id == R.id.action_settings) {
+                startActivity(new Intent(this, SettingsActivity.class));
+                return true;
+            }
+
+            return super.onOptionsItemSelected(item);
+        } else {
+            return false;
         }
-
-        return super.onOptionsItemSelected(item);
     }
 }
