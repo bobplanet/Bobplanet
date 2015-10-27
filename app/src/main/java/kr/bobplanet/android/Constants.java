@@ -15,7 +15,7 @@ public interface Constants {
 	/**
 	 * 데이터를 가져올 Google AppEngine의 root URL
 	 */
-    String BACKEND_ROOT_URL = "https://kr-bobplanet.appspot.com/_ah/api/";
+    String BACKEND_ROOT_URL = BuildConfig.BACKEND_ROOT_URL;
 	
 	/**
 	 * Google Cloud Message의 기본 발신자ID.
