@@ -35,6 +35,17 @@ public interface Constants {
     DateFormat DATEFORMAT_YMD = new SimpleDateFormat("yyyy-MM-dd");
     DateFormat DATEFORMAT_YMDE = new SimpleDateFormat("yyyy/MM/dd(EEE)");
 
+    /**
+     * '좋아요'의 기본점수
+     */
     int VOTE_UP = 1;
+    /**
+     * '싫어요'의 기본점수
+     */
     int VOTE_DOWN = -1;
+
+    /**
+     * WebView에 사용자ID를 넘길 때 사용되는 패러미터 이름
+     */
+    String WEBVIEW_USERID = "bobp_userId";
 }

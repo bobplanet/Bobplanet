@@ -62,12 +62,14 @@
             android:label="@string/title_settings"
             android:theme="@style/AppTheme.Settings" />
 
-        <!-- -->
-        <activity android:name=".ui.WebViewActivity">
+        <!--  -->
+        <activity android:name=".ui.WebViewActivity" >
             <intent-filter>
                 <data android:scheme="http" />
                 <data android:scheme="https" />
+
                 <action android:name="kr.bobplanet.android.ACTION_WEBVIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -93,6 +95,7 @@
                 <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
             </intent-filter>
         </receiver>
+
         <service
             android:name="com.google.android.gms.analytics.AnalyticsService"
             android:enabled="true"
@@ -124,7 +127,6 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
     </application>
 
 </manifest>
