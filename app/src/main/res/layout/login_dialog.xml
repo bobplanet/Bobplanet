@@ -16,15 +16,16 @@
             android:layout_height="wrap_content"
             android:text="@string/dialog_login_desc" />
 
-        <ImageView
+        <ImageButton
+            android:id="@+id/google_login_button"
             android:layout_width="220dp"
             android:layout_height="40dp"
             android:src="@drawable/google_oauth_button" />
 
-        <ImageView
+        <ImageButton
+            android:id="@+id/facebook_login_button"
             android:layout_width="220dp"
             android:layout_height="40dp"
-            android:padding="2dp"
             android:src="@drawable/facebook_oauth_button" />
 
     </LinearLayout>

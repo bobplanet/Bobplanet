@@ -15,7 +15,7 @@ import kr.bobplanet.android.Constants;
 import kr.bobplanet.android.R;
 import kr.bobplanet.android.UserManager;
 import kr.bobplanet.android.Util;
-import kr.bobplanet.android.event.GoogleSigninEvent;
+import kr.bobplanet.android.event.UserSignInEvent;
 import kr.bobplanet.android.event.UserLogEvent;
 import kr.bobplanet.backend.bobplanetApi.model.Item;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
@@ -28,6 +28,8 @@ import kr.bobplanet.backend.bobplanetApi.model.Vote;
  * @version 15. 10. 24
  */
 public class VoteManager {
+    private static final String TAG = VoteManager.class.getSimpleName();
+
     private static final String DIALOG_VOTE = "DIALOG_VOTE";
     private static final String DIALOG_LOGIN = "DIALOG_LOGIN";
 
@@ -92,7 +94,7 @@ public class VoteManager {
         if (userHasAccount) {
             uploadVote();
         } else {
-            showSigninDialog();
+            showSignInDialog();
         }
         voteDialog.dismiss();
     }
@@ -121,13 +123,28 @@ public class VoteManager {
      * 구글/페이스북 계정 등록 요청 dialog 표시
      */
     @DebugLog
-    private void showSigninDialog() {
-        new BaseDialogBuilder(activity, DIALOG_LOGIN)
+    private void showSignInDialog() {
+        View view = LayoutInflater.from(context).inflate(R.layout.login_dialog, null);
+
+        Dialog signInDialog = new BaseDialogBuilder(activity, DIALOG_LOGIN)
                 .setTitle(R.string.dialog_login_label)
-                .setView(R.layout.login_dialog)
-                .setPositiveButton(R.string.button_ok, (dialog, which) ->
-                        activity.requestGoogleSignin())
-                .setNegativeButton(R.string.button_cancel, null).show();
+                .setView(view)
+                .setNegativeButton(R.string.button_cancel, null)
+                .create();
+
+        ImageButton g = ButterKnife.findById(view, R.id.google_login_button);
+        g.setOnClickListener(v -> {
+            activity.requestGoogleSignIn();
+            signInDialog.dismiss();
+        });
+
+        ImageButton f = ButterKnife.findById(view, R.id.facebook_login_button);
+        f.setOnClickListener(v -> {
+            activity.requestFacebookSignin();
+            signInDialog.dismiss();
+        });
+
+        signInDialog.show();
     }
 
     /**
@@ -137,7 +154,7 @@ public class VoteManager {
      */
     @SuppressWarnings("UnusedDeclaration")
     @DebugLog
-    public void onEvent(GoogleSigninEvent event) {
+    public void onEvent(UserSignInEvent event) {
         UserLogEvent.login("Google");
         uploadVote();
     }

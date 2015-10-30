@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId "kr.bobplanet.android"
-        minSdkVersion 11
+        minSdkVersion 10
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
@@ -64,6 +64,7 @@ repositories {
     maven {
         url "https://repo.commonsware.com.s3.amazonaws.com"
     }
+    mavenCentral()
 }
 
 dependencies {
@@ -80,6 +81,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-gcm:8.1.0'
     compile 'com.google.android.gms:play-services-analytics:8.1.0'
 
+    compile 'com.facebook.android:facebook-android-sdk:4.5.0'
     compile 'com.commonsware.cwac:pager:0.2.+'
     compile 'de.greenrobot:eventbus:2.4.0'
     compile 'com.mcxiaoke.volley:library:1.0.19'

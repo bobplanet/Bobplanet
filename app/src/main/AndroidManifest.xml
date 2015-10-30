@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="kr.bobplanet.android" >
+    package="kr.bobplanet.android">
 
     <!-- 네트웤에서 데이터 가져와야 하므로 기본적으로 필요 -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -26,12 +26,12 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
 
         <!-- 메인 Actiivty -->
         <activity
             android:name=".ui.StartActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -50,7 +50,7 @@
             android:name=".ui.MenuActivity"
             android:label="@string/title_menu"
             android:parentActivityName=".ui.DayActivity"
-            android:theme="@style/AppTheme.Detail" >
+            android:theme="@style/AppTheme.Detail">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.DayActivity" />
@@ -63,7 +63,7 @@
             android:theme="@style/AppTheme.Settings" />
 
         <!--  -->
-        <activity android:name=".ui.WebViewActivity" >
+        <activity android:name=".ui.WebViewActivity">
             <intent-filter>
                 <data android:scheme="http" />
                 <data android:scheme="https" />
@@ -74,11 +74,18 @@
             </intent-filter>
         </activity>
 
+        <!-- Facebook login activity -->
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
         <!-- GCM 메시지를 수신하는 Receiver -->
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND" >
+            android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
@@ -90,7 +97,7 @@
         <!-- Play Services가 없을 때 백그라운드 전송을 위해 대타로 사용되는 리시버와 서비스 -->
         <receiver
             android:name="com.google.android.gms.analytics.AnalyticsReceiver"
-            android:enabled="true" >
+            android:enabled="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
             </intent-filter>
@@ -109,7 +116,7 @@
         <!-- GCM 메시지 수신 Service -->
         <service
             android:name=".gcm.GcmServices$MessageListener"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
@@ -118,7 +125,7 @@
         <!-- 인스턴스ID 변경이벤트 수신 Service -->
         <service
             android:name=".gcm.GcmServices$InstanceIDListener"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.gms.iid.InstanceID" />
             </intent-filter>
@@ -127,6 +134,10 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
     </application>
 
 </manifest>

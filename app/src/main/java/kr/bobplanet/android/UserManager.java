@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.provider.Settings;
 import android.util.Log;
 
+import com.facebook.Profile;
 import com.google.android.gms.iid.InstanceID;
 import com.google.android.gms.plus.model.people.Person;
 
@@ -12,7 +13,7 @@ import java.util.UUID;
 
 import de.greenrobot.event.EventBus;
 import hugo.weaving.DebugLog;
-import kr.bobplanet.android.event.GoogleSigninEvent;
+import kr.bobplanet.android.event.UserSignInEvent;
 import kr.bobplanet.android.gcm.GcmEvent;
 import kr.bobplanet.android.gcm.GcmServices;
 import kr.bobplanet.backend.bobplanetApi.model.User;
@@ -124,7 +125,7 @@ public class UserManager implements ApiProxy.ApiResultListener<UserDevice> {
      * @return
      */
     public boolean hasAccount() {
-        return device.getUser() != null && device.getUser().getAccountType() != null;
+        return device.getUser() != null && device.getUser().getAccountId() != null;
     }
 
     public UserDevice getDevice() {
@@ -165,26 +166,22 @@ public class UserManager implements ApiProxy.ApiResultListener<UserDevice> {
     }
 
     /**
-     * 구글ID 로그인이 끝났을 때 호출해줘야 하는 함수.
+     * 구글/페이스북 ID 로그인이 끝났을 때 사용자정보를 서버 및 preferences에 저장
      *
-     * @param person
+     * @param accountType
+     * @param user
      */
     @DebugLog
-    public void registerGoogleAccount(Person person) {
-        User user = new User()
-                .setId(UUID.randomUUID().toString())
-                .setAccountType("Google")
-                .setAccountId(person.getId())
-                .setNickName(person.getDisplayName())
-                .setImage(person.getImage().getUrl());
+    public void registerUser(String accountType, User user) {
+        device.setUser(user.setId(UUID.randomUUID().toString()));
 
-        device.setUser(user);
+        App.getInstance().getApiProxy().registerUser(device, result -> {
+            if (result != null) {
+                this.device = result;
+                prefs.storeDevice(device);
 
-        App.getInstance().getApiProxy().registerUser(device, (result) -> {
-            this.device = result;
-            prefs.storeDevice(device);
-
-            EventBus.getDefault().post(new GoogleSigninEvent());
+                EventBus.getDefault().post(new UserSignInEvent(accountType));
+            }
         });
     }
 }

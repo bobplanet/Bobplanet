@@ -16,8 +16,18 @@ public interface Constants {
 	 * 데이터를 가져올 Google AppEngine의 root URL
 	 */
     String BACKEND_ROOT_URL = BuildConfig.BACKEND_ROOT_URL;
-	
-	/**
+
+    /**
+     * 구글 계정 type
+     */
+    String ACCOUNT_GOOGLE = "Google";
+
+    /**
+     * 페이스북 계정 type
+     */
+    String ACCOUNT_FACEBOOK = "Facebook";
+
+    /**
 	 * Google Cloud Message의 기본 발신자ID.
 	 * Google Cloud의 프로젝트 단위로 지정되므로 개발/상용이 동일한 값을 가짐
 	 */

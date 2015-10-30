@@ -35,7 +35,7 @@ import kr.bobplanet.backend.bobplanetApi.model.Menu;
  * <p>
  * 로그인 여부에 따른 flow
  * - 로그인유저: 투표 dialog -> uploadVote()
- * - 비로그인유저: 투표 dialog -> 로그인 dialog -> requestGoogleSignin() -> onEvent() -> uploadVote()
+ * - 비로그인유저: 투표 dialog -> 로그인 dialog -> requestGoogleSignIn() -> onEvent() -> uploadVote()
  * <p>
  * TODO 화면상단의 up arrow를 눌렀을 때 DayViewActivity의 마지막 fragment로 돌아가야 함
  *
