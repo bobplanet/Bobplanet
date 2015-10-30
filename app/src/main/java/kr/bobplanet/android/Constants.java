@@ -28,6 +28,11 @@ public interface Constants {
     String ACCOUNT_FACEBOOK = "Facebook";
 
     /**
+     *
+     */
+    String ACCOUNT_NAVER = "Naver";
+
+    /**
 	 * Google Cloud Message의 기본 발신자ID.
 	 * Google Cloud의 프로젝트 단위로 지정되므로 개발/상용이 동일한 값을 가짐
 	 */
@@ -58,4 +63,9 @@ public interface Constants {
      * WebView에 사용자ID를 넘길 때 사용되는 패러미터 이름
      */
     String WEBVIEW_USERID = "bobp_userId";
+
+    /**
+     *
+     */
+    int REQUEST_GOOGLE_SIGN_IN = 1;
 }

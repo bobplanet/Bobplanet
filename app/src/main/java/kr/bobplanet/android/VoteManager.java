@@ -1,4 +1,4 @@
-package kr.bobplanet.android.ui;
+package kr.bobplanet.android;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -6,17 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
 import hugo.weaving.DebugLog;
-import kr.bobplanet.android.ApiProxy;
-import kr.bobplanet.android.App;
-import kr.bobplanet.android.Constants;
-import kr.bobplanet.android.R;
-import kr.bobplanet.android.UserManager;
-import kr.bobplanet.android.Util;
 import kr.bobplanet.android.event.UserSignInEvent;
 import kr.bobplanet.android.event.UserLogEvent;
+import kr.bobplanet.android.ui.BaseActivity;
+import kr.bobplanet.android.ui.BaseDialogBuilder;
 import kr.bobplanet.backend.bobplanetApi.model.Item;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
 import kr.bobplanet.backend.bobplanetApi.model.Vote;
@@ -39,6 +36,15 @@ public class VoteManager {
     private boolean userHasAccount;
     private Menu menu;
     private int myScore;
+
+    @Bind(R.id.google_login_button)
+    ImageButton googleLoginButton;
+
+    @Bind(R.id.facebook_login_button)
+    ImageButton facebookLoginButton;
+
+    @Bind(R.id.naver_login_button)
+    ImageButton naverLoginButton;
 
     private VoteCompletionListener listener;
 
@@ -125,6 +131,7 @@ public class VoteManager {
     @DebugLog
     private void showSignInDialog() {
         View view = LayoutInflater.from(context).inflate(R.layout.login_dialog, null);
+        ButterKnife.bind(this, view);
 
         Dialog signInDialog = new BaseDialogBuilder(activity, DIALOG_LOGIN)
                 .setTitle(R.string.dialog_login_label)
@@ -132,15 +139,20 @@ public class VoteManager {
                 .setNegativeButton(R.string.button_cancel, null)
                 .create();
 
-        ImageButton g = ButterKnife.findById(view, R.id.google_login_button);
-        g.setOnClickListener(v -> {
-            activity.requestGoogleSignIn();
+        SignInManager signInManager = App.getInstance().getSignInManager();
+
+        googleLoginButton.setOnClickListener(v -> {
+            signInManager.requestGoogleSignIn(activity);
             signInDialog.dismiss();
         });
 
-        ImageButton f = ButterKnife.findById(view, R.id.facebook_login_button);
-        f.setOnClickListener(v -> {
-            activity.requestFacebookSignin();
+        facebookLoginButton.setOnClickListener(v -> {
+            signInManager.requestFacebookSignIn(activity);
+            signInDialog.dismiss();
+        });
+
+        naverLoginButton.setOnClickListener(v -> {
+            signInManager.requestNaverSignIn(activity);
             signInDialog.dismiss();
         });
 

@@ -16,18 +16,34 @@
             android:layout_height="wrap_content"
             android:text="@string/dialog_login_desc" />
 
-        <ImageButton
-            android:id="@+id/google_login_button"
-            android:layout_width="220dp"
-            android:layout_height="40dp"
-            android:src="@drawable/google_oauth_button" />
+        <LinearLayout
+            android:layout_width="320dp"
+            android:layout_height="120dp"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
 
-        <ImageButton
-            android:id="@+id/facebook_login_button"
-            android:layout_width="220dp"
-            android:layout_height="40dp"
-            android:src="@drawable/facebook_oauth_button" />
+            <ImageButton
+                android:id="@+id/google_login_button"
+                android:layout_width="@dimen/login_button_size"
+                android:layout_height="@dimen/login_button_size"
+                android:src="@drawable/google_login"
+                android:theme="@style/AppTheme.LoginButton" />
 
+            <ImageButton
+                android:id="@+id/facebook_login_button"
+                android:layout_width="@dimen/login_button_size"
+                android:layout_height="@dimen/login_button_size"
+                android:src="@drawable/facebook_login"
+                android:theme="@style/AppTheme.LoginButton" />
+
+            <ImageButton
+                android:id="@+id/naver_login_button"
+                android:layout_width="@dimen/login_button_size"
+                android:layout_height="@dimen/login_button_size"
+                android:src="@drawable/naver_login"
+                android:theme="@style/AppTheme.LoginButton" />
+
+        </LinearLayout>
     </LinearLayout>
 
 </RelativeLayout>

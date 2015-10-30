@@ -14,8 +14,10 @@ import com.google.android.gms.analytics.Logger;
 import com.google.android.gms.analytics.Tracker;
 
 import de.greenrobot.event.EventBus;
+import kr.bobplanet.android.event.AppInitCompleteEvent;
 import kr.bobplanet.android.event.MeasureLogEvent;
 import kr.bobplanet.android.event.ScreenLogEvent;
+import kr.bobplanet.backend.bobplanetApi.model.Secret;
 
 /**
  * 커스텀 애플리케이션 클래스.
@@ -39,6 +41,11 @@ public class App extends Application {
      *
      */
     private UserManager userManager;
+
+    /**
+     *
+     */
+    private SignInManager signInManager;
 
     /**
      * ApiProxy 객체.
@@ -78,10 +85,40 @@ public class App extends Application {
         apiProxy = new ApiProxy();
 
         userManager = new UserManager(this, prefs);
-
-        initializeTracker();
+        signInManager = new SignInManager(this);
     }
 
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        signInManager.onDestroy();
+    }
+
+    /**
+     *
+     */
+    public void init() {
+        initializeTracker();
+        userManager.loadDevice();
+        initializeSecret();
+    }
+
+    /**
+     *
+     */
+    private void initializeSecret() {
+        apiProxy.getSecret((result) -> {
+            if (result != null) {
+                signInManager.initAccountSignInEnv(result);
+
+                EventBus.getDefault().post(new AppInitCompleteEvent());
+            }
+        });
+    }
+
+    /**
+     *
+     */
     private void initializeTracker() {
         if (tracker == null) {
             Log.i(TAG, "Initializing Google Analytics");
@@ -98,6 +135,18 @@ public class App extends Application {
         return userManager;
     }
 
+    /**
+     *
+     * @return
+     */
+    public SignInManager getSignInManager() {
+        return signInManager;
+    }
+
+    /**
+     *
+     * @return
+     */
     public Tracker getTracker() {
         return tracker;
     }

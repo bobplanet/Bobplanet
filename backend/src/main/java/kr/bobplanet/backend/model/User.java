@@ -47,6 +47,11 @@ public class User {
     String nickName;
 
     /**
+     *
+     */
+    String email;
+
+    /**
      * 최종수정일시
      */
     @IgnoreLoad
@@ -98,6 +103,14 @@ public class User {
         this.nickName = nickName;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     @OnSave
     public void onSave() {
         this.updateDate = new Date();
@@ -105,6 +118,7 @@ public class User {
 
     @Override
     public String toString() {
-        return String.format("{ id = %s, accountId = %s }", id, accountId);
+        return String.format("{ id = %s, accountType = %s, accountId = %s }",
+                id, accountType, accountId);
     }
 }

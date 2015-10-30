@@ -58,7 +58,7 @@ public class UserManager implements ApiProxy.ApiResultListener<UserDevice> {
     /**
      * 사용자정보를 읽어온다. 없으면 서버에 등록요청.
      */
-    public void loadDevice() {
+    protected void loadDevice() {
         UserDevice loaded = prefs.loadDevice();
         if (loaded == null) {
             Log.i(TAG, "Device doesn't exists. Creating new device");
@@ -166,13 +166,12 @@ public class UserManager implements ApiProxy.ApiResultListener<UserDevice> {
     }
 
     /**
-     * 구글/페이스북 ID 로그인이 끝났을 때 사용자정보를 서버 및 preferences에 저장
+     * ID 로그인이 끝났을 때 사용자정보를 서버 및 preferences에 저장
      *
-     * @param accountType
      * @param user
      */
     @DebugLog
-    public void registerUser(String accountType, User user) {
+    public void registerUser(User user) {
         device.setUser(user.setId(UUID.randomUUID().toString()));
 
         App.getInstance().getApiProxy().registerUser(device, result -> {
@@ -180,7 +179,7 @@ public class UserManager implements ApiProxy.ApiResultListener<UserDevice> {
                 this.device = result;
                 prefs.storeDevice(device);
 
-                EventBus.getDefault().post(new UserSignInEvent(accountType));
+                EventBus.getDefault().post(new UserSignInEvent(user.getAccountType()));
             }
         });
     }

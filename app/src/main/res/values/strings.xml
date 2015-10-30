@@ -30,7 +30,7 @@
 
     <!-- 구글 로그인 Dialog -->
     <string name="dialog_login_label">로그인 필요</string>
-    <string name="dialog_login_desc">점수를 주시려면 구글/페이스북 로그인이 필요합니다</string>
+    <string name="dialog_login_desc">아래 인터넷서비스 계정으로 로그인해주세요</string>
     <string name="pick_account_needed">구글계정 선택 안함!</string>
 
     <!-- 설정화면 -->

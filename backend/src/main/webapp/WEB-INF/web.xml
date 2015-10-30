@@ -21,6 +21,7 @@
                 kr.bobplanet.backend.api.MenuEndpoint,
                 kr.bobplanet.backend.api.UserEndpoint,
                 kr.bobplanet.backend.api.MiscEndpoint,
+                kr.bobplanet.backend.api.SecretEndpoint,
                 kr.bobplanet.backend.api.MessageEndpoint
             </param-value>
         </init-param>

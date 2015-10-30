@@ -21,4 +21,7 @@
     <!-- MaterializeListView 설정 -->
     <dimen name="title_size">16dp</dimen>
     <dimen name="bigger_title_size">16dp</dimen>
+
+    <!-- 로그인 버튼 -->
+    <dimen name="login_button_size">96dp</dimen>
 </resources>

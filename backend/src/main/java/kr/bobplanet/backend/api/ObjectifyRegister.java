@@ -3,6 +3,7 @@ package kr.bobplanet.backend.api;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 
+import kr.bobplanet.backend.model.Secret;
 import kr.bobplanet.backend.model.UserDevice;
 import kr.bobplanet.backend.model.Item;
 import kr.bobplanet.backend.model.Menu;
@@ -24,6 +25,7 @@ import kr.bobplanet.backend.model.Vote;
  */
 public final class ObjectifyRegister {
     static {
+        ObjectifyService.register(Secret.class);
         ObjectifyService.register(Menu.class);
         ObjectifyService.register(Item.class);
         ObjectifyService.register(User.class);

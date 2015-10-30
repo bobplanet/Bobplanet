@@ -32,4 +32,8 @@
         <item name="android:background">@color/primary</item>
 		<item name="android:actionModeBackground">@android:color/white</item>
     </style>
+
+    <style name="AppTheme.LoginButton">
+        <item name="android:padding">0dp</item>
+    </style>
 </resources>

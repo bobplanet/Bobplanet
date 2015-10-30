@@ -19,7 +19,7 @@ import kr.bobplanet.backend.bobplanetApi.BobplanetApi;
 import kr.bobplanet.backend.bobplanetApi.model.DailyMenu;
 import kr.bobplanet.backend.bobplanetApi.model.Item;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
-import kr.bobplanet.backend.bobplanetApi.model.User;
+import kr.bobplanet.backend.bobplanetApi.model.Secret;
 import kr.bobplanet.backend.bobplanetApi.model.UserDevice;
 import kr.bobplanet.backend.bobplanetApi.model.Vote;
 
@@ -78,6 +78,16 @@ public class ApiProxy implements Constants {
                 .setRootUrl(BACKEND_ROOT_URL).build();
 
         this.jsonCache = new LruCache<>(MAX_SIZE);
+    }
+
+    /**
+     *
+     * @param listener
+     */
+    public void getSecret(ApiResultListener<Secret> listener) {
+        new Builder<>(Secret.class, () -> api.getSecret().execute(), "getSecret")
+                .setResultListener(listener)
+                .execute();
     }
 
     /**

@@ -37,6 +37,7 @@ android {
         release {
             buildConfigField 'boolean', 'DEV_VERSION', 'false'
             buildConfigField 'String', 'BACKEND_ROOT_URL', '"https://kr-bobplanet.appspot.com/_ah/api/"'
+
             signingConfig signingConfigs.release
             minifyEnabled true
             proguardFiles 'proguard-rules.pro'

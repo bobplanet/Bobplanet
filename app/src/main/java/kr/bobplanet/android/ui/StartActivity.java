@@ -3,8 +3,11 @@ package kr.bobplanet.android.ui;
 import android.content.Intent;
 import android.os.Bundle;
 
+import de.greenrobot.event.EventBus;
+import hugo.weaving.DebugLog;
 import kr.bobplanet.android.App;
 import kr.bobplanet.android.DeviceEnvironment;
+import kr.bobplanet.android.event.AppInitCompleteEvent;
 import kr.bobplanet.android.gcm.GcmServices;
 
 /**
@@ -30,8 +33,24 @@ public class StartActivity extends BaseActivity {
             finish();
         }
 
-        App.getInstance().getUserManager().loadDevice();
+        EventBus.getDefault().register(this);
+        App app = App.getInstance();
+        app.init();
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    /**
+     *
+     * @param event
+     */
+    @DebugLog
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEvent(AppInitCompleteEvent event) {
         startActivity(new Intent(this, DayActivity.class));
         finish();
     }

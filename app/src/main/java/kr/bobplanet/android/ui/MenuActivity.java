@@ -24,6 +24,7 @@ import kr.bobplanet.android.App;
 import kr.bobplanet.android.Constants;
 import kr.bobplanet.android.EntityTranslator;
 import kr.bobplanet.android.R;
+import kr.bobplanet.android.VoteManager;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
 
 /**
