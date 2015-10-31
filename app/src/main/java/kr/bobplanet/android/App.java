@@ -9,23 +9,17 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Logger;
 import com.google.android.gms.analytics.Tracker;
 
-import de.greenrobot.event.EventBus;
-import kr.bobplanet.android.event.AppInitCompleteEvent;
-import kr.bobplanet.android.event.MeasureLogEvent;
-import kr.bobplanet.android.event.ScreenLogEvent;
-import kr.bobplanet.backend.bobplanetApi.model.Secret;
+import kr.bobplanet.android.signin.SignInManager;
 
 /**
  * 커스텀 애플리케이션 클래스.
- * 애플리케이션 전체 scope에서 관리해야 할 ApiProxy, Volley, Google Analytics 등을 관리.
+ * 애플리케이션이 전체적으로 사용할 객체들은 이 클래스의 멤버로 선언하여 lifecycle 관리함.
  * <p>
- * - EntityVault의 싱글턴은 여기에서 관리함
- * - 공용 유틸리티 로직 제공을 위해 Singleton 인터페이스 제공함 (casting 없어도 되는 장점)
- * - GA Tracker는 여러개 생성하면 PV가 n배로 잡히므로 이 Singleton 내에서 관리.
+ * - 공용 유틸리티 로직 제공을 위해 Singleton 패턴 차용: App.getInstance()
+ * - GA Tracker는 여러개 생성하면 PV가 n배로 잡히므로 이 Singleton 내에서 관리하는 게 맞음.
  *
  * @author hkjinlee on 15. 9. 29..
  */
@@ -38,12 +32,12 @@ public class App extends Application {
     private static App instance;
 
     /**
-     *
+     * 사용자정보 저장/관리
      */
     private UserManager userManager;
 
     /**
-     *
+     * OAuth 로그인 관리
      */
     private SignInManager signInManager;
 
@@ -58,7 +52,7 @@ public class App extends Application {
     private Tracker tracker;
 
     /**
-     * Volley의 RequestQueue. 현재는 이용하지 않음.
+     * Volley의 RequestQueue.
      */
     private RequestQueue requestQueue;
 
@@ -67,6 +61,9 @@ public class App extends Application {
      */
     private ImageLoader imageLoader;
 
+    /**
+     * Preferences 저장관리
+     */
     private Preferences prefs;
 
     /**
@@ -83,37 +80,18 @@ public class App extends Application {
 
         prefs = new Preferences(this);
         apiProxy = new ApiProxy();
+        initializeTracker();
 
         userManager = new UserManager(this, prefs);
         signInManager = new SignInManager(this);
     }
 
-    @Override
-    public void onTerminate() {
-        super.onTerminate();
-        signInManager.onDestroy();
-    }
-
     /**
      *
      */
-    public void init() {
-        initializeTracker();
+    public void initComponents() {
         userManager.loadDevice();
-        initializeSecret();
-    }
-
-    /**
-     *
-     */
-    private void initializeSecret() {
-        apiProxy.getSecret((result) -> {
-            if (result != null) {
-                signInManager.initAccountSignInEnv(result);
-
-                EventBus.getDefault().post(new AppInitCompleteEvent());
-            }
-        });
+        signInManager.loadSecret();
     }
 
     /**

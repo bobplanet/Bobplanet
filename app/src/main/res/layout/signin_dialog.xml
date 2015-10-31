@@ -23,24 +23,21 @@
             android:orientation="horizontal">
 
             <ImageButton
-                android:id="@+id/google_login_button"
+                android:id="@+id/signin_button_1"
                 android:layout_width="@dimen/login_button_size"
                 android:layout_height="@dimen/login_button_size"
-                android:src="@drawable/google_login"
                 android:theme="@style/AppTheme.LoginButton" />
 
             <ImageButton
-                android:id="@+id/facebook_login_button"
+                android:id="@+id/signin_button_2"
                 android:layout_width="@dimen/login_button_size"
                 android:layout_height="@dimen/login_button_size"
-                android:src="@drawable/facebook_login"
                 android:theme="@style/AppTheme.LoginButton" />
 
             <ImageButton
-                android:id="@+id/naver_login_button"
+                android:id="@+id/signin_button_3"
                 android:layout_width="@dimen/login_button_size"
                 android:layout_height="@dimen/login_button_size"
-                android:src="@drawable/naver_login"
                 android:theme="@style/AppTheme.LoginButton" />
 
         </LinearLayout>

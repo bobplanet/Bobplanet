@@ -24,19 +24,16 @@ import kr.bobplanet.backend.bobplanetApi.model.UserDevice;
 import kr.bobplanet.backend.bobplanetApi.model.Vote;
 
 /**
- * Google AppEngine으로부터 가져오는 데이터를 LruCache를 이용해 한차례 caching하는 객체저장소.
- * ContentProvider를 만들자니 JSON serialization이 귀찮아서 JSON 문자열을 통째로 캐슁하도록 구현함.
+ * Google AppEngine(=GAE) API 호출 및 결과 caching을 담당하는 객체.
+ * GAE에서 전달되는 Entity는 JSON이므로 <code>EntityTranslator</code>를 이용하여 문자열로 저장
  * <p/>
- * - 실제 Bobplanet 서버 API를 호출하는 로직은 이쪽으로 집중함
- * - Activity나 Fragment에서 AsyncTask 만들 필요가 없도록 AsyncTask는 이 클래스에 내장
+ * - Activity나 Fragment에서 AsyncTask 만들 필요가 없도록 AsyncTask는 이 객체에서 처리함
  * - 싱글턴 관리는 MainApplication에 위임
  * - 내부적으로 Android support package의 LruCache를 이용하여 캐슁
  * - LruCache의 key는 '클래스이름:키값'이 되도록 함. (가령, "DailyMenu:2015-10-09")
- * - 캐쉬에서 객체를 찾아보고, 없으면 API를 호출해 가져온 뒤 캐쉬에 저장하는 반복코딩 줄이기 위해 generics 이용
  * - 네트웤에서 데이터를 가져올 경우 시간이 소요되므로 async 방식으로 데이터 조회
- * - 이미 JSON 문자열을 갖고있는 경우에는 <code>parseEntity()</code>를 이용해서 unserialize만 해도 됨
- * - callee는 ApiResultLoader를 전달하여, 데이터 로딩이 끝나면 UI업데이트 등을 수행해야 함
- * - 주의사항: 네트웤 에러가 발생할 경우 ApiResultLoader의 결과값이 null일 수 있으므로 방어로직 필요
+ * - callee는 <code>ApiResultListener</code>를 전달하여, 데이터 로딩이 끝나면 UI업데이트 등을 수행해야 함
+ * - 주의사항: 네트웤 에러가 발생할 경우 ApiResultLoader의 결과값이 null일 수 있음
  *
  * @author hkjinlee
  * @version 2015. 10. 7

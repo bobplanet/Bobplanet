@@ -2,13 +2,20 @@ package kr.bobplanet.android.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import de.greenrobot.event.EventBus;
 import hugo.weaving.DebugLog;
 import kr.bobplanet.android.App;
 import kr.bobplanet.android.DeviceEnvironment;
-import kr.bobplanet.android.event.AppInitCompleteEvent;
-import kr.bobplanet.android.gcm.GcmServices;
+import kr.bobplanet.android.R;
+import kr.bobplanet.android.event.InitCompleteEvent;
+import kr.bobplanet.android.signin.SignInManager;
 
 /**
  * 본 애플리케이션의 메인 액티비티.
@@ -24,18 +31,28 @@ import kr.bobplanet.android.gcm.GcmServices;
 public class StartActivity extends BaseActivity {
     private static final String TAG = StartActivity.class.getSimpleName();
 
+    private static final Class[] INIT_COMPONENTS = { SignInManager.class };
+
+    /**
+     *
+     */
+    private List<Class> initComponents = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Google Play Services가 있는지 확인. 없을 경우 종료.
         if (!DeviceEnvironment.checkPlayServices(this)) {
+            Toast.makeText(this, R.string.need_google_play_service, Toast.LENGTH_LONG).show();
             finish();
         }
 
+        initComponents.addAll(Arrays.asList(INIT_COMPONENTS));
+
         EventBus.getDefault().register(this);
         App app = App.getInstance();
-        app.init();
+        app.initComponents();
     }
 
     @Override
@@ -50,8 +67,15 @@ public class StartActivity extends BaseActivity {
      */
     @DebugLog
     @SuppressWarnings("UnusedDeclaration")
-    public void onEvent(AppInitCompleteEvent event) {
-        startActivity(new Intent(this, DayActivity.class));
-        finish();
+    public void onEvent(InitCompleteEvent event) {
+        if (initComponents.contains(event.component)) {
+            initComponents.remove(event.component);
+        }
+        Log.d(TAG, "size = " + initComponents.size());
+
+        if (initComponents.size() == 0) {
+            startActivity(new Intent(this, DayActivity.class));
+            finish();
+        }
     }
 }

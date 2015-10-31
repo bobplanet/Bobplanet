@@ -28,7 +28,6 @@ public class VoteManager {
     private static final String TAG = VoteManager.class.getSimpleName();
 
     private static final String DIALOG_VOTE = "DIALOG_VOTE";
-    private static final String DIALOG_LOGIN = "DIALOG_LOGIN";
 
     private BaseActivity activity;
     private Context context;
@@ -36,15 +35,6 @@ public class VoteManager {
     private boolean userHasAccount;
     private Menu menu;
     private int myScore;
-
-    @Bind(R.id.google_login_button)
-    ImageButton googleLoginButton;
-
-    @Bind(R.id.facebook_login_button)
-    ImageButton facebookLoginButton;
-
-    @Bind(R.id.naver_login_button)
-    ImageButton naverLoginButton;
 
     private VoteCompletionListener listener;
 
@@ -100,7 +90,7 @@ public class VoteManager {
         if (userHasAccount) {
             uploadVote();
         } else {
-            showSignInDialog();
+            App.getInstance().getSignInManager().showSignInDialog(activity);
         }
         voteDialog.dismiss();
     }
@@ -126,40 +116,6 @@ public class VoteManager {
     }
 
     /**
-     * 구글/페이스북 계정 등록 요청 dialog 표시
-     */
-    @DebugLog
-    private void showSignInDialog() {
-        View view = LayoutInflater.from(context).inflate(R.layout.login_dialog, null);
-        ButterKnife.bind(this, view);
-
-        Dialog signInDialog = new BaseDialogBuilder(activity, DIALOG_LOGIN)
-                .setTitle(R.string.dialog_login_label)
-                .setView(view)
-                .setNegativeButton(R.string.button_cancel, null)
-                .create();
-
-        SignInManager signInManager = App.getInstance().getSignInManager();
-
-        googleLoginButton.setOnClickListener(v -> {
-            signInManager.requestGoogleSignIn(activity);
-            signInDialog.dismiss();
-        });
-
-        facebookLoginButton.setOnClickListener(v -> {
-            signInManager.requestFacebookSignIn(activity);
-            signInDialog.dismiss();
-        });
-
-        naverLoginButton.setOnClickListener(v -> {
-            signInManager.requestNaverSignIn(activity);
-            signInDialog.dismiss();
-        });
-
-        signInDialog.show();
-    }
-
-    /**
      * 구글 로그인이 완료되었을 때 호출되는 callback.
      *
      * @param event
@@ -167,7 +123,7 @@ public class VoteManager {
     @SuppressWarnings("UnusedDeclaration")
     @DebugLog
     public void onEvent(UserSignInEvent event) {
-        UserLogEvent.login("Google");
+        UserLogEvent.login(event.accountType);
         uploadVote();
     }
 

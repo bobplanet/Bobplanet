@@ -36,6 +36,7 @@ import kr.bobplanet.android.App;
 import kr.bobplanet.android.Constants;
 import kr.bobplanet.android.R;
 import kr.bobplanet.android.event.ScreenLogEvent;
+import kr.bobplanet.android.signin.SignInProvider;
 import kr.bobplanet.backend.bobplanetApi.model.Secret;
 import kr.bobplanet.backend.bobplanetApi.model.User;
 
@@ -52,9 +53,22 @@ import kr.bobplanet.backend.bobplanetApi.model.User;
 abstract public class BaseActivity extends AppCompatActivity implements Constants {
     private static final String TAG = BaseActivity.class.getSimpleName();
 
+    /**
+     *
+     */
+    private SignInProvider signInProvider;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    /**
+     *
+     * @param signInProvider
+     */
+    public void setSignInProvider(SignInProvider signInProvider) {
+        this.signInProvider = signInProvider;
     }
 
     /**
@@ -68,7 +82,7 @@ abstract public class BaseActivity extends AppCompatActivity implements Constant
         Log.d(TAG, "onActivityResult:" + requestCode + ":" + resultCode + ":" + data);
         super.onActivityResult(requestCode, resultCode, data);
 
-        App.getInstance().getSignInManager().onActivityResult(requestCode, resultCode, data);
+        signInProvider.onActivityResult(requestCode, resultCode, data);
     }
 
     /**

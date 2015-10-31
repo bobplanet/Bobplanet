@@ -12,11 +12,6 @@ import java.text.SimpleDateFormat;
  * @author hkjinlee on 15. 9. 29
  */
 public interface Constants {
-	/**
-	 * 데이터를 가져올 Google AppEngine의 root URL
-	 */
-    String BACKEND_ROOT_URL = BuildConfig.BACKEND_ROOT_URL;
-
     /**
      * 구글 계정 type
      */
@@ -28,9 +23,14 @@ public interface Constants {
     String ACCOUNT_FACEBOOK = "Facebook";
 
     /**
-     *
+     * 네이버 계정 type
      */
     String ACCOUNT_NAVER = "Naver";
+
+    /**
+	 * 데이터를 가져올 Google AppEngine의 root URL
+	 */
+    String BACKEND_ROOT_URL = BuildConfig.BACKEND_ROOT_URL;
 
     /**
 	 * Google Cloud Message의 기본 발신자ID.
@@ -63,9 +63,4 @@ public interface Constants {
      * WebView에 사용자ID를 넘길 때 사용되는 패러미터 이름
      */
     String WEBVIEW_USERID = "bobp_userId";
-
-    /**
-     *
-     */
-    int REQUEST_GOOGLE_SIGN_IN = 1;
 }

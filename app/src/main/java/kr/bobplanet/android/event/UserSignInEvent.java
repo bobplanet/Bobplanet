@@ -8,7 +8,7 @@ package kr.bobplanet.android.event;
  * @version 15. 10. 18
  */
 public class UserSignInEvent {
-    String accountType;
+    public String accountType;
 
     public UserSignInEvent(String accountType) {
         this.accountType = accountType;
