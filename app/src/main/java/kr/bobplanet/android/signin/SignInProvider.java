@@ -42,7 +42,4 @@ abstract public class SignInProvider<T> implements Constants {
      */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
     }
-
-    protected void onDestroy() {
-    }
 }

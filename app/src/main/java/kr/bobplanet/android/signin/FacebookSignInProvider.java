@@ -11,10 +11,12 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
-import com.facebook.Profile;
-import com.facebook.ProfileTracker;
+import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Arrays;
 
@@ -28,12 +30,11 @@ import kr.bobplanet.backend.bobplanetApi.model.User;
  * @author heonkyu.jin
  * @version 15. 10. 31
  */
-public class FacebookSignInProvider extends SignInProvider<Profile> {
+public class FacebookSignInProvider extends SignInProvider<JSONObject> {
     private static final String TAG = FacebookSignInProvider.class.getSimpleName();
 
     private static final String[] FACEBOOK_PERMISSIONS = {"public_profile", "email"};
-    private CallbackManager facebookCallbackManager;
-    private ProfileTracker facebookProfileTracker;
+    private CallbackManager callbackManager;
 
     protected FacebookSignInProvider(Context context) {
         super(context);
@@ -44,17 +45,17 @@ public class FacebookSignInProvider extends SignInProvider<Profile> {
         FacebookSdk.sdkInitialize(context);
         FacebookSdk.setApplicationId(secret.getFacebookAppId());
 
-        this.facebookCallbackManager = CallbackManager.Factory.create();
-        LoginManager.getInstance().registerCallback(facebookCallbackManager,
+        this.callbackManager = CallbackManager.Factory.create();
+        LoginManager.getInstance().registerCallback(callbackManager,
                 new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
                         GraphRequest request = GraphRequest.newMeRequest(
                                 loginResult.getAccessToken(),
-                                (object, response) -> Log.d(TAG, response.toString())
+                                (json, response) -> onSignInComplete(json)
                         );
                         Bundle params = new Bundle();
-                        params.putString("fields", "id,name,email");
+                        params.putString("fields", "id,name,email,link,picture");
                         request.setParameters(params);
                         request.executeAsync();
                     }
@@ -70,39 +71,29 @@ public class FacebookSignInProvider extends SignInProvider<Profile> {
                     }
                 });
 
-        this.facebookProfileTracker = new ProfileTracker() {
-            @Override
-            protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
-                onSignInComplete(currentProfile);
-            }
-        };
 
         LoginManager loginManager = LoginManager.getInstance();
         loginManager.logInWithReadPermissions(activity, Arrays.asList(FACEBOOK_PERMISSIONS));
     }
 
     @Override
-    protected void onSignInComplete(Profile profile) {
-        Log.v(TAG, "facebook = " + profile.toString());
+    protected void onSignInComplete(JSONObject json) {
+        try {
+            User user = new User()
+                    .setAccountType(SignInManager.ACCOUNT_FACEBOOK)
+                    .setAccountId(json.getString("id"))
+                    .setNickName(json.getString("name"))
+                    .setEmail(json.getString("email"))
+                    .setImage(json.getJSONObject("picture").getJSONObject("data").getString("url"));
 
-        User user = new User()
-                .setAccountType(SignInManager.ACCOUNT_FACEBOOK)
-                .setAccountId(profile.getId())
-                .setNickName(profile.getName())
-                .setImage(profile.getProfilePictureUri(200, 200).toString());
-
-        App.getUserManager().registerUser(user);
+            App.getUserManager().registerUser(user);
+        } catch (JSONException e) {
+            Log.w(TAG, "Facebook login error", e);
+        }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        facebookCallbackManager.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public void onDestroy() {
-        if (facebookProfileTracker != null) {
-            facebookProfileTracker.stopTracking();
-        }
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 }
