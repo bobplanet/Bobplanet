@@ -66,13 +66,6 @@ public class App extends Application {
      */
     private Preferences prefs;
 
-    /**
-     * 싱글턴 인스턴스 조회.
-     */
-    public static synchronized App getInstance() {
-        return instance;
-    }
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -84,14 +77,17 @@ public class App extends Application {
 
         userManager = new UserManager(this, prefs);
         signInManager = new SignInManager(this);
+
+        requestQueue = Volley.newRequestQueue(getApplicationContext());
+        imageLoader = new ImageLoader(requestQueue, new LruBitmapCache());
     }
 
     /**
      *
      */
-    public void initComponents() {
-        userManager.loadDevice();
-        signInManager.loadSecret();
+    public static void initComponents() {
+        instance.userManager.loadDevice();
+        instance.signInManager.loadSecret();
     }
 
     /**
@@ -109,70 +105,53 @@ public class App extends Application {
     /**
      *
      */
-    public UserManager getUserManager() {
-        return userManager;
+    public static UserManager getUserManager() {
+        return instance.userManager;
     }
 
     /**
      *
      * @return
      */
-    public SignInManager getSignInManager() {
-        return signInManager;
+    public static SignInManager getSignInManager() {
+        return instance.signInManager;
     }
 
     /**
      *
      * @return
      */
-    public Tracker getTracker() {
-        return tracker;
+    public static Tracker getTracker() {
+        return instance.tracker;
     }
 
     /**
      * ApiProxy 조회
      */
-    public ApiProxy getApiProxy() {
-        return apiProxy;
+    public static ApiProxy getApiProxy() {
+        return instance.apiProxy;
     }
 
-    public Preferences getPreferences() {
-        return prefs;
+    /**
+     *
+     * @return
+     */
+    public static Preferences getPreferences() {
+        return instance.prefs;
     }
 
-    public RequestQueue getRequestQueue() {
-        if (requestQueue == null) {
-            requestQueue = Volley.newRequestQueue(getApplicationContext());
-        }
-
-        return requestQueue;
+    /**
+     *
+     * @return
+     */
+    public static RequestQueue getRequestQueue() {
+        return instance.requestQueue;
     }
 
     /**
      * ImageLoader 조회
      */
-    public ImageLoader getImageLoader() {
-        getRequestQueue();
-        if (imageLoader == null) {
-            imageLoader = new ImageLoader(this.requestQueue, new LruBitmapCache());
-        }
-
-        return imageLoader;
-    }
-
-    public <T> void addToRequestQueue(Request<T> req, String tag) {
-        req.setTag(TextUtils.isEmpty(tag) ? TAG : tag);
-        getRequestQueue().add(req);
-    }
-
-    public <T> void addToRequestQueue(Request<T> req) {
-        req.setTag(TAG);
-        getRequestQueue().add(req);
-    }
-
-    public void cancelPendingRequests(Object tag) {
-        if (requestQueue != null) {
-            requestQueue.cancelAll(tag);
-        }
+    public static ImageLoader getImageLoader() {
+        return instance.imageLoader;
     }
 }

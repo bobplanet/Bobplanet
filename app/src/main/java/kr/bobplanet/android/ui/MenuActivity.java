@@ -47,7 +47,7 @@ public class MenuActivity extends BaseActivity implements Constants {
     @SuppressWarnings("UnusedDeclaration")
     private static final String TAG = MenuActivity.class.getSimpleName();
 
-    private final ImageLoader imageLoader = App.getInstance().getImageLoader();
+    private final ImageLoader imageLoader = App.getImageLoader();
 
     private Menu menu;
 

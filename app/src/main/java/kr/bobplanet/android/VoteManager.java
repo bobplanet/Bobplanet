@@ -70,10 +70,10 @@ public class VoteManager {
      */
     @DebugLog
     private void requestMyScore() {
-        UserManager um = App.getInstance().getUserManager();
+        UserManager um = App.getUserManager();
         if (um.hasAccount()) {
             userHasAccount = true;
-            App.getInstance().getApiProxy().myVote(um.getUserId(), menu,
+            App.getApiProxy().myVote(um.getUserId(), menu,
                     (Vote result) -> {
                         if (result != null) {
                             myScore = result.getScore();
@@ -90,7 +90,7 @@ public class VoteManager {
         if (userHasAccount) {
             uploadVote();
         } else {
-            App.getInstance().getSignInManager().showSignInDialog(activity);
+            App.getSignInManager().showSignInDialog(activity);
         }
         voteDialog.dismiss();
     }
@@ -101,8 +101,8 @@ public class VoteManager {
     @DebugLog
     private void uploadVote() {
         if (myScore != 0) {
-            ApiProxy proxy = App.getInstance().getApiProxy();
-            proxy.vote(App.getInstance().getUserManager().getUserId(), menu, myScore,
+            ApiProxy proxy = App.getApiProxy();
+            proxy.vote(App.getUserManager().getUserId(), menu, myScore,
                     null);
 
             String level = context.getString(myScore > 0 ? R.string.vote_level_up : R.string.vote_level_down);

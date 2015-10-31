@@ -100,8 +100,8 @@ public class GcmServices implements Constants {
             long menuId = Long.valueOf(data.getString("menuId"));
             this.data = data;
 
-            ApiProxy apiProxy = App.getInstance().getApiProxy();
-            final ImageLoader imageLoader = App.getInstance().getImageLoader();
+            ApiProxy apiProxy = App.getApiProxy();
+            final ImageLoader imageLoader = App.getImageLoader();
 
             apiProxy.loadMenu(menuId, new ApiProxy.ApiResultListener<Menu>() {
                 @Override

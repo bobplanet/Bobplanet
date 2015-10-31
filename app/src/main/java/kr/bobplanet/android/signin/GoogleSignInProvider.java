@@ -95,10 +95,10 @@ public class GoogleSignInProvider extends SignInProvider<Void> {
                 .setAccountType(SignInManager.ACCOUNT_GOOGLE)
                 .setAccountId(person.getId())
                 .setNickName(person.getDisplayName())
-                //.setEmail(accountName)
+                .setEmail(accountName)
                 .setImage(person.getImage().getUrl());
 
-        App.getInstance().getUserManager().registerUser(user);
+        App.getUserManager().registerUser(user);
     }
 
     @Override

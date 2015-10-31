@@ -64,7 +64,7 @@ public class UserManager implements ApiProxy.ApiResultListener<UserDevice> {
             Log.i(TAG, "Device doesn't exists. Creating new device");
             this.device = createUserDevice();
 
-            App.getInstance().getApiProxy().registerDevice(device, this);
+            App.getApiProxy().registerDevice(device, this);
         } else {
             Log.i(TAG, "Device restored from prefs: " + loaded);
             this.device = loaded;
@@ -160,7 +160,7 @@ public class UserManager implements ApiProxy.ApiResultListener<UserDevice> {
     @DebugLog
     public void updateDevice() {
         if (device.getId() != null && device.getGcmToken() != null) {
-            App.getInstance().getApiProxy().updateDevice(device);
+            App.getApiProxy().updateDevice(device);
             prefs.storeDevice(device);
         }
     }
@@ -174,7 +174,7 @@ public class UserManager implements ApiProxy.ApiResultListener<UserDevice> {
     public void registerUser(User user) {
         device.setUser(user.setId(UUID.randomUUID().toString()));
 
-        App.getInstance().getApiProxy().registerUser(device, result -> {
+        App.getApiProxy().registerUser(device, result -> {
             if (result != null) {
                 this.device = result;
                 prefs.storeDevice(device);

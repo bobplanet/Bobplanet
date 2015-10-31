@@ -44,7 +44,6 @@ public class MenuFragment extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ApiProxy apiProxy = App.getInstance().getApiProxy();
         String menu_json = getActivity().getIntent().getStringExtra(KEY_MENU);
         menu = EntityTranslator.parseEntity(Menu.class, menu_json);
 

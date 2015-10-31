@@ -91,7 +91,7 @@ public class FacebookSignInProvider extends SignInProvider<Profile> {
                 .setNickName(profile.getName())
                 .setImage(profile.getProfilePictureUri(200, 200).toString());
 
-        App.getInstance().getUserManager().registerUser(user);
+        App.getUserManager().registerUser(user);
     }
 
     @Override

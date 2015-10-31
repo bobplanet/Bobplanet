@@ -165,7 +165,7 @@ public class DayActivity extends BaseActivity {
 	 * 좌우로 swipe하면 다른 날짜 메뉴도 볼 수 있음을 Snackbar로 알려줌
 	 */
     private void showSwipeNotice() {
-        final Preferences prefs = App.getInstance().getPreferences();
+        final Preferences prefs = App.getPreferences();
 
         if (prefs.hasDismissedSwipeNotice()) {
             return;

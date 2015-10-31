@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.nhn.android.naverlogin.OAuthLogin;
 
@@ -83,7 +84,7 @@ class NaverSignInProvider extends SignInProvider<String> {
                                 user.setNickName(text);
                                 break;
                             case "email":
-                                //user.setEmail(text);
+                                user.setEmail(text);
                                 break;
                             case "profile_image":
                                 user.setImage(text);
@@ -93,7 +94,7 @@ class NaverSignInProvider extends SignInProvider<String> {
                 eventType = parser.next();
             }
 
-            App.getInstance().getUserManager().registerUser(user);
+            App.getUserManager().registerUser(user);
         } catch (Exception e) {
             Log.w(TAG, "Naver login XML parsing error: ", e);
         }
@@ -132,7 +133,8 @@ class NaverSignInProvider extends SignInProvider<String> {
                     }
                 };
 
-                App.getInstance().addToRequestQueue(profileRequest);
+                RequestQueue queue = App.getRequestQueue();
+                queue.add(profileRequest);
             } else {
                 Log.w(TAG, "Naver SignIn failed:" + naverLogin.getLastErrorDesc(activity));
             }

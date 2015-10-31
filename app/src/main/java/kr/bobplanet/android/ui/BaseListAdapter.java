@@ -51,7 +51,7 @@ public class BaseListAdapter extends RecyclerView.Adapter<BaseListAdapter.BaseVi
     }
 
     protected abstract static class BaseViewHolder<T> extends RecyclerView.ViewHolder {
-        private final ImageLoader imageLoader = App.getInstance().getImageLoader();
+        private final ImageLoader imageLoader = App.getImageLoader();
 
         BaseViewHolder(View view) {
             super(view);

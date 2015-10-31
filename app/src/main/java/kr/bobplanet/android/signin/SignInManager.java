@@ -47,7 +47,7 @@ public class SignInManager implements Constants {
     }
 
     public void loadSecret() {
-        App.getInstance().getApiProxy().getSecret((result) -> {
+        App.getApiProxy().getSecret((result) -> {
             if (result != null) {
                 this.secret = result;
 

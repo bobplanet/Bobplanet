@@ -71,7 +71,7 @@ public class SettingsActivity extends BaseActivity implements EmptyOptionsMenu {
             super.onResume();
             Log.d(TAG, "onResume()");
 			
-            UserDevice device = App.getInstance().getUserManager().getDevice();
+            UserDevice device = App.getUserManager().getDevice();
             prefHandler.setChecked(PREF_LUNCH_PUSH, device.getLunchPushEnabled());
             prefHandler.setChecked(PREF_DINNER_PUSH, device.getDinnerPushEnabled());
 
@@ -90,7 +90,7 @@ public class SettingsActivity extends BaseActivity implements EmptyOptionsMenu {
          */
         @Override
         public boolean onPreferenceTreeClick(PreferenceScreen screen, Preference pref) {
-            UserManager userManager = App.getInstance().getUserManager();
+            UserManager userManager = App.getUserManager();
             UserDevice device = userManager.getDevice();
 
             switch (pref.getKey()) {

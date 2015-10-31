@@ -51,8 +51,7 @@ public class StartActivity extends BaseActivity {
         initComponents.addAll(Arrays.asList(INIT_COMPONENTS));
 
         EventBus.getDefault().register(this);
-        App app = App.getInstance();
-        app.initComponents();
+        App.initComponents();
     }
 
     @Override

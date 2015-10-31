@@ -16,9 +16,9 @@ abstract public class LogEvent {
     }
 
     protected void dispatch() {
-        Tracker tracker = App.getInstance().getTracker();
-        if (App.getInstance().getUserManager().hasAccount())
-            tracker.set("&uid", App.getInstance().getUserManager().getUserId());
+        Tracker tracker = App.getTracker();
+        if (App.getUserManager().hasAccount())
+            tracker.set("&uid", App.getUserManager().getUserId());
         dispatch(tracker);
     }
 

@@ -30,7 +30,7 @@ public class WebViewActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.webview_activity);
 
-        userManager = App.getInstance().getUserManager();
+        userManager = App.getUserManager();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
