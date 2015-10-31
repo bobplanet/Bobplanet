@@ -1,8 +1,10 @@
 package kr.bobplanet.android.ui;
 
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -41,6 +43,13 @@ public class StartActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.start_activity);
+
+        ImageView imageView = (ImageView) findViewById(R.id.imageView);
+        imageView.setBackgroundResource(R.drawable.pacman_animation);
+
+        AnimationDrawable frameAnimation = (AnimationDrawable) imageView.getBackground();
+        frameAnimation.start();
 
         // Google Play Services가 있는지 확인. 없을 경우 종료.
         if (!DeviceEnvironment.checkPlayServices(this)) {
