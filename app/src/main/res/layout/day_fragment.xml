@@ -35,9 +35,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_margin="8dp"
-            android:textStyle="bold"
-            android:textColor="?attr/colorPrimaryDark"
             android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="?attr/colorPrimaryDark"
+            android:textStyle="bold"
             tools:text="2015-10-02" />
 
         <!-- 메뉴 리스트 -->
@@ -53,8 +53,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
+            android:layout_marginBottom="50dp"
+            android:gravity="center_vertical"
             android:orientation="vertical"
-            android:paddingTop="100dp"
             android:visibility="gone">
 
             <ImageView
@@ -72,6 +73,7 @@
                 android:singleLine="false"
                 android:text="@string/closed_today"
                 android:textSize="14dip" />
+            
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
