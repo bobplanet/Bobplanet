@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 
 import com.commonsware.cwac.pager.PageDescriptor;
 import com.commonsware.cwac.pager.SimplePageDescriptor;
@@ -74,8 +75,20 @@ public class DayActivity extends BaseActivity {
         ViewPager pager = (ViewPager) findViewById(R.id.view_pager);
         pager.setAdapter(adapter);
 
-		// 처음 사용하는 사람들을 위해 좌우스와이프 안내메시지 노출
+        // 처음 사용하는 사람들을 위해 좌우스와이프 안내메시지 노출
         showSwipeNotice();
+        findViewById(R.id.view_pager).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(DayActivity.this, MenuActivity.class));
+            }
+        });
+        findViewById(R.id.toolbar).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(DayActivity.this, SettingsActivity.class));
+            }
+        });
     }
 
     @Override

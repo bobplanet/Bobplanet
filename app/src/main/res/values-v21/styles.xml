@@ -20,4 +20,11 @@
         <!--<item name="android:statusBarColor">@android:color/transparent</item>-->
     </style>
 
+    <!-- 스플래시화면 스타일 -->
+    <style name="AppTheme.Splash">
+        <item name="android:windowBackground">@drawable/splash</item>
+        <item name="colorPrimary">@color/splash_background</item>
+        <item name="colorPrimaryDark">@color/splash_background</item>
+        <item name="android:navigationBarColor">@color/splash_background</item>
+    </style>
 </resources>

@@ -16,6 +16,13 @@
 	<!-- 기본 스타일 -->
     <style name="AppTheme" parent="Base.AppTheme" />
 
+    <!-- 스플래시화면 스타일 -->
+    <style name="AppTheme.Splash">
+        <item name="android:windowBackground">@drawable/splash</item>
+        <item name="colorPrimary">@color/splash_background</item>
+        <item name="colorPrimaryDark">@color/splash_background</item>
+    </style>
+
 	<!-- 상세페이지용 스타일. Lollipop 이상에서는 StatusBar 침범 가능 -->
     <style name="AppTheme.Detail" parent="AppTheme">
     </style>
@@ -31,9 +38,5 @@
         <item name="android:textColorSecondary">@android:color/white</item>
         <item name="android:background">@color/primary</item>
 		<item name="android:actionModeBackground">@android:color/white</item>
-    </style>
-
-    <style name="AppTheme.LoginButton">
-        <item name="android:padding">0dp</item>
     </style>
 </resources>

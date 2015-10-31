@@ -1,5 +1,6 @@
 package kr.bobplanet.android.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -64,6 +65,12 @@ public class MenuActivity extends BaseActivity implements Constants {
         menu = EntityTranslator.parseEntity(Menu.class, getIntent().getStringExtra(KEY_MENU));
 
         initLayout();
+        findViewById(R.id.toolbar).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MenuActivity.this, SettingsActivity.class));
+            }
+        });
     }
 
     /**
