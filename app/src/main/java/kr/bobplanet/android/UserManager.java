@@ -20,12 +20,15 @@ import kr.bobplanet.backend.bobplanetApi.model.User;
 import kr.bobplanet.backend.bobplanetApi.model.UserDevice;
 
 /**
- * 사용자 identity를 관리하는 객체.
+ * 기기 및 사용자 identity의 persistence를 관리하는 객체.
  * <p>
+ * - 기기정보는 항상 존재하고, 사용자정보는 로그인한 경우에만 존재함
  * - 앱이 실행되면 가장 먼저 기기번호(UUID)를 직접 생성한 뒤 서버에 등록 요청
- * - 서버가 기기정보를 내려줌: 이미 동일한 androidId의 기기가 존재할 경우 이를 재활용
- * - 기기정보 등록이 완료되면 서버에 GCM토큰 업로드
- * - GCM토큰 업로드까지 끝나면 preference에 사용자정보 저장
+ *   - 동일한 androidId의 기기가 이미 존재할 경우 서버가 새로운 UUID를 내려줄 수 있음
+ * - 기기정보 등록이 완료되면 서버에 GCM토큰 업로드하고 preference에 UUID + GCM토큰 저장
+ * - SignInManager에 의해 OAuth 계정이 등록되면 이를 서버/preference에 저장
+ *   - 이미 동일한 계정이 존재할 경우 서버는 Device까지 그 밑에 붙여서 내려줄 수 있음
+ *   - 저장이 끝나면 UserSignInEvent를 발생시켜 후처리 진행
  *
  * @author heonkyu.jin
  * @version 15. 10. 18
@@ -120,7 +123,7 @@ public class UserManager implements ApiProxy.ApiResultListener<UserDevice> {
     }
 
     /**
-     * 구글이나 페이스북 계정이 등록된 사용자인지 확인. MenuActivity가 호출함.
+     * 구글이나 페이스북 계정이 등록된 사용자인지 확인. VoteManager가 호출함.
      *
      * @return
      */
@@ -128,6 +131,10 @@ public class UserManager implements ApiProxy.ApiResultListener<UserDevice> {
         return device.getUser() != null && device.getUser().getAccountId() != null;
     }
 
+    /**
+     * 현재 이 앱을 사용중인 Device의 정보를 알려줌.
+     * SettingsActivity에서 기기/사용자정보를 화면에 뿌려주기 위해 호출함.
+     */
     public UserDevice getDevice() {
         return device;
     }

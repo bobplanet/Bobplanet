@@ -23,7 +23,7 @@ import kr.bobplanet.backend.bobplanetApi.model.Secret;
 import kr.bobplanet.backend.bobplanetApi.model.User;
 
 /**
- *
+ * 페이스북 OAuth 로그인 기능을 제공하는 객체.
  *
  * @author heonkyu.jin
  * @version 15. 10. 31
@@ -83,7 +83,7 @@ public class FacebookSignInProvider extends SignInProvider<Profile> {
 
     @Override
     protected void onSignInComplete(Profile profile) {
-        Log.d(TAG, "facebook = " + profile.toString());
+        Log.v(TAG, "facebook = " + profile.toString());
 
         User user = new User()
                 .setAccountType(SignInManager.ACCOUNT_FACEBOOK)

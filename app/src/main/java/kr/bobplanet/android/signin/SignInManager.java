@@ -25,6 +25,12 @@ import kr.bobplanet.backend.bobplanetApi.model.Secret;
 /**
  * 구글/페이스북/네이버 등 OAuth 로그인 기능을 제공하는 객체.
  *
+ * - 구글은 패키지 이름과 인증서 fingerprint로 클라이언트를 식별하지만 페이스북과 네이버의 경우는 별도 인증정보 필요
+ * - 인증정보를 소스 내에 둘 수는 없으니, Bobplanet 서버로부터 받아옴 (이게 Secret)
+ * - Secret 로딩이 끝나면 Eventbus를 통해 InitCompleteEvent 전파: StartActivity에서 받아 처리함
+ * - 계정 노출순서는 random으로 지정하여 노출순서가 계정 선택에 영향을 주지 않도록 함
+ * - onActivityResult() 처리를 위해 BaseActivity.setSignInProvider() 호출해서 delegate 전달.
+ *
  * @author heonkyu.jin
  * @version 15. 10. 30
  */
@@ -35,7 +41,7 @@ public class SignInManager implements Constants {
     private static final String DIALOG_LOGIN = "DIALOG_LOGIN";
 
     /**
-     *
+     * 페이스북, 네이버의 OAuth 인증을 위해 필요한 ID, secret 등이 저장된 객체
      */
     private Secret secret;
 
@@ -46,6 +52,9 @@ public class SignInManager implements Constants {
         this.context = context;
     }
 
+    /**
+     * 서버로부터 Secret을 받아온 뒤 StartActivity에 노티.
+     */
     public void loadSecret() {
         App.getApiProxy().getSecret((result) -> {
             if (result != null) {
@@ -57,6 +66,7 @@ public class SignInManager implements Constants {
     }
 
     /**
+     * 약식 팩토리.
      *
      * @param accountType
      * @return

@@ -43,9 +43,10 @@ import kr.bobplanet.backend.bobplanetApi.model.User;
 /**
  * Bobplanet 앱에서 사용하는 모든 Activity들의 엄마클래스.
  * <p>
- * - onResume()에서 이벤트 측정
- * - Google OAuth 기능 사용을 위한 Google Api Client 관리
+ * - 로그인 처리를 위해 SignInProvider를 이용 (사실은 얘가 delegate임)
+ * - onResume()에서 Activity 구동이벤트 측정
  * - 공용 옵션메뉴(ActionBar 오른쪽에 나오는) 관리
+ * - 스낵바에 메시지를 출력하는 간단한 helper method 제공
  *
  * @author heonkyu.jin
  * @version 2015. 10. 3
@@ -54,7 +55,7 @@ abstract public class BaseActivity extends AppCompatActivity implements Constant
     private static final String TAG = BaseActivity.class.getSimpleName();
 
     /**
-     *
+     * OAuth 로그인 처리를 담당하는 provider.
      */
     private SignInProvider signInProvider;
 
@@ -64,6 +65,7 @@ abstract public class BaseActivity extends AppCompatActivity implements Constant
     }
 
     /**
+     * OAuth delegate 지정. SignInManager가 호출해줌.
      *
      * @param signInProvider
      */

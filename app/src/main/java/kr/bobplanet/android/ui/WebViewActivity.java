@@ -16,6 +16,9 @@ import kr.bobplanet.android.UserManager;
  * 앱 안에서 WebView를 띄울 때 기본으로 사용되어야 하는 Activity.
  *
  * - 앱 -> 웹으로 동선이 넘어가는 경우에도 GA상에서 동일한 사용자로 인식되도록 함.
+ *   - bobp_userId를 웹페이지에 request parameter로 전달
+ *   - 웹페이지에서는 해당 parameter가 있을 경우 이를 쿠키에 저장
+ *   - 다른 페이지로 넘어가더라도 쿠키에서 userId를 복원
  *
  * @author heonkyu.jin
  * @version 15. 10. 27

@@ -9,8 +9,10 @@ import android.widget.Toast;
 import kr.bobplanet.android.R;
 
 /**
- * 일간메뉴화면에서 가장 마지막 날짜에서 오른쪽 swipe를 시도하면 toast 메시지를 보여주는 ViewPager.
- * onInterceptTouchEvent()가 여러번 호출되는 경우가 있어 eventConsumed를 통해 상태관리.
+ * 일간메뉴화면에서 날짜별 메뉴를 좌-우 panning으로 볼 수 있도록 fragment를 관리하는 Pager.
+ *
+ * - 가장 마지막 날짜에서 오른쪽 swipe를 시도하면 toast 메시지를 뿌려줌.
+ *   - onInterceptTouchEvent()가 여러번 호출되는 경우가 있어 eventConsumed를 통해 상태관리.
  *
  * @author heonkyu.jin
  * @version 15. 10. 22

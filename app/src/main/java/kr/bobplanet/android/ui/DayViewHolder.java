@@ -20,8 +20,9 @@ import kr.bobplanet.backend.bobplanetApi.model.Menu;
 import kr.bobplanet.backend.bobplanetApi.model.Submenu;
 
 /**
- * 메뉴 객체의 ViewHolder.
- * EventBus를 이용해서 @link{DayActivity}로 Onclick 이벤트 전송
+ * DayAcvitiy에서 사용하는 ViewHolder. 아침-점심-저녁 메뉴의 listview를 관리함.
+ *
+ * - 메뉴 클릭할 경우 EventBus를 이용해서 @link{DayActivity}로 Onclick 이벤트 전송
  */
 public class DayViewHolder extends BaseListAdapter.BaseViewHolder<Menu> implements View.OnClickListener {
     private static final String TAG = DayViewHolder.class.getSimpleName();

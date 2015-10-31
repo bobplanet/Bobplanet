@@ -19,7 +19,12 @@ import kr.bobplanet.backend.bobplanetApi.model.Menu;
 import kr.bobplanet.backend.bobplanetApi.model.Vote;
 
 /**
+ * 사용자의 메뉴 평가 기능을 제공하는 객체.
  *
+ * - 평가 dialog 생성
+ * - 로그인하지 않은 사용자는 SignInManager로 넘겨 계정등록 유도
+ * - 평가 데이터의 서버 전송
+ * - 평가 내용은 Snackbar에 띄워 사용자에게 '평가가 끝났다'는 시각적 힌트를 제공
  *
  * @author heonkyu.jin
  * @version 15. 10. 24
@@ -116,7 +121,7 @@ public class VoteManager {
     }
 
     /**
-     * 구글 로그인이 완료되었을 때 호출되는 callback.
+     * 로그인이 완료되었을 때 호출되는 callback.
      *
      * @param event
      */
