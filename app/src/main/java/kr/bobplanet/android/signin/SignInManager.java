@@ -2,8 +2,11 @@ package kr.bobplanet.android.signin;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 import java.util.Arrays;
@@ -18,6 +21,7 @@ import kr.bobplanet.android.App;
 import kr.bobplanet.android.Constants;
 import kr.bobplanet.android.R;
 import kr.bobplanet.android.event.InitCompleteEvent;
+import kr.bobplanet.android.event.UserLogEvent;
 import kr.bobplanet.android.ui.BaseActivity;
 import kr.bobplanet.android.ui.BaseDialogBuilder;
 import kr.bobplanet.backend.bobplanetApi.model.Secret;
@@ -44,6 +48,8 @@ public class SignInManager implements Constants {
      * 페이스북, 네이버의 OAuth 인증을 위해 필요한 ID, secret 등이 저장된 객체
      */
     private Secret secret;
+
+    private Button positiveButton;
 
     /**
      *
@@ -89,16 +95,21 @@ public class SignInManager implements Constants {
      */
     @DebugLog
     public void showSignInDialog(BaseActivity activity) {
-        View view = LayoutInflater.from(activity).inflate(R.layout.signin_dialog, null);
+        View view = createDialogView(activity);
+        Dialog signInDialog = createDialog(activity, view);
+        signInDialog.show();
+    }
 
-        Dialog signInDialog = new BaseDialogBuilder(activity, DIALOG_LOGIN)
-                .setTitle(R.string.dialog_login_label)
-                .setView(view)
-                .setNegativeButton(R.string.button_cancel, null)
-                .create();
+    /**
+     *
+     * @param context
+     * @return
+     */
+    private View createDialogView(Context context) {
+        final View view = LayoutInflater.from(context).inflate(R.layout.signin_dialog, null);
 
-        List<String> order = Arrays.asList(ACCOUNT_GOOGLE, ACCOUNT_FACEBOOK, ACCOUNT_NAVER);
-        Collections.shuffle(order);
+        final List<String> accountTypes = Arrays.asList(ACCOUNT_GOOGLE, ACCOUNT_FACEBOOK, ACCOUNT_NAVER);
+        Collections.shuffle(accountTypes);
 
         Map<String, Integer> buttonDrawables = new HashMap<>();
         buttonDrawables.put(ACCOUNT_GOOGLE, R.drawable.google_signin);
@@ -106,20 +117,68 @@ public class SignInManager implements Constants {
         buttonDrawables.put(ACCOUNT_NAVER, R.drawable.naver_signin);
 
         int[] buttonIds = { R.id.signin_button_1, R.id.signin_button_2, R.id.signin_button_3 };
+        ImageButton[] buttons = new ImageButton[buttonIds.length];
 
         for (int i = 0; i < buttonIds.length; i++) {
+            buttons[i] = (ImageButton) view.findViewById(buttonIds[i]);
+            String accountType = accountTypes.get(i);
             ImageButton button = (ImageButton) view.findViewById(buttonIds[i]);
-            String accountType = order.get(i);
+
+            button.setTag(new Tag(accountType, i + 1));
             button.setImageDrawable(context.getResources().getDrawable(buttonDrawables.get(accountType)));
 
             button.setOnClickListener(v -> {
-                SignInProvider p = getSignInProvider(accountType);
-                activity.setSignInProvider(p);
-                p.requestSignIn(activity, secret);
-                signInDialog.dismiss();
+                positiveButton.setEnabled(true);
+                for (int j = 0; j < buttonIds.length; j++) {
+                    buttons[j].setSelected(false);
+                }
+
+                button.setSelected(true);
+                view.setTag(button.getTag());
             });
         }
 
-        signInDialog.show();
+        return view;
+    }
+
+    /**
+     *
+     * @param activity
+     * @param view
+     * @return
+     */
+    private Dialog createDialog(BaseActivity activity, View view) {
+        AlertDialog signInDialog = new BaseDialogBuilder(activity, DIALOG_LOGIN)
+                .setTitle(R.string.dialog_login_label)
+                .setView(view)
+                .setPositiveButton(R.string.button_ok, (dialog, which) -> {
+                    Log.d(TAG, "OK button");
+
+                    Tag tag = (Tag) view.getTag();
+                    UserLogEvent.accountSelect(tag.accountType, tag.displayOrder);
+
+                    SignInProvider provider = getSignInProvider(tag.accountType);
+                    activity.setSignInProvider(provider);
+                    provider.requestSignIn(activity, secret);
+                })
+                .setNegativeButton(R.string.button_cancel, null)
+                .create();
+
+        signInDialog.setOnShowListener(dialog -> {
+            this.positiveButton = signInDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            positiveButton.setEnabled(false);
+        });
+
+        return signInDialog;
+    }
+
+    private class Tag {
+        String accountType;
+        int displayOrder;
+
+        private Tag(String accountType, int displayOrder) {
+            this.accountType = accountType;
+            this.displayOrder = displayOrder;
+        }
     }
 }

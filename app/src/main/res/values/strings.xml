@@ -8,7 +8,7 @@
 
     <!-- StartActivity -->
     <string name="need_google_play_service">Google Play Services가 있는 기기에서만 동작합니다</string>
-    
+
     <!-- 일간보기 화면 -->
     <string name="closed_today">오늘은 회사식당 쉽니다.\n좌우로 화면을 넘겨보세요.\n(그런데.. 왜 휴일에 이 앱을 보고 계신가요?)</string>
     <string name="swipe_notice">좌우로 화면을 넘기면 다른 날의 메뉴도 볼 수 있어요.</string>
@@ -31,9 +31,9 @@
     <string name="vote_level_down">별로에요</string>
 	<string name="vote_notice_fmt" formatted="false">%s \"%s\"%s라고 평가해주셨네요~\n점수는 언제든 재평가 가능합니다 :)</string>
 
-    <!-- 구글 로그인 Dialog -->
+    <!-- 로그인 Dialog -->
     <string name="dialog_login_label">로그인 필요</string>
-    <string name="dialog_login_desc">아래 인터넷서비스 계정으로 로그인해주세요</string>
+    <string name="dialog_login_desc">로그인하시면 계속 진행하실 수 있습니다.\n아래 인터넷서비스 계정을 이용해서 로그인해주세요.</string>
     <string name="pick_account_needed">구글계정 선택 안함!</string>
 
     <!-- 설정화면 -->

@@ -14,31 +14,37 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="@string/dialog_login_desc" />
 
         <LinearLayout
-            android:layout_width="320dp"
-            android:layout_height="120dp"
-            android:layout_margin="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_gravity="center"
+            android:gravity="center_horizontal"
             android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/signin_button_1"
                 android:layout_width="@dimen/login_button_size"
                 android:layout_height="@dimen/login_button_size"
-                android:padding="0dp" />
+                style="@style/AppTheme.LoginButton" />
 
             <ImageButton
                 android:id="@+id/signin_button_2"
                 android:layout_width="@dimen/login_button_size"
                 android:layout_height="@dimen/login_button_size"
-                android:padding="0dp" />
+                android:layout_marginLeft="10dp"
+                style="@style/AppTheme.LoginButton" />
 
             <ImageButton
                 android:id="@+id/signin_button_3"
                 android:layout_width="@dimen/login_button_size"
                 android:layout_height="@dimen/login_button_size"
-                android:padding="0dp" />
+                android:layout_marginLeft="10dp"
+                style="@style/AppTheme.LoginButton" />
 
         </LinearLayout>
     </LinearLayout>
