@@ -33,6 +33,7 @@ import kr.bobplanet.backend.bobplanetApi.model.Secret;
  * - 인증정보를 소스 내에 둘 수는 없으니, Bobplanet 서버로부터 받아옴 (이게 Secret)
  * - Secret 로딩이 끝나면 Eventbus를 통해 InitCompleteEvent 전파: StartActivity에서 받아 처리함
  * - 계정 노출순서는 random으로 지정하여 노출순서가 계정 선택에 영향을 주지 않도록 함
+ * - 선택한 계정 종류는 View에 tag으로 저장
  * - onActivityResult() 처리를 위해 BaseActivity.setSignInProvider() 호출해서 delegate 전달.
  *
  * @author heonkyu.jin
@@ -101,6 +102,7 @@ public class SignInManager implements Constants {
     }
 
     /**
+     * Dialog의 본체를 구성할 View 생성.
      *
      * @param context
      * @return
@@ -129,11 +131,12 @@ public class SignInManager implements Constants {
 
             button.setOnClickListener(v -> {
                 positiveButton.setEnabled(true);
+
                 for (int j = 0; j < buttonIds.length; j++) {
                     buttons[j].setSelected(false);
                 }
-
                 button.setSelected(true);
+
                 view.setTag(button.getTag());
             });
         }
@@ -142,6 +145,7 @@ public class SignInManager implements Constants {
     }
 
     /**
+     * Dialog 생성
      *
      * @param activity
      * @param view
@@ -152,8 +156,6 @@ public class SignInManager implements Constants {
                 .setTitle(R.string.dialog_login_label)
                 .setView(view)
                 .setPositiveButton(R.string.button_ok, (dialog, which) -> {
-                    Log.d(TAG, "OK button");
-
                     Tag tag = (Tag) view.getTag();
                     UserLogEvent.accountSelect(tag.accountType, tag.displayOrder);
 
@@ -164,6 +166,7 @@ public class SignInManager implements Constants {
                 .setNegativeButton(R.string.button_cancel, null)
                 .create();
 
+        // positiveButton은 실제 화면에 노출된 이후에 생성되므로 OnShowListener에서 처리.
         signInDialog.setOnShowListener(dialog -> {
             this.positiveButton = signInDialog.getButton(AlertDialog.BUTTON_POSITIVE);
             positiveButton.setEnabled(false);
@@ -172,6 +175,9 @@ public class SignInManager implements Constants {
         return signInDialog;
     }
 
+    /**
+     * 계정 선택 버튼의 위치와 계정 종류를 저장하는 tag 객체
+     */
     private class Tag {
         String accountType;
         int displayOrder;

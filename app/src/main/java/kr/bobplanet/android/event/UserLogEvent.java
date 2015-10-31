@@ -31,19 +31,21 @@ public final class UserLogEvent extends LogEvent {
     }
 
     /**
-     *
+     * 사용자 로그인 완료.
      */
     public static void login(String accountType) {
         new UserLogEvent(LOGIN, accountType).dispatch();
     }
 
     /**
+     * 로그인 계정 선택 완료.
+     * 선택한 계정이 화면에서 몇번째 위치에 있었는지를 함께 기록함.
      *
      * @param accountType
      * @param displayOrder
      */
     public static void accountSelect(String accountType, int displayOrder) {
-        new UserLogEvent(ACCOUNT_SELECT, accountType).dispatch();
+        new UserLogEvent(ACCOUNT_SELECT, accountType, displayOrder).dispatch();
     }
 
     protected void dispatch(Tracker tracker) {
