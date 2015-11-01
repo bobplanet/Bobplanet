@@ -73,7 +73,7 @@
                 android:singleLine="false"
                 android:text="@string/closed_today"
                 android:textSize="14dip" />
-            
+
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
