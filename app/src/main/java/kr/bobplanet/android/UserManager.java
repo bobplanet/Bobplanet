@@ -123,6 +123,20 @@ public class UserManager implements ApiProxy.ApiResultListener<UserDevice> {
     }
 
     /**
+     *
+     */
+    public String getUserName() {
+        return device.getUser() != null ? device.getUser().getNickName() : null;
+    }
+
+    /**
+     *
+     */
+    public String getUserImage() {
+        return device.getUser() != null ? device.getUser().getImage() : null;
+    }
+
+    /**
      * 구글이나 페이스북 계정이 등록된 사용자인지 확인. VoteManager가 호출함.
      *
      * @return
