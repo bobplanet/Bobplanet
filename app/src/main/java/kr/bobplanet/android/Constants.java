@@ -48,7 +48,7 @@ public interface Constants {
 	 * 공용으로 사용할 DateFormat 객체들
 	 */
     DateFormat DATEFORMAT_YMD = new SimpleDateFormat("yyyy-MM-dd");
-    DateFormat DATEFORMAT_YMDE = new SimpleDateFormat("yyyy/MM/dd(EEE)");
+    DateFormat DATEFORMAT_MDE = new SimpleDateFormat("MM월 d일(EEE)");
 
     /**
      * '좋아요'의 기본점수

@@ -40,7 +40,6 @@ import kr.bobplanet.backend.bobplanetApi.model.Menu;
  */
 public class DayActivity extends BaseActivity {
     private static final String TAG = DayActivity.class.getSimpleName();
-    private static final String FRAGMENT_TAG_PREFIX = "DayFragment-";
 
 	/**
 	 * Fragment 관리용 Adapter
@@ -73,6 +72,13 @@ public class DayActivity extends BaseActivity {
         adapter = new DayPagerAdapter(getSupportFragmentManager(), descriptors);
 
         ViewPager pager = (ViewPager) findViewById(R.id.view_pager);
+        pager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                String title = adapter.getPageTitle(position);
+                getSupportActionBar().setTitle(title);
+            }
+        });
         pager.setAdapter(adapter);
 
         // 처음 사용하는 사람들을 위해 좌우스와이프 안내메시지 노출
@@ -81,12 +87,6 @@ public class DayActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(DayActivity.this, MenuActivity.class));
-            }
-        });
-        findViewById(R.id.toolbar).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(DayActivity.this, SettingsActivity.class));
             }
         });
     }
@@ -98,10 +98,18 @@ public class DayActivity extends BaseActivity {
     }
 
     /**
-     * Fragment의 tag로는 FRAGMENT_TAG_PREFIX + 날짜를 지정
+     * Fragment의 tag와 타이틀 지정
+     * - tag: FRAGMENT_TAG_PREFIX + 날짜. "2015-11-07" 형태
+     * - title: "11월 7일(금)" 형태
      */
     private PageDescriptor newPageDescriptor(String date) {
-        return new SimplePageDescriptor(FRAGMENT_TAG_PREFIX + date, date);
+        String pageTitle = date;
+        try {
+            pageTitle = DATEFORMAT_MDE.format(DATEFORMAT_YMD.parse(date));
+        } catch (Exception e) {
+        }
+
+        return new SimplePageDescriptor(date, pageTitle);
     }
 
     /**
@@ -135,8 +143,8 @@ public class DayActivity extends BaseActivity {
     private boolean isExistingPage(String date) {
         int page_count = adapter.getCount();
         for (int i = 0; i < page_count; i++) {
-            String title = adapter.getPageTitle(i);
-            if (title.equals(date)) {
+            DayFragment fragment = adapter.getExistingFragment(i);
+            if (fragment != null && fragment.getTag().equals(date)) {
                 return true;
             }
         }
@@ -202,7 +210,7 @@ public class DayActivity extends BaseActivity {
 
         @Override
         protected DayFragment createFragment(PageDescriptor pageDescriptor) {
-            return DayFragment.newInstance(pageDescriptor.getTitle());
+            return DayFragment.newInstance(pageDescriptor.getFragmentTag());
         }
     }
 

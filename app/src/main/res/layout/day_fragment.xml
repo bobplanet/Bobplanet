@@ -28,18 +28,6 @@
         android:paddingRight="4dp"
         android:paddingTop="0dp">
 
-        <!-- 날짜 헤더 -->
-        <TextView
-            android:id="@+id/header_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="8dp"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="?attr/colorPrimaryDark"
-            android:textStyle="bold"
-            tools:text="2015-10-02" />
-
         <!-- 메뉴 리스트 -->
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"
