@@ -1,5 +1,6 @@
 <resources>
-    <dimen name="daily_name">16dp</dimen>
+    <dimen name="daily_name">24sp</dimen>
+    <dimen name="daily_signal_size">16dp</dimen>
     <dimen name="daily_sub">13dip</dimen>
     <dimen name="daily_calories">12dip</dimen>
     <dimen name="fab_margin">16dp</dimen>

@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.commonsware.cwac.pager.PageDescriptor;
@@ -23,6 +24,7 @@ import kr.bobplanet.android.App;
 import kr.bobplanet.android.Constants;
 import kr.bobplanet.android.Preferences;
 import kr.bobplanet.android.R;
+import kr.bobplanet.android.event.MorningMenuToggleEvent;
 import kr.bobplanet.backend.bobplanetApi.model.DailyMenu;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
 
@@ -40,6 +42,11 @@ import kr.bobplanet.backend.bobplanetApi.model.Menu;
  */
 public class DayActivity extends BaseActivity {
     private static final String TAG = DayActivity.class.getSimpleName();
+
+    /**
+     * 주간보기 모드인가?
+     */
+    private boolean isWeekViewMode = false;
 
 	/**
 	 * Fragment 관리용 Adapter
@@ -99,7 +106,7 @@ public class DayActivity extends BaseActivity {
 
     /**
      * Fragment의 tag와 타이틀 지정
-     * - tag: FRAGMENT_TAG_PREFIX + 날짜. "2015-11-07" 형태
+     * - tag: "2015-11-07" 형태
      * - title: "11월 7일(금)" 형태
      */
     private PageDescriptor newPageDescriptor(String date) {
@@ -196,6 +203,32 @@ public class DayActivity extends BaseActivity {
         Snackbar.make(layout, R.string.swipe_notice, Snackbar.LENGTH_INDEFINITE)
                 .setAction(R.string.swipe_notice_goaway, (v) -> prefs.setDismissedSwipeNotice())
                 .show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(android.view.Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.menu_day, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_morning_toggle:
+                Preferences prefs = App.getPreferences();
+                boolean active = prefs.isMorningMenuActive();
+                prefs.setMorningMenuActive(!active);
+                EventBus.getDefault().post(new MorningMenuToggleEvent(!active));
+                return true;
+
+            case R.id.action_dayweek_toggle:
+                isWeekViewMode = !isWeekViewMode;
+                item.setIcon(isWeekViewMode ? R.drawable.ic_filter_7 : R.drawable.ic_filter_1);
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     /**

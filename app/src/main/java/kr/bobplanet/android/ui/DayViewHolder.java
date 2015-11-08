@@ -2,7 +2,9 @@ package kr.bobplanet.android.ui;
 
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -33,18 +35,10 @@ public class DayViewHolder extends BaseListAdapter.BaseViewHolder<Menu> implemen
     TextView when;
     @Bind(R.id.thumbnail)
     NetworkImageView thumbnail;
-    @Bind(R.id.title)
-    TextView title;
-    @Bind(R.id.text_thumb_ups)
-    TextView thumbUps;
-    @Bind(R.id.text_thumb_downs)
-    TextView thumbDowns;
-    @Bind(R.id.vote_bar_up)
-    View voteBarUp;
-    @Bind(R.id.submenu)
-    TextView submenu;
-    @Bind(R.id.calories)
-    TextView calories;
+    @Bind(R.id.name)
+    TextView name;
+    @Bind(R.id.signal)
+    ImageView signal;
 
     public DayViewHolder(View itemView) {
         super(itemView);
@@ -76,35 +70,13 @@ public class DayViewHolder extends BaseListAdapter.BaseViewHolder<Menu> implemen
 
         Item item = menu.getItem();
 
-        if (item.getThumbnail() != null) {
-            thumbnail.setImageUrl(item.getThumbnail(), getImageLoader());
+        if (item.getImage() != null) {
+            thumbnail.setImageUrl(item.getImage(), getImageLoader());
         } else {
             thumbnail.setDefaultImageResId(R.drawable.no_menu);
         }
 
-        title.setText(item.getName());
-
-        thumbUps.setText(String.format("%,d", item.getNumThumbUps()));
-        thumbDowns.setText(String.format("%,d", item.getNumThumbDowns()));
-
-        int totalVotes = item.getNumThumbUps() + item.getNumThumbDowns();
-        float barWeight = totalVotes == 0 ? 0.5f : (1f * item.getNumThumbDowns() / totalVotes);
-        voteBarUp.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.MATCH_PARENT, barWeight));
-
-        // 서브메뉴는 ','로 concatenate
-        List<Submenu> submenus = menu.getSubmenu();
-        if (submenus != null) {
-            List<String> subs = new ArrayList<>();
-            for (Submenu sub : submenus) {
-                subs.add(sub.getItem().getName());
-            }
-            submenu.setText(TextUtils.join(", ", subs));
-        }
-
-        // 아침 메뉴는 칼로리 데이터가 없으므로 비워서 보여줌
-        int cal = menu.getCalories();
-        calories.setText(menu.getCalories() == 0 ? "" : new StringBuilder().append(cal).append(" KCal"));
+        name.setText(item.getName());
     }
 
     @Override

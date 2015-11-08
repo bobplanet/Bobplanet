@@ -16,7 +16,7 @@ import kr.bobplanet.android.App;
  * 화면마다 별로 할일도 없는 Adapter들이 많아지는 것 같아 한단계 추상화한 클래스.
  *
  * @author heonkyu.jin
- * @versoin 15. 10. 17
+ * @version 15. 10. 17
  */
 public class BaseListAdapter extends RecyclerView.Adapter<BaseListAdapter.BaseViewHolder> {
     final List itemList;
@@ -39,6 +39,14 @@ public class BaseListAdapter extends RecyclerView.Adapter<BaseListAdapter.BaseVi
     final public void onBindViewHolder(BaseViewHolder holder, int position) {
         Object item = getItem(position);
         holder.setItem(item);
+    }
+
+    public void addItem(int position, Object item) {
+        itemList.add(position, item);
+    }
+
+    public void removeItem(int position) {
+        itemList.remove(position);
     }
 
     @Override

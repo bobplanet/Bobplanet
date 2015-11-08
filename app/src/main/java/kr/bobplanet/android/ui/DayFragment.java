@@ -22,8 +22,10 @@ import de.greenrobot.event.EventBus;
 import fr.castorflex.android.smoothprogressbar.SmoothProgressDrawable;
 import kr.bobplanet.android.ApiProxy;
 import kr.bobplanet.android.App;
+import kr.bobplanet.android.Preferences;
 import kr.bobplanet.android.R;
 import kr.bobplanet.android.event.ItemChangeEvent;
+import kr.bobplanet.android.event.MorningMenuToggleEvent;
 import kr.bobplanet.android.event.NetworkExceptionEvent;
 import kr.bobplanet.backend.bobplanetApi.model.DailyMenu;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
@@ -47,8 +49,20 @@ public class DayFragment extends BaseFragment {
     private static final String TAG = DayFragment.class.getSimpleName();
     private static final String ARGUMENT_DATE = "ARGUMENT_DATE";
 
+    /**
+     * 아무 데이터도 없는 메뉴리스트 상수.
+     */
     private static final List<Menu> EMPTY_MENU_LIST = new ArrayList<>();
+
+    /**
+     * 메뉴리스트
+     */
     private List<Menu> menuList = EMPTY_MENU_LIST;
+
+    /**
+     * 아침메뉴 객체. 아침메뉴 보기를 끌 때 menuList에서 백업됨.
+     */
+    private Menu morningMenu;
 
     /**
      * 네트웤에서 데이터를 가져올 때 동작하는 ProgressBar
@@ -56,11 +70,19 @@ public class DayFragment extends BaseFragment {
     ProgressBar progressBar;
 
     /**
+     * 메뉴정보를 관리하는 ListAdapter
+     */
+    BaseListAdapter adapter;
+
+    /**
      * 메뉴정보를 표시하는 RecyclerView
      */
     RecyclerView recyclerView;
 
-    BaseListAdapter adapter;
+    /**
+     * recyclerView의 LayoutManager. 스크롤위치 조절할 때 사용됨
+     */
+    LinearLayoutManager layoutManager;
 
     /**
      * 메뉴가 없을 때(식당 노는날) 대신 표시되는 View. 안내메시지 포함.
@@ -116,7 +138,8 @@ public class DayFragment extends BaseFragment {
                 android.graphics.PorterDuff.Mode.SRC_IN);
         progressBar.setIndeterminateDrawable(d);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
     }
 
@@ -140,6 +163,11 @@ public class DayFragment extends BaseFragment {
             if (menuList != null) {
                 BaseListAdapter.BaseViewHolderFactory factory = (View view) -> new DayViewHolder(view);
 
+                Preferences prefs = App.getPreferences();
+                if (!prefs.isMorningMenuActive()) {
+                    morningMenu = menuList.get(0);
+                    menuList.remove(0);
+                }
                 adapter = new BaseListAdapter(factory, menuList, R.layout.day_item);
                 recyclerView.setAdapter(adapter);
             } else {
@@ -165,6 +193,25 @@ public class DayFragment extends BaseFragment {
     @SuppressWarnings("unused")
     public void onEventMainThread(NetworkExceptionEvent e) {
         Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * 아침메뉴 on/off 처리.
+     *
+     * @param e
+     */
+    @SuppressWarnings("unused")
+    public void onEventMainThread(MorningMenuToggleEvent e) {
+        if (adapter == null) return;
+
+        if (!e.isActive) {
+            adapter.removeItem(0);
+            adapter.notifyItemRemoved(0);
+        } else {
+            adapter.addItem(0, morningMenu);
+            adapter.notifyItemInserted(0);
+            layoutManager.scrollToPosition(0);
+        }
     }
 
     public void onEventMainThread(ItemChangeEvent e) {

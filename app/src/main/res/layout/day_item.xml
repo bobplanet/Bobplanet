@@ -11,23 +11,21 @@
     app:cardElevation="@dimen/card_elevation">
 
     <!-- 이미지 / 메뉴명 / 서브메뉴 / 칼로리 등을 담는 layout -->
-    <RelativeLayout
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/list_row_selector"
-        android:padding="8dp">
+        android:layout_height="wrap_content">
 
         <!-- 이미지 + '아침/점심/저녁' -->
         <FrameLayout
             android:id="@+id/thumbnail_holder"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="8dp">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <com.android.volley.toolbox.NetworkImageView
                 android:id="@+id/thumbnail"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
                 android:scaleType="centerCrop"
                 android:transitionName="menu_icon" />
 
@@ -43,101 +41,28 @@
         </FrameLayout>
 
         <!-- 메뉴이름 -->
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@id/thumbnail_holder"
-            android:layout_toRightOf="@id/thumbnail_holder"
-            android:textSize="@dimen/daily_name"
-            android:textStyle="bold"
-            android:transitionName="menu_title"
-            tools:text="Menu title" />
-
-        <!-- 평점 -->
         <LinearLayout
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/title"
-            android:orientation="vertical"
-            android:paddingLeft="10dp">
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="14dp"
-                    android:layout_height="14dp"
-                    android:src="@drawable/ic_thumb_up"
-                    android:tint="@color/thumb_up" />
-
-                <TextView
-                    android:id="@+id/text_thumb_ups"
-                    android:layout_width="wrap_content"
-                    android:layout_height="14dp"
-                    android:textSize="12dp" />
-
-                <ImageView
-                    android:layout_width="14dp"
-                    android:layout_height="14dp"
-                    android:layout_marginLeft="10dp"
-                    android:src="@drawable/ic_thumb_down"
-                    android:tint="@color/thumb_down" />
-
-                <TextView
-                    android:id="@+id/text_thumb_downs"
-                    android:layout_width="wrap_content"
-                    android:layout_height="14dp"
-                    android:textSize="12dp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:orientation="horizontal"
-                android:weightSum="1">
-
-                <View
-                    android:id="@+id/vote_bar_up"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="@color/thumb_up" />
-
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="@color/thumb_down" />
-
-            </LinearLayout>
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/daily_name"
+                android:textStyle="bold"
+                android:transitionName="menu_title"
+                tools:text="Menu title" />
+            
+            <ImageView
+                android:id="@+id/signal"
+                android:src="@drawable/signal_go"
+                android:layout_width="@dimen/daily_signal_size"
+                android:layout_height="@dimen/daily_signal_size"
+                />
 
         </LinearLayout>
-
-        <!-- 서브메뉴 -->
-        <TextView
-            android:id="@+id/submenu"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/title"
-            android:layout_marginTop="1dip"
-            android:layout_toRightOf="@id/thumbnail_holder"
-            android:textSize="@dimen/daily_sub"
-            tools:text="Submenus 1, Submenus 2" />
-
-        <!-- 칼로리 -->
-        <TextView
-            android:id="@+id/calories"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/submenu"
-            android:layout_marginTop="5dp"
-            android:layout_toRightOf="@id/thumbnail_holder"
-            android:textColor="@color/calories"
-            android:textSize="@dimen/daily_calories"
-            tools:text="860 KCal" />
-
-    </RelativeLayout>
+ </LinearLayout>
 
 </android.support.v7.widget.CardView>
