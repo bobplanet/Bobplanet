@@ -5,7 +5,7 @@ import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.widget.Button;
 
-import kr.bobplanet.android.event.DialogLogEvent;
+import kr.bobplanet.android.log.DialogLogEvent;
 
 /**
  * 실행기록을 남기는 Dialog를 만들기 위한 기본 builder.

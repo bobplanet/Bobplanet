@@ -13,7 +13,7 @@ import java.util.Date;
 
 import de.greenrobot.event.EventBus;
 import hugo.weaving.DebugLog;
-import kr.bobplanet.android.event.MeasureLogEvent;
+import kr.bobplanet.android.log.MeasureLogEvent;
 import kr.bobplanet.android.event.NetworkExceptionEvent;
 import kr.bobplanet.backend.bobplanetApi.BobplanetApi;
 import kr.bobplanet.backend.bobplanetApi.model.DailyMenu;
@@ -26,7 +26,7 @@ import kr.bobplanet.backend.bobplanetApi.model.Vote;
 /**
  * Google AppEngine(=GAE) API 호출 및 결과 caching을 담당하는 객체.
  * GAE에서 전달되는 Entity는 JSON이므로 <code>EntityTranslator</code>를 이용하여 문자열로 저장
- * <p/>
+ * <p>
  * - Activity나 Fragment에서 AsyncTask 만들 필요가 없도록 AsyncTask는 이 객체에서 처리함
  * - 싱글턴 관리는 MainApplication에 위임
  * - 내부적으로 Android support package의 LruCache를 이용하여 캐슁
@@ -78,7 +78,6 @@ public class ApiProxy implements Constants {
     }
 
     /**
-     *
      * @param listener
      */
     public void getSecret(ApiResultListener<Secret> listener) {
@@ -152,6 +151,13 @@ public class ApiProxy implements Constants {
                 .execute();
     }
 
+    public void unregisterUser(final UserDevice device, ApiResultListener<Void> listener) {
+        new Builder<>(Void.class, () ->
+                api.unregisterUser(device.getId(), device.getUser()).execute(), "unregisterUser")
+                .setResultListener(listener)
+                .execute();
+    }
+
     /**
      * 메뉴 평가.
      *
@@ -187,18 +193,19 @@ public class ApiProxy implements Constants {
 
     /**
      * 캐쉬 조회 및 네트웤API 호출을 담당하는 AsyncTask.
-     * <p/>
+     * <p>
      * - 생성자에는 서버API호출로직을 담은 RemoteApiLoader와, 데이터로딩 완료 후처리를 담당할 ApiResultListener 전달
      * - execute()에는 결과값의 Entity class와 서버 API에 전달할 key값을 패러미터로 전달
      * - doInBackground()에서 캐쉬 조회 및 네트웤API 호출, 캐쉬 업데이트 등을 수행
      * - onPostExecute()에서 listener의 onApiResult() 메소드를 호출하여 데이터로딩 후처리 진행
      */
-    private class Builder<T> extends AsyncTask<Void, Void, T>{
+    private class Builder<T> extends AsyncTask<Void, Void, T> {
         private Class<T> resultType;
         ApiExecutor<T> apiExecutor;
         ApiResultListener resultListener;
         String measureApiName;
         String cacheKey;
+        int cacheDuration = CACHE_EXPIRE_SECONDS;
         boolean cacheReadable = false;
         boolean cacheWritable = false;
 

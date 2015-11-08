@@ -1,4 +1,4 @@
-package kr.bobplanet.android.event;
+package kr.bobplanet.android.log;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;

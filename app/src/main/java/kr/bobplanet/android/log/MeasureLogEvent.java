@@ -1,7 +1,4 @@
-package kr.bobplanet.android.event;
-
-import android.support.annotation.Nullable;
-import android.util.Log;
+package kr.bobplanet.android.log;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;

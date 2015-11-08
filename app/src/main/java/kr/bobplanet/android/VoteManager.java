@@ -6,12 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
 import hugo.weaving.DebugLog;
-import kr.bobplanet.android.event.UserSignInEvent;
-import kr.bobplanet.android.event.UserLogEvent;
+import kr.bobplanet.android.event.UserAccountEvent;
+import kr.bobplanet.android.log.UserLogEvent;
 import kr.bobplanet.android.ui.BaseActivity;
 import kr.bobplanet.android.ui.BaseDialogBuilder;
 import kr.bobplanet.backend.bobplanetApi.model.Item;
@@ -127,9 +126,11 @@ public class VoteManager {
      */
     @SuppressWarnings("UnusedDeclaration")
     @DebugLog
-    public void onEvent(UserSignInEvent event) {
-        UserLogEvent.login(event.accountType);
-        uploadVote();
+    public void onEvent(UserAccountEvent event) {
+        if (event instanceof UserAccountEvent.SignIn) {
+            UserLogEvent.login(event.accountType);
+            uploadVote();
+        }
     }
 
     public void setVoteCompletionListener(VoteCompletionListener listener) {

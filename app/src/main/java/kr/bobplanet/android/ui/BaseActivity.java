@@ -1,8 +1,6 @@
 package kr.bobplanet.android.ui;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -11,34 +9,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
-import com.facebook.GraphRequest;
-import com.facebook.Profile;
-import com.facebook.ProfileTracker;
-import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
-import com.google.android.gms.common.Scopes;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.plus.Plus;
-import com.google.android.gms.plus.model.people.Person;
-import com.nhn.android.naverlogin.OAuthLogin;
-import com.nhn.android.naverlogin.OAuthLoginHandler;
-
-import java.util.Arrays;
-import java.util.UUID;
-
-import hugo.weaving.DebugLog;
-import kr.bobplanet.android.App;
 import kr.bobplanet.android.Constants;
 import kr.bobplanet.android.R;
-import kr.bobplanet.android.event.ScreenLogEvent;
+import kr.bobplanet.android.log.ScreenLogEvent;
 import kr.bobplanet.android.signin.SignInProvider;
-import kr.bobplanet.backend.bobplanetApi.model.Secret;
-import kr.bobplanet.backend.bobplanetApi.model.User;
 
 /**
  * Bobplanet 앱에서 사용하는 모든 Activity들의 엄마클래스.

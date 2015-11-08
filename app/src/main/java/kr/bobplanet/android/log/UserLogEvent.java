@@ -1,9 +1,7 @@
-package kr.bobplanet.android.event;
+package kr.bobplanet.android.log;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-
-import java.util.Map;
 
 /**
  * 사용자의 액션에 의해 일어나는 이벤트를 측정하기 위한 객체.

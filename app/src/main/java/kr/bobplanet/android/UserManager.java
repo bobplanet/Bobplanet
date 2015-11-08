@@ -5,15 +5,13 @@ import android.content.Intent;
 import android.provider.Settings;
 import android.util.Log;
 
-import com.facebook.Profile;
 import com.google.android.gms.iid.InstanceID;
-import com.google.android.gms.plus.model.people.Person;
 
 import java.util.UUID;
 
 import de.greenrobot.event.EventBus;
 import hugo.weaving.DebugLog;
-import kr.bobplanet.android.event.UserSignInEvent;
+import kr.bobplanet.android.event.UserAccountEvent;
 import kr.bobplanet.android.gcm.GcmEvent;
 import kr.bobplanet.android.gcm.GcmServices;
 import kr.bobplanet.backend.bobplanetApi.model.User;
@@ -186,8 +184,15 @@ public class UserManager implements ApiProxy.ApiResultListener<UserDevice> {
                 this.device = result;
                 prefs.storeDevice(device);
 
-                EventBus.getDefault().post(new UserSignInEvent(user.getAccountType()));
+                EventBus.getDefault().post(new UserAccountEvent.SignIn(user.getAccountType()));
             }
+        });
+    }
+
+    public void unregisterUser() {
+        App.getApiProxy().unregisterUser(device, result -> {
+            EventBus.getDefault().post(new UserAccountEvent.SignOut(device.getUser().getAccountType()));
+            device.setUser(null);
         });
     }
 }

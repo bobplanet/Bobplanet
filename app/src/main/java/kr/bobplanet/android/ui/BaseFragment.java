@@ -3,7 +3,7 @@ package kr.bobplanet.android.ui;
 import android.support.v4.app.Fragment;
 
 import kr.bobplanet.android.Constants;
-import kr.bobplanet.android.event.ScreenLogEvent;
+import kr.bobplanet.android.log.ScreenLogEvent;
 
 /**
  * 이 앱이 사용하는 모든 fragment의 엄마 클래스.
