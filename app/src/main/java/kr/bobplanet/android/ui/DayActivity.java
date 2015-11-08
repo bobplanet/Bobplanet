@@ -1,16 +1,21 @@
 package kr.bobplanet.android.ui;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.android.volley.toolbox.NetworkImageView;
 import com.commonsware.cwac.pager.PageDescriptor;
 import com.commonsware.cwac.pager.SimplePageDescriptor;
 import com.commonsware.cwac.pager.v4.ArrayPagerAdapter;
@@ -48,6 +53,16 @@ public class DayActivity extends BaseActivity {
      */
     private boolean isWeekViewMode = false;
 
+    /**
+     * 화면 왼쪽에서 나오는 Drawer의 레이아웃
+     */
+    private DrawerLayout drawerLayout;
+
+    /**
+     * Drawer를 켰다꺼는 토글버튼
+     */
+    private ActionBarDrawerToggle drawerToggle;
+
 	/**
 	 * Fragment 관리용 Adapter
 	 */
@@ -58,9 +73,23 @@ public class DayActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.day_activity);
 
+        // Toolbar 표시 & 버튼 노출
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // Drawer 표시
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
+                R.string.app_name, R.string.app_name);
+        drawerLayout.setDrawerListener(drawerToggle);
+
+        // Drawer 설정
+        NetworkImageView profileView = (NetworkImageView) findViewById(R.id.profile_image);
+        if (App.getUserManager().hasAccount()) {
+            profileView.setImageUrl(App.getUserManager().getUserImage(), App.getImageLoader());
+        }
+        
         // DayFragment가 보내주는 데이터로딩완료 메시지 수신을 위해 EventBus 등록
         EventBus.getDefault().register(this);
 
@@ -99,9 +128,42 @@ public class DayActivity extends BaseActivity {
     }
 
     @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        drawerToggle.syncState();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (drawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        drawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    /**
+     * Override하지 않으면 Drawer가 열린 상태에서 back 눌렀을 때 Activity가 종료됨
+     */
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     /**

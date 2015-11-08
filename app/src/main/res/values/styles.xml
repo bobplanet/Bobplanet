@@ -16,6 +16,18 @@
 	<!-- 기본 스타일 -->
     <style name="AppTheme" parent="Base.AppTheme" />
 
+    <!-- 일반화면용 툴바의 스타일 -->
+    <style name="AppTheme.Toolbar" parent="@style/AppTheme">
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
+        <item name="android:background">@color/primary</item>
+        <item name="android:actionModeBackground">@android:color/white</item>
+    </style>
+
+    <style name="AppTheme.Drawer">
+        <item name="android:colorBackground">@color/primary_dark</item>
+    </style>
+
     <!-- 스플래시화면 스타일 -->
     <style name="AppTheme.Splash">
         <item name="android:windowBackground">@drawable/splash</item>
@@ -30,14 +42,6 @@
 	<!-- 설정화면 스타일 -->
     <style name="AppTheme.Settings" parent="AppTheme">
         <item name="colorAccent">@color/primary_dark</item>
-    </style>
-
-	<!-- 일반화면용 툴바의 스타일 -->
-    <style name="AppTheme.Toolbar" parent="@style/AppTheme">
-        <item name="android:textColorPrimary">@android:color/white</item>
-        <item name="android:textColorSecondary">@android:color/white</item>
-        <item name="android:background">@color/primary</item>
-		<item name="android:actionModeBackground">@android:color/white</item>
     </style>
 
     <style name="AppTheme.LoginButton" parent="android:style/Widget.ImageButton">
