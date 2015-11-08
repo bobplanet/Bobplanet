@@ -1,5 +1,7 @@
 package kr.bobplanet.android.ui;
 
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.DrawableContainer;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
@@ -29,19 +31,32 @@ import kr.bobplanet.backend.bobplanetApi.model.Submenu;
 public class DayViewHolder extends BaseListAdapter.BaseViewHolder<Menu> implements View.OnClickListener {
     private static final String TAG = DayViewHolder.class.getSimpleName();
 
+    private static final int SUBMENU_DISPLAY_COUNT = 3;
+
     Menu menu;
 
     @Bind(R.id.when)
     TextView when;
-    @Bind(R.id.thumbnail)
-    NetworkImageView thumbnail;
+    @Bind(R.id.image)
+    NetworkImageView image;
     @Bind(R.id.name)
     TextView name;
     @Bind(R.id.signal)
     ImageView signal;
+    @Bind(R.id.submenu)
+    TextView submenu;
+    @Bind(R.id.thumb_up_count)
+    TextView thumbUpCount;
+    @Bind(R.id.thumb_down_count)
+    TextView thumbDownCount;
+    @Bind(R.id.thumb_up_comment)
+    TextView thumbUpComment;
+    @Bind(R.id.thumb_down_comment)
+    TextView thumbDownComment;
 
     public DayViewHolder(View itemView) {
         super(itemView);
+
         ButterKnife.bind(this, itemView);
 
         itemView.setOnClickListener(this);
@@ -50,9 +65,12 @@ public class DayViewHolder extends BaseListAdapter.BaseViewHolder<Menu> implemen
     @Override
     void setItem(Menu menu) {
         if (menu == null) return;
-
         this.menu = menu;
+        setMeta();
+        setVote();
+    }
 
+    private void setMeta() {
         int background = R.color.breakfast_bg;
         switch (menu.getWhen()) {
             case "아침":
@@ -71,12 +89,44 @@ public class DayViewHolder extends BaseListAdapter.BaseViewHolder<Menu> implemen
         Item item = menu.getItem();
 
         if (item.getImage() != null) {
-            thumbnail.setImageUrl(item.getImage(), getImageLoader());
+            image.setImageUrl(item.getImage(), getImageLoader());
         } else {
-            thumbnail.setDefaultImageResId(R.drawable.no_menu);
+            image.setDefaultImageResId(R.drawable.no_menu);
         }
 
         name.setText(item.getName());
+
+        // 서브메뉴는 ','로 concatenate
+        List<Submenu> submenus = menu.getSubmenu();
+        if (submenus != null) {
+            List<String> subs = new ArrayList<>();
+            for (int i = 0; i < SUBMENU_DISPLAY_COUNT; i++) {
+                Item subItem = submenus.get(i).getItem();
+                if (subItem != null) {
+                    subs.add(subItem.getName());
+                }
+            }
+            subs.add("...");
+            submenu.setText(TextUtils.join(", ", subs));
+        }
+    }
+
+    private void setVote() {
+        Item item = menu.getItem();
+
+        int thumbUps = item.getNumThumbUps();
+        int thumbDowns = item.getNumThumbDowns();
+
+        int drawableResId = R.drawable.signal_wait;
+        if (thumbUps + 1> (thumbDowns + 1) * 2) {
+            drawableResId = R.drawable.signal_go;
+        } else if (thumbDowns + 1> (thumbUps + 1) * 2) {
+            drawableResId = R.drawable.signal_stop;
+        }
+        signal.setImageDrawable(ContextCompat.getDrawable(itemView.getContext(), drawableResId));
+
+        thumbUpCount.setText(String.format("%,d", thumbUps));
+        thumbDownCount.setText(String.format("%,d", thumbDowns));
     }
 
     @Override

@@ -1,8 +1,12 @@
 <resources>
-    <dimen name="daily_name">24sp</dimen>
-    <dimen name="daily_signal_size">16dp</dimen>
-    <dimen name="daily_sub">13dip</dimen>
-    <dimen name="daily_calories">12dip</dimen>
+    <dimen name="day_item_name">22sp</dimen>
+    <dimen name="day_item_signal">16dp</dimen>
+    <dimen name="day_item_submenu">13sp</dimen>
+
+    <dimen name="day_item_thumb">16dp</dimen>
+    <dimen name="day_item_thumb_count">16sp</dimen>
+    <dimen name="day_item_comment">12sp</dimen>
+
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="app_bar_height">240dp</dimen>
     <dimen name="text_margin">16dp</dimen>

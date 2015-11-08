@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.android.volley.toolbox.NetworkImageView;
 import com.commonsware.cwac.pager.PageDescriptor;
@@ -35,10 +36,10 @@ import kr.bobplanet.backend.bobplanetApi.model.Menu;
 
 /**
  * 특정 일자의 아침-점심-저녁 메뉴리스트를 보여주는 Activity.
- * <p/>
+ * <p>
  * 실행 intent의 extra에 날짜가 지정되어있을 경우(가령, 푸쉬메시지를 통한 실행) 그 날짜를,
  * 없을 경우에는 오늘 날짜를 사용한다.
- * <p/>
+ * <p>
  * - Fragment와의 통신을 위해 EventBus 이용 (@see https://github.com/greenrobot/EventBus/)
  * - Fragment의 동적 추가를 위해 ArrayPagerAdapter 이용 (@see https://github.com/commonsguy/cwac-pager)
  * - ViewPager를 이용하여 DayViewFragment를 좌우 swipe로 넘겨볼 수 있음
@@ -63,9 +64,9 @@ public class DayActivity extends BaseActivity {
      */
     private ActionBarDrawerToggle drawerToggle;
 
-	/**
-	 * Fragment 관리용 Adapter
-	 */
+    /**
+     * Fragment 관리용 Adapter
+     */
     private DayPagerAdapter adapter;
 
     @Override
@@ -89,7 +90,7 @@ public class DayActivity extends BaseActivity {
         if (App.getUserManager().hasAccount()) {
             profileView.setImageUrl(App.getUserManager().getUserImage(), App.getImageLoader());
         }
-        
+
         // DayFragment가 보내주는 데이터로딩완료 메시지 수신을 위해 EventBus 등록
         EventBus.getDefault().register(this);
 
@@ -140,9 +141,33 @@ public class DayActivity extends BaseActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(android.view.Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.menu_day, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (drawerToggle.onOptionsItemSelected(item)) {
             return true;
+        }
+
+        switch (item.getItemId()) {
+            case R.id.action_morning_toggle:
+                Preferences prefs = App.getPreferences();
+                boolean active = prefs.isMorningMenuActive();
+                prefs.setMorningMenuActive(!active);
+
+                int messageId = !active ? R.string.morning_menu_active : R.string.morning_menu_inactive;
+                Toast.makeText(this, getString(messageId), Toast.LENGTH_SHORT).show();
+                EventBus.getDefault().post(new MorningMenuToggleEvent(!active));
+                return true;
+
+            case R.id.action_dayweek_toggle:
+                isWeekViewMode = !isWeekViewMode;
+                item.setIcon(isWeekViewMode ? R.drawable.ic_filter_7 : R.drawable.ic_filter_1);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -191,8 +216,8 @@ public class DayActivity extends BaseActivity {
         DailyMenu d = e.getDailyMenu();
         Log.v(TAG, "Data load complete: " + d.toString());
 
-		// 주의사항: FragmentManager를 이용해서 fragment 존재여부 체크하면 안됨.
-		// 이 단계에서는 adapter에만 추가되어있어, FM에서는 해당 fragment를 모르는 상태임.
+        // 주의사항: FragmentManager를 이용해서 fragment 존재여부 체크하면 안됨.
+        // 이 단계에서는 adapter에만 추가되어있어, FM에서는 해당 fragment를 모르는 상태임.
         if (d.getPreviousDate() != null && !isExistingPage(d.getPreviousDate())) {
             Log.i(TAG, "Creating fragment of the previous day: " + d.getPreviousDate());
             adapter.insert(newPageDescriptor(d.getPreviousDate()), 0);
@@ -204,11 +229,10 @@ public class DayActivity extends BaseActivity {
     }
 
     /**
-	 * 이미 해당날짜의 Fragment가 있는지 확인한다.
-	 * 10월 5일 화면을 띄우는 순간 10월 4일과 6일 화면을 미리 만들어두는데,
-	 * 10월 4일 화면으로 이동하면 10월 3일(이건 괜찮음)과 5일(이건 안됨) 화면을 또 만들려고 하기 때문.
-	 *
-	 */
+     * 이미 해당날짜의 Fragment가 있는지 확인한다.
+     * 10월 5일 화면을 띄우는 순간 10월 4일과 6일 화면을 미리 만들어두는데,
+     * 10월 4일 화면으로 이동하면 10월 3일(이건 괜찮음)과 5일(이건 안됨) 화면을 또 만들려고 하기 때문.
+     */
     private boolean isExistingPage(String date) {
         int page_count = adapter.getCount();
         for (int i = 0; i < page_count; i++) {
@@ -220,21 +244,21 @@ public class DayActivity extends BaseActivity {
         return false;
     }
 
-	/**
-	 * 식단메뉴 상세페이지로 이동.
-	 * 식단메뉴가 클릭되었을 때 EventBus에 의해 호출됨.
-	 *
-	 * - 관련 View가 ViewPager 밑의 fragment 밑의 RecyclerView 밑에 있어서 그냥 EventBus로 간단히 구현함.
-	 * - startActivity()는 메인스레드(=UI스레드)에서 실행되어야 하는 것으로 보임.
-	 */
+    /**
+     * 식단메뉴 상세페이지로 이동.
+     * 식단메뉴가 클릭되었을 때 EventBus에 의해 호출됨.
+     * <p>
+     * - 관련 View가 ViewPager 밑의 fragment 밑의 RecyclerView 밑에 있어서 그냥 EventBus로 간단히 구현함.
+     * - startActivity()는 메인스레드(=UI스레드)에서 실행되어야 하는 것으로 보임.
+     */
     @SuppressWarnings("unused")
     public void onEventMainThread(DayViewHolder.ViewClickEvent e) {
         startMenuViewActivity(e.viewHolder);
     }
 
-	/**
-	 * TODO Activity 전환 transition 효과 복구.
-	 */
+    /**
+     * TODO Activity 전환 transition 효과 복구.
+     */
     private void startMenuViewActivity(DayViewHolder viewHolder) {
         Menu menu = viewHolder.menu;
 
@@ -251,9 +275,9 @@ public class DayActivity extends BaseActivity {
         startActivity(intent);
     }
 
-	/**
-	 * 좌우로 swipe하면 다른 날짜 메뉴도 볼 수 있음을 Snackbar로 알려줌
-	 */
+    /**
+     * 좌우로 swipe하면 다른 날짜 메뉴도 볼 수 있음을 Snackbar로 알려줌
+     */
     private void showSwipeNotice() {
         final Preferences prefs = App.getPreferences();
 
@@ -265,32 +289,6 @@ public class DayActivity extends BaseActivity {
         Snackbar.make(layout, R.string.swipe_notice, Snackbar.LENGTH_INDEFINITE)
                 .setAction(R.string.swipe_notice_goaway, (v) -> prefs.setDismissedSwipeNotice())
                 .show();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(android.view.Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.menu_day, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_morning_toggle:
-                Preferences prefs = App.getPreferences();
-                boolean active = prefs.isMorningMenuActive();
-                prefs.setMorningMenuActive(!active);
-                EventBus.getDefault().post(new MorningMenuToggleEvent(!active));
-                return true;
-
-            case R.id.action_dayweek_toggle:
-                isWeekViewMode = !isWeekViewMode;
-                item.setIcon(isWeekViewMode ? R.drawable.ic_filter_7 : R.drawable.ic_filter_1);
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     /**

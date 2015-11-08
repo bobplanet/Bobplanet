@@ -12,9 +12,9 @@
 
     <!-- 이미지 / 메뉴명 / 서브메뉴 / 칼로리 등을 담는 layout -->
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <!-- 이미지 + '아침/점심/저녁' -->
         <FrameLayout
@@ -23,7 +23,7 @@
             android:layout_height="wrap_content">
 
             <com.android.volley.toolbox.NetworkImageView
-                android:id="@+id/thumbnail"
+                android:id="@+id/image"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:scaleType="centerCrop"
@@ -42,27 +42,112 @@
 
         <!-- 메뉴이름 -->
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:orientation="horizontal"
+            android:weightSum="10"
+            android:divider="?android:dividerHorizontal"
+            android:showDividers="middle" >
 
-            <TextView
-                android:id="@+id/name"
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/daily_name"
-                android:textStyle="bold"
-                android:transitionName="menu_title"
-                tools:text="Menu title" />
-            
-            <ImageView
-                android:id="@+id/signal"
-                android:src="@drawable/signal_go"
-                android:layout_width="@dimen/daily_signal_size"
-                android:layout_height="@dimen/daily_signal_size"
-                />
+                android:layout_weight="10">
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/day_item_name"
+                    android:textStyle="bold"
+                    android:transitionName="menu_title"
+                    tools:text="Menu title" />
+
+                <ImageView
+                    android:id="@+id/signal"
+                    android:layout_width="@dimen/day_item_signal"
+                    android:layout_height="@dimen/day_item_signal"
+                    android:scaleType="centerInside"
+                    android:layout_toRightOf="@id/name"
+                    android:src="@drawable/signal_go" />
+
+                <TextView
+                    android:id="@+id/submenu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/name"
+                    android:textSize="@dimen/day_item_submenu"
+                    tools:text="쌀밥, 계란후라이, 토란대볶음..." />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp">
+
+                <ImageView
+                    android:id="@+id/button_thumb_up"
+                    android:layout_width="@dimen/day_item_thumb"
+                    android:layout_height="@dimen/day_item_thumb"
+                    android:src="@drawable/ic_thumb_up"
+                    android:tint="@color/thumb_up" />
+
+                <TextView
+                    android:id="@+id/thumb_up_count"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/button_thumb_up"
+                    android:textColor="@color/thumb_up"
+                    android:textSize="@dimen/day_item_thumb_count"
+                    tools:text="111" />
+
+                <TextView
+                    android:id="@+id/thumb_up_comment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/button_thumb_up"
+                    android:paddingTop="2dp"
+                    android:textColor="@color/thumb_up"
+                    tools:text='"해장메뉴"' />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp">
+
+                <ImageView
+                    android:id="@+id/button_thumb_down"
+                    android:layout_width="@dimen/day_item_thumb"
+                    android:layout_height="@dimen/day_item_thumb"
+                    android:src="@drawable/ic_thumb_down"
+                    android:tint="@color/thumb_down" />
+
+                <TextView
+                    android:id="@+id/thumb_down_count"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/button_thumb_down"
+                    android:textColor="@color/thumb_down"
+                    android:textSize="@dimen/day_item_thumb_count"
+                    tools:text="111" />
+
+                <TextView
+                    android:id="@+id/thumb_down_comment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/button_thumb_down"
+                    android:paddingTop="2dp"
+                    android:textColor="@color/thumb_down"
+                    tools:text='"소금국"' />
+
+            </RelativeLayout>
 
         </LinearLayout>
- </LinearLayout>
+
+    </LinearLayout>
 
 </android.support.v7.widget.CardView>

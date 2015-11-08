@@ -153,6 +153,8 @@ public class DayFragment extends BaseFragment {
 
         EventBus.getDefault().register(this);
 
+        if (menuList != EMPTY_MENU_LIST) return;
+
         // 데이터 로딩이 끝나면 그에 맞게 UI 업데이트하고 activity에도 데이터로딩 끝났음을 전달
         ApiProxy.ApiResultListener<DailyMenu> listener = (DailyMenu dailyMenu) -> {
             if (dailyMenu == null) return;
