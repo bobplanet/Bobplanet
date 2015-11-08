@@ -2,6 +2,7 @@ package kr.bobplanet.android.signin;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -125,8 +126,8 @@ public class SignInManager implements Constants {
             String accountType = accountTypes.get(i);
             ImageButton button = (ImageButton) view.findViewById(buttonIds[i]);
 
-            button.setTag(new Tag(accountType, i + 1));
-            button.setImageDrawable(context.getResources().getDrawable(buttonDrawables.get(accountType)));
+            button.setTag(new SignInInfo(accountType, i + 1));
+            button.setImageDrawable(ContextCompat.getDrawable(context, buttonDrawables.get(accountType)));
 
             button.setOnClickListener(v -> {
                 positiveButton.setEnabled(true);
@@ -155,10 +156,10 @@ public class SignInManager implements Constants {
                 .setTitle(R.string.dialog_login_label)
                 .setView(view)
                 .setPositiveButton(R.string.button_ok, (dialog, which) -> {
-                    Tag tag = (Tag) view.getTag();
-                    UserLogEvent.accountSelect(tag.accountType, tag.displayOrder);
+                    SignInInfo signInInfo = (SignInInfo) view.getTag();
+                    UserLogEvent.accountSelect(signInInfo.accountType, signInInfo.displayOrder);
 
-                    SignInProvider provider = getSignInProvider(tag.accountType);
+                    SignInProvider provider = getSignInProvider(signInInfo.accountType);
                     activity.setSignInProvider(provider);
                     provider.requestSignIn(activity, secret);
                 })
@@ -177,11 +178,11 @@ public class SignInManager implements Constants {
     /**
      * 계정 선택 버튼의 위치와 계정 종류를 저장하는 tag 객체
      */
-    private class Tag {
+    private class SignInInfo {
         String accountType;
         int displayOrder;
 
-        private Tag(String accountType, int displayOrder) {
+        private SignInInfo(String accountType, int displayOrder) {
             this.accountType = accountType;
             this.displayOrder = displayOrder;
         }

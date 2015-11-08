@@ -93,4 +93,9 @@ abstract public class BaseMessage {
     public void onSave() {
         this.sentDate = new Date();
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s { type=%s title=%s }", this.getClass().getSimpleName(), type, title);
+    }
 }

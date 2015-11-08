@@ -30,21 +30,21 @@
                 android:id="@+id/signin_button_1"
                 android:layout_width="@dimen/login_button_size"
                 android:layout_height="@dimen/login_button_size"
-                style="@style/AppTheme.LoginButton" />
+                style="@style/AppTheme.ToggleButton" />
 
             <ImageButton
                 android:id="@+id/signin_button_2"
                 android:layout_width="@dimen/login_button_size"
                 android:layout_height="@dimen/login_button_size"
                 android:layout_marginLeft="10dp"
-                style="@style/AppTheme.LoginButton" />
+                style="@style/AppTheme.ToggleButton" />
 
             <ImageButton
                 android:id="@+id/signin_button_3"
                 android:layout_width="@dimen/login_button_size"
                 android:layout_height="@dimen/login_button_size"
                 android:layout_marginLeft="10dp"
-                style="@style/AppTheme.LoginButton" />
+                style="@style/AppTheme.ToggleButton" />
 
         </LinearLayout>
     </LinearLayout>

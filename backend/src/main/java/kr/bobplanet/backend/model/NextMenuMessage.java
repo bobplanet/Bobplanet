@@ -33,5 +33,4 @@ public class NextMenuMessage extends BaseMessage {
 
         return new NextMenuMessage(messageType, menuIdList);
     }
-
 }

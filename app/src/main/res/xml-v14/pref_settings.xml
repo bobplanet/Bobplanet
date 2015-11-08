@@ -1,23 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory
-        android:title="@string/settings_push_category">
+    <PreferenceCategory android:title="@string/settings_screen_category">
 
         <SwitchPreference
+            android:defaultValue="false"
+            android:key="MORNING_DISPLAY"
+            android:summaryOff="@string/settings_screen_morning_menu_off"
+            android:summaryOn="@string/settings_screen_morning_menu_on"
+            android:title="@string/settings_screen_morning_menu" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/settings_push_category">
+
+        <SwitchPreference
+            android:defaultValue="true"
             android:key="LUNCH_PUSH"
-            android:title="@string/settings_push_lunch"
-            android:defaultValue="true"
-            android:summaryOn="@string/settings_push_lunch_summary_on"
             android:summaryOff="@string/settings_push_lunch_summary_off"
-            />
+            android:summaryOn="@string/settings_push_lunch_summary_on"
+            android:title="@string/settings_push_lunch" />
 
         <SwitchPreference
-            android:key="DINNER_PUSH"
-            android:title="@string/settings_push_dinner"
             android:defaultValue="true"
-            android:summaryOn="@string/settings_push_dinner_summary_on"
+            android:key="DINNER_PUSH"
             android:summaryOff="@string/settings_push_dinner_summary_off"
-            />
+            android:summaryOn="@string/settings_push_dinner_summary_on"
+            android:title="@string/settings_push_dinner" />
 
     </PreferenceCategory>
 
@@ -33,8 +41,7 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory
-        android:title="@string/settings_etc_category">
+    <PreferenceCategory android:title="@string/settings_etc_category">
 
         <Preference
             android:key="ABOUT"

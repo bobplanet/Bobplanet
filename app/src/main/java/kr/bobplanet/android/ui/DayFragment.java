@@ -29,6 +29,7 @@ import kr.bobplanet.android.event.MorningMenuToggleEvent;
 import kr.bobplanet.android.event.NetworkExceptionEvent;
 import kr.bobplanet.backend.bobplanetApi.model.DailyMenu;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
+import kr.bobplanet.backend.bobplanetApi.model.UserDevice;
 
 /**
  * 특정 일자의 아침-점심-저녁 메뉴를 보여주는 fragment.
@@ -153,8 +154,6 @@ public class DayFragment extends BaseFragment {
 
         EventBus.getDefault().register(this);
 
-        if (menuList != EMPTY_MENU_LIST) return;
-
         // 데이터 로딩이 끝나면 그에 맞게 UI 업데이트하고 activity에도 데이터로딩 끝났음을 전달
         ApiProxy.ApiResultListener<DailyMenu> listener = (DailyMenu dailyMenu) -> {
             if (dailyMenu == null) return;
@@ -165,8 +164,8 @@ public class DayFragment extends BaseFragment {
             if (menuList != null) {
                 BaseListAdapter.BaseViewHolderFactory factory = (View view) -> new DayViewHolder(view);
 
-                Preferences prefs = App.getPreferences();
-                if (!prefs.isMorningMenuActive()) {
+                UserDevice device = App.getUserManager().getDevice();
+                if (!device.getMorningMenuEnabled()) {
                     morningMenu = menuList.get(0);
                     menuList.remove(0);
                 }

@@ -1,1 +1,1 @@
-include ':app', ':backend'
+include ':app', ':app:libs:Android-Cloud-TagView-Plus:library', ':backend'

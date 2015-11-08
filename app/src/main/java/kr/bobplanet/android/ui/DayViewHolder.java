@@ -20,6 +20,7 @@ import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
 import kr.bobplanet.android.R;
 import kr.bobplanet.backend.bobplanetApi.model.Item;
+import kr.bobplanet.backend.bobplanetApi.model.ItemVoteSummary;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
 import kr.bobplanet.backend.bobplanetApi.model.Submenu;
 
@@ -113,9 +114,10 @@ public class DayViewHolder extends BaseListAdapter.BaseViewHolder<Menu> implemen
 
     private void setVote() {
         Item item = menu.getItem();
+        ItemVoteSummary voteSummary = item.getVoteSummary();
 
-        int thumbUps = item.getNumThumbUps();
-        int thumbDowns = item.getNumThumbDowns();
+        int thumbUps = voteSummary.getNumThumbUps();
+        int thumbDowns = voteSummary.getNumThumbDowns();
 
         int drawableResId = R.drawable.signal_wait;
         if (thumbUps + 1> (thumbDowns + 1) * 2) {

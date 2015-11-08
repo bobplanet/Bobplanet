@@ -18,6 +18,7 @@ import kr.bobplanet.android.event.NetworkExceptionEvent;
 import kr.bobplanet.backend.bobplanetApi.BobplanetApi;
 import kr.bobplanet.backend.bobplanetApi.model.DailyMenu;
 import kr.bobplanet.backend.bobplanetApi.model.Item;
+import kr.bobplanet.backend.bobplanetApi.model.ItemVoteSummary;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
 import kr.bobplanet.backend.bobplanetApi.model.Secret;
 import kr.bobplanet.backend.bobplanetApi.model.UserDevice;
@@ -102,7 +103,7 @@ public class ApiProxy implements Constants {
 
     /**
      * 주어진 메뉴번호로 메뉴를 가져온다.
-     * MenuDetailViewActivity와 GcmServices.MessageListener에서 주로 사용.
+     * MenuActivity와 GcmServices.MessageListener에서 주로 사용.
      *
      * @param id
      * @param listener 데이터로드 후처리를 담당할 listener
@@ -161,18 +162,13 @@ public class ApiProxy implements Constants {
     /**
      * 메뉴 평가.
      *
-     * @param userId
-     * @param menu
-     * @param score
-     * @param listener
+     * @param vote
      */
     @DebugLog
-    public void vote(final String userId, final Menu menu, final int score, ApiResultListener<Item> listener) {
-        Log.v(TAG, "score = " + score);
-
-        new Builder<>(Item.class, () -> api.vote(userId, menu.getItem().getName(), menu.getId(), score).execute(), "vote")
+    public void vote(Vote vote, ApiResultListener<ItemVoteSummary> listener) {
+        new Builder<>(ItemVoteSummary.class, () -> api.vote(vote).execute(), "vote")
                 .setResultListener(listener)
-                .setCacheKey(menu.getId())
+                .setCacheKey(vote.getMenuId())
                 .setCacheWritable(true)
                 .execute();
     }

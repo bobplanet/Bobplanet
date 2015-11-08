@@ -82,6 +82,7 @@ public class UserManager implements ApiProxy.ApiResultListener<UserDevice> {
     private UserDevice createUserDevice() {
         UserDevice device = new UserDevice()
                 .setId(UUID.randomUUID().toString())
+                .setMorningMenuEnabled(false)
                 .setLunchPushEnabled(true)
                 .setDinnerPushEnabled(true)
                 .setAndroidId(

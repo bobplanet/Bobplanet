@@ -44,7 +44,7 @@
         <item name="colorAccent">@color/primary_dark</item>
     </style>
 
-    <style name="AppTheme.LoginButton" parent="android:style/Widget.ImageButton">
+    <style name="AppTheme.ToggleButton" parent="android:style/Widget.ImageButton">
         <item name="android:scaleType">fitXY</item>
         <item name="android:background">@drawable/signin_button_border</item>
         <item name="android:padding">6dp</item>

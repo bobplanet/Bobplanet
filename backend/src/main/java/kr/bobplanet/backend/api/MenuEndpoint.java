@@ -2,11 +2,12 @@ package kr.bobplanet.backend.api;
 
 import com.google.api.server.spi.config.ApiClass;
 import com.google.api.server.spi.config.ApiMethod;
-import com.googlecode.objectify.VoidWork;
 import com.googlecode.objectify.Work;
 import com.googlecode.objectify.cmd.LoadType;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Named;
 
@@ -15,6 +16,7 @@ import kr.bobplanet.backend.model.Item;
 import kr.bobplanet.backend.model.DailyMenu;
 import kr.bobplanet.backend.model.User;
 import kr.bobplanet.backend.model.Vote;
+import kr.bobplanet.backend.model.ItemVoteSummary;
 
 import static kr.bobplanet.backend.api.ObjectifyRegister.ofy;
 
@@ -47,6 +49,16 @@ public class MenuEndpoint extends BaseEndpoint {
 
         LoadType<Menu> menubase = ofy().load().type(Menu.class);
         List<Menu> menu = menubase.filter("date", date).list();
+        List<String> itemNames = new ArrayList<>(menu.size());
+        for (Menu m : menu) {
+            itemNames.add(m.getItem().getName());
+        }
+        Map<String, ItemVoteSummary> voteSummaries = ofy().load().type(ItemVoteSummary.class).ids(itemNames);
+        for (Menu m : menu) {
+            Item item = m.getItem();
+            ItemVoteSummary voteSummary = voteSummaries.get(item.getName());
+            item.setVoteSummary(voteSummary == null ? new ItemVoteSummary(item) : voteSummary);
+        }
 
         List<Menu> previous = menubase.filter("date <", date).order("-date").limit(1).list();
         String previous_date = previous.size() > 0 ? previous.get(0).getDate() : null;
@@ -80,50 +92,56 @@ public class MenuEndpoint extends BaseEndpoint {
 	 * 이 때 사용자가 매긴 점수 데이터는 Item의 속성에도 summarise되어 반영되며, 별도의 Vote 객체로도 저장된다.
 	 * (그래야 향후 사용자-메뉴아이템간 취향분석 등을 할 수 있으므로)
 	 *
-	 * @param itemName Item의 key("갈비탕", "잡채밥")
-	 * @param menuId 메뉴의 key
-	 * @score 평점(5점 만점)
 	 */
     @ApiMethod(
             name = "vote",
-            httpMethod = "POST"
+            httpMethod = "POST",
+            path = "vote"
     )
-    public Item vote(@Named("userId") final String userId, @Named("itemName") final String itemName,
-                     @Named("menuId") final Long menuId, @Named("score") final int score) {
-        logger.info(String.format(
-                        "Executing vote() : { userId, itemName, menuId, score }  = { %s, %s, %s, %d }",
-                        userId, itemName, menuId, score)
-        );
+    public ItemVoteSummary vote(final Vote vote) {
+        logger.info(String.format("Executing vote() : %s", vote.toString()));
 
         // 데이터 저장시 transaction 처리
-        return ofy().transact(new Work<Item>() {
-            @Override
-            public Item run() {
-                Item item = ofy().load().type(Item.class).id(itemName).now();
-                User user = new User(userId);
+        return ofy().transact(new Work<ItemVoteSummary>() {
+            final Item item = vote.getItem();
 
-                Vote vote = ofy().load().type(Vote.class).ancestor(item).filter("user", user).first().now();
-                logger.info("vote = " + vote);
-                if (vote != null) {
+            @Override
+            public ItemVoteSummary run() {
+                Vote oldVote = ofy().load().type(Vote.class)
+                        .ancestor(item).filter("user", vote.getUser()).first().now();
+
+                if (oldVote != null) {
+                    vote.setId(oldVote.getId());
+                }
+
+                ItemVoteSummary voteSummary =
+                        ofy().load().type(ItemVoteSummary.class).id(item.getName()).now();
+                if (voteSummary == null) {
+                    voteSummary = new ItemVoteSummary(vote);
+                }
+
+                logger.info("vote = " + oldVote);
+                if (oldVote != null) {
                     logger.info("Vote exists. Updates score");
-                    item.applyScore(score, vote.getScore());
+
+                    voteSummary.applyVote(vote, oldVote);
                 } else {
                     logger.info("no oldVote. Just adds score");
-                    vote = new Vote(new User(userId), item, new Menu(menuId));
-                    item.applyScore(score);
+
+                    voteSummary.applyVote(vote);
                 }
-                vote.setScore(score);
 
-                ofy().save().entities(vote, item).now();
+                ofy().save().entities(vote, voteSummary).now();
 
-                return item;
+                return voteSummary;
             }
         });
     }
 
     @ApiMethod(
             name = "myVote",
-            httpMethod = "GET"
+            httpMethod = "GET",
+            path = "myVote"
     )
     public Vote myVote(@Named("userId") final String userId, @Named("itemName") final String itemName) {
         logger.info(String.format(

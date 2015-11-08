@@ -53,6 +53,11 @@ public class UserDevice {
     String gcmToken;
 
     /**
+     * 아침메뉴 화면표시 여부
+     */
+    boolean morningMenuEnabled = false;
+
+    /**
      * 점심메뉴 알림메시지 수신여부
      */
     @Index
@@ -106,6 +111,14 @@ public class UserDevice {
 
     public void setIid(String iid) {
         this.iid = iid;
+    }
+
+    public boolean isMorningMenuEnabled() {
+        return morningMenuEnabled;
+    }
+
+    public void setMorningMenuEnabled(boolean morningMenuEnabled) {
+        this.morningMenuEnabled = morningMenuEnabled;
     }
 
     public boolean isLunchPushEnabled() {

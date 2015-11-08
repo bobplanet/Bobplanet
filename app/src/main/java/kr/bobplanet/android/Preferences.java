@@ -20,7 +20,6 @@ public class Preferences {
 
     private static final String DEVICE = "DEVICE";
 
-    private static final String IS_MORNING_MENU_ACTIVE = "IS_MORNING_MENU_ACTIVE";
     private static final String HAS_LAUNCHED = "HAS_LAUNCHED";
     private static final String HAS_DISMISSED_SWIPE_NOTICE = "HAS_DISMISSED_SWIPE_NOTICE";
 
@@ -47,14 +46,6 @@ public class Preferences {
 
     public void setDismissedSwipeNotice() {
         prefs.edit().putBoolean(HAS_DISMISSED_SWIPE_NOTICE, true).apply();
-    }
-
-    public boolean isMorningMenuActive() {
-        return prefs.getBoolean(IS_MORNING_MENU_ACTIVE, false);
-    }
-
-    public void setMorningMenuActive(boolean isActive) {
-        prefs.edit().putBoolean(IS_MORNING_MENU_ACTIVE, isActive).apply();
     }
 
     public boolean hasLaunched() {

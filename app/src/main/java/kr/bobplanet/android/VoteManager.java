@@ -2,9 +2,19 @@ package kr.bobplanet.android;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.TypedArrayUtils;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+
+import java.util.Arrays;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
@@ -28,7 +38,7 @@ import kr.bobplanet.backend.bobplanetApi.model.Vote;
  * @author heonkyu.jin
  * @version 15. 10. 24
  */
-public class VoteManager {
+public class VoteManager implements Constants {
     private static final String TAG = VoteManager.class.getSimpleName();
 
     private static final String DIALOG_VOTE = "DIALOG_VOTE";
@@ -38,7 +48,13 @@ public class VoteManager {
 
     private boolean userHasAccount;
     private Menu menu;
-    private int myScore;
+
+    private int score;
+    private List<String> comments;
+
+    private EditText commentsEditText;
+
+    private Button positiveButton;
 
     private VoteCompletionListener listener;
 
@@ -55,16 +71,36 @@ public class VoteManager {
 
         View view = LayoutInflater.from(context).inflate(R.layout.vote_dialog, null);
 
-        Dialog voteDialog = new BaseDialogBuilder(activity, DIALOG_VOTE)
+        AlertDialog voteDialog = new BaseDialogBuilder(activity, DIALOG_VOTE)
                 .setTitle(R.string.dialog_vote_label)
                 .setView(view)
+                .setPositiveButton(R.string.button_ok, (dialog, which) -> {
+                    voteOrRequestSignin();
+                    dialog.dismiss();
+                })
                 .setNegativeButton(R.string.button_cancel, null)
                 .create();
 
+        voteDialog.setOnShowListener(dialog -> {
+            positiveButton = voteDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+            positiveButton.setEnabled(false);
+        });
+
         ImageButton buttonUp = ButterKnife.findById(view, R.id.button_thumb_up);
-        buttonUp.setOnClickListener(v -> voteOrRequestSignin(Constants.VOTE_UP, voteDialog));
         ImageButton buttonDown = ButterKnife.findById(view, R.id.button_thumb_down);
-        buttonDown.setOnClickListener(v -> voteOrRequestSignin(Constants.VOTE_DOWN, voteDialog));
+
+        commentsEditText = ButterKnife.findById(view, R.id.comment_edit);
+
+        View.OnClickListener clickListener = v -> {
+            positiveButton.setEnabled(true);
+
+            score = v.getId() == R.id.button_thumb_up ? VOTE_UP : VOTE_DOWN;
+            buttonUp.setSelected(score == VOTE_UP);
+            buttonDown.setSelected(score != VOTE_UP);
+        };
+
+        buttonUp.setOnClickListener(clickListener);
+        buttonDown.setOnClickListener(clickListener);
 
         voteDialog.show();
     }
@@ -78,9 +114,10 @@ public class VoteManager {
         if (um.hasAccount()) {
             userHasAccount = true;
             App.getApiProxy().myVote(um.getUserId(), menu,
-                    (Vote result) -> {
+                    (kr.bobplanet.backend.bobplanetApi.model.Vote result) -> {
                         if (result != null) {
-                            myScore = result.getScore();
+                            score = result.getScore();
+                            comments = result.getComments();
                         }
                     }
             );
@@ -88,15 +125,12 @@ public class VoteManager {
     }
 
     @DebugLog
-    private void voteOrRequestSignin(int score, Dialog voteDialog) {
-        myScore = score;
-
+    private void voteOrRequestSignin() {
         if (userHasAccount) {
             uploadVote();
         } else {
             App.getSignInManager().showSignInDialog(activity);
         }
-        voteDialog.dismiss();
     }
 
     /**
@@ -104,12 +138,23 @@ public class VoteManager {
      */
     @DebugLog
     private void uploadVote() {
-        if (myScore != 0) {
+        if (score != 0) {
             ApiProxy proxy = App.getApiProxy();
-            proxy.vote(App.getUserManager().getUserId(), menu, myScore,
-                    null);
 
-            String level = context.getString(myScore > 0 ? R.string.vote_level_up : R.string.vote_level_down);
+            Vote vote = new Vote()
+                    .setUserId(App.getUserManager().getUserId())
+                    .setMenuId(menu.getId())
+                    .setItemName(menu.getItem().getName())
+                    .setScore(score)
+                    .setComments(Arrays.asList(commentsEditText.getText().toString().split(" ")));
+
+            proxy.vote(vote, result -> {
+                if (result != null) {
+                    Log.v(TAG, result.toString());
+                }
+            });
+
+            String level = context.getString(score > 0 ? R.string.vote_level_up : R.string.vote_level_down);
             String message = String.format(context.getString(R.string.vote_notice_fmt),
                     Util.appendParticle(menu.getItem().getName(), "을", "를"),
                     level, Util.endsWithConsonant(level) ? "이" : ""

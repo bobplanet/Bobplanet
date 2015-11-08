@@ -3,6 +3,7 @@ package kr.bobplanet.backend.model;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.IgnoreSave;
 import com.googlecode.objectify.annotation.Load;
 
 import java.util.List;
@@ -24,14 +25,20 @@ public class Menu {
 	/**
 	 * 메뉴번호. 통상 4자리 숫자.
 	 */
-    @Id private Long ID;
+    @Id
+    private Long ID;
 
 	/**
 	 * 식사항목. 가령 '갈비탕'
 	 */
-    @Load private Ref<Item> item;
-	
-	/**
+    @Load
+    private Ref<Item> item;
+
+    @Load
+    @IgnoreSave
+    private Ref<ItemVoteSummary> voteSummaryRef;
+
+    /**
 	 * 제공일자. "2015-10-09" 형식.
 	 */
     private String date;

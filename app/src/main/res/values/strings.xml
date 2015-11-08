@@ -41,6 +41,10 @@
 
     <!-- 설정화면 -->
     <string name="title_settings">설정</string>
+    <string name="settings_screen_category">화면</string>
+    <string name="settings_screen_morning_menu">아침메뉴 표시</string>
+    <string name="settings_screen_morning_menu_on">아침메뉴를 화면에 표시합니다</string>
+    <string name="settings_screen_morning_menu_off">아침메뉴를 화면에 표시하지 않습니다</string>
 	<string name="settings_push_category">푸시알림</string>
 	<string name="settings_push_lunch">점심메뉴 알림</string>
 	<string name="settings_push_lunch_summary_on">점심메뉴 알림메시지를 수신합니다</string>

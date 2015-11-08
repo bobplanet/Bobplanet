@@ -113,4 +113,22 @@ public class UserEndpoint extends BaseEndpoint {
             }
         });
     }
+
+
+    /**
+     * 사용자 탈퇴. 사용자가 'logout'를 선택할 경우 호출
+     *
+     * @param deviceId
+     * @param user
+     */
+    @ApiMethod(
+            name = "unregisterUser",
+            path = "user/unregister",
+            httpMethod = "POST"
+    )
+    public void unregisterUser(@Named("deviceId") final String deviceId, final User user) {
+        logger.info(String.format("unregisterUser(): deviceId = %s, user = %s", deviceId, user));
+
+        ofy().delete().entity(user).now();
+    }
 }

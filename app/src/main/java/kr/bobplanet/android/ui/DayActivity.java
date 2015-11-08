@@ -33,6 +33,7 @@ import kr.bobplanet.android.R;
 import kr.bobplanet.android.event.MorningMenuToggleEvent;
 import kr.bobplanet.backend.bobplanetApi.model.DailyMenu;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
+import kr.bobplanet.backend.bobplanetApi.model.UserDevice;
 
 /**
  * 특정 일자의 아침-점심-저녁 메뉴리스트를 보여주는 Activity.
@@ -155,13 +156,16 @@ public class DayActivity extends BaseActivity {
 
         switch (item.getItemId()) {
             case R.id.action_morning_toggle:
-                Preferences prefs = App.getPreferences();
-                boolean active = prefs.isMorningMenuActive();
-                prefs.setMorningMenuActive(!active);
+                UserDevice device = App.getUserManager().getDevice();
 
-                int messageId = !active ? R.string.morning_menu_active : R.string.morning_menu_inactive;
+                boolean morningEnabled = device.getMorningMenuEnabled();
+                device.setMorningMenuEnabled(!morningEnabled);
+                App.getUserManager().updateDevice();
+
+                int messageId = !morningEnabled ? R.string.morning_menu_active : R.string.morning_menu_inactive;
                 Toast.makeText(this, getString(messageId), Toast.LENGTH_SHORT).show();
-                EventBus.getDefault().post(new MorningMenuToggleEvent(!active));
+
+                EventBus.getDefault().post(new MorningMenuToggleEvent(!morningEnabled));
                 return true;
 
             case R.id.action_dayweek_toggle:

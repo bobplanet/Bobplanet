@@ -31,6 +31,7 @@ public class SettingsActivity extends BaseActivity implements EmptyOptionsMenu {
     private static final String TAG = SettingsActivity.class.getSimpleName();
 
     private static final String PREF_ABOUT = "ABOUT";
+    private static final String PREF_MORNING_DISPLAY = "MORNING_DISPLAY";
     private static final String PREF_LUNCH_PUSH = "LUNCH_PUSH";
     private static final String PREF_DINNER_PUSH = "DINNER_PUSH";
     private static final String PREF_DEVICE_ID = "DEVICE_ID";
@@ -72,6 +73,7 @@ public class SettingsActivity extends BaseActivity implements EmptyOptionsMenu {
             Log.d(TAG, "onResume()");
 			
             UserDevice device = App.getUserManager().getDevice();
+            prefHandler.setChecked(PREF_MORNING_DISPLAY, device.getMorningMenuEnabled());
             prefHandler.setChecked(PREF_LUNCH_PUSH, device.getLunchPushEnabled());
             prefHandler.setChecked(PREF_DINNER_PUSH, device.getDinnerPushEnabled());
 
@@ -94,6 +96,10 @@ public class SettingsActivity extends BaseActivity implements EmptyOptionsMenu {
             UserDevice device = userManager.getDevice();
 
             switch (pref.getKey()) {
+                case PREF_MORNING_DISPLAY:
+                    device.setMorningMenuEnabled(prefHandler.isChecked(pref.getKey()));
+                    userManager.updateDevice();
+                    return true;
                 case PREF_LUNCH_PUSH:
                     device.setLunchPushEnabled(prefHandler.isChecked(pref.getKey()));
                     userManager.updateDevice();

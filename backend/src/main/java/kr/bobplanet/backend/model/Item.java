@@ -1,8 +1,14 @@
 package kr.bobplanet.backend.model;
 
+import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.IgnoreLoad;
+import com.googlecode.objectify.annotation.IgnoreSave;
+import com.googlecode.objectify.annotation.Load;
+import com.googlecode.objectify.annotation.OnLoad;
+import com.googlecode.objectify.annotation.OnSave;
 
 import java.util.Date;
 
@@ -36,9 +42,7 @@ public class Item {
 	 */
     private String thumbnail;
 
-    protected int numThumbUps;
-
-    protected int numThumbDowns;
+    private ItemVoteSummary voteSummary;
 
     /**
      * 최종수정일
@@ -65,24 +69,16 @@ public class Item {
         return thumbnail;
     }
 
-    public int getNumThumbUps() {
-        return numThumbUps;
+    public ItemVoteSummary getVoteSummary() {
+        return voteSummary;
     }
 
-    public int getNumThumbDowns() {
-        return numThumbDowns;
+    public void setVoteSummary(ItemVoteSummary voteSummary) {
+        this.voteSummary = voteSummary;
     }
 
-    public void applyScore(int score) {
-        applyScore(score, 0);
-    }
-
-    public void applyScore(int score, int oldScore) {
-        if (score == oldScore) return;
-
-        numThumbUps += score > 0 ? 1 : 0;
-        numThumbDowns += score < 0 ? 1 : 0;
-        numThumbUps -= oldScore > 0 ? 1 : 0;
-        numThumbDowns -= oldScore < 0 ? 1 : 0;
+    @OnSave
+    public void onSave() {
+        this.updateDate = new Date();
     }
 }

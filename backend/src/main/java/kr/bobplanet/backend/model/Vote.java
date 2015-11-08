@@ -1,5 +1,6 @@
 package kr.bobplanet.backend.model;
 
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
@@ -10,6 +11,7 @@ import com.googlecode.objectify.annotation.OnSave;
 import com.googlecode.objectify.annotation.Parent;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 사용자가 평점을 매길 때마다 하나씩 생성되는 투표 객체.
@@ -26,17 +28,17 @@ public class Vote {
     private Long id;
 
     /**
-     * 투표자
-     */
-    @Index
-    protected Ref<User> user;
-
-    /**
      * 투표대상 메뉴항목
      */
     @Parent
     @Index
     protected Ref<Item> item;
+
+    /**
+     * 투표자
+     */
+    @Index
+    protected Ref<User> user;
 
     /**
      * 투표대상 메뉴번호
@@ -52,7 +54,8 @@ public class Vote {
     /**
      * 코멘트.
      */
-    protected String comment;
+    @Load
+    protected List<String> comments;
 
     /**
      *
@@ -63,18 +66,32 @@ public class Vote {
     public Vote() {
     }
 
-    public Vote(User user, Item item, Menu menu) {
-        this.user = Ref.create(user);
-        this.item = Ref.create(item);
-        this.menu = Ref.create(menu);
-    }
-
     public long getId() {
         return id;
     }
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public User getUser() {
+        return user == null ? null : user.get();
+    }
+
+    public void setUserId(String userId) {
+        this.user = Ref.create(Key.create(User.class, userId));
+    }
+
+    public Item getItem() {
+        return item.get();
+    }
+
+    public void setItemName(String itemName) {
+        this.item = Ref.create(Key.create(Item.class, itemName));
+    }
+
+    public void setMenuId(Long menuId) {
+        this.menu = Ref.create(Key.create(Menu.class, menuId));
     }
 
     public int getScore() {
@@ -85,12 +102,12 @@ public class Vote {
         this.score = score;
     }
 
-    public String getComment() {
-        return comment;
+    public List<String> getComments() {
+        return comments;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setComments(List<String> comments) {
+        this.comments = comments;
     }
 
     @OnSave
@@ -100,7 +117,7 @@ public class Vote {
 
     @Override
     public String toString() {
-        return String.format("Vote { id = %s, user = %s, itemId = %s, score = %d }",
-                id, user, item, score);
+        return String.format("Vote { id = %s, user = %s, itemId = %s, score = %d, comments = %s }",
+                id, user, item, score, comments);
     }
 }
