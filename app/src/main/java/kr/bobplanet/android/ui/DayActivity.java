@@ -170,7 +170,7 @@ public class DayActivity extends BaseActivity {
 
             case R.id.action_dayweek_toggle:
                 isWeekViewMode = !isWeekViewMode;
-                item.setIcon(isWeekViewMode ? R.drawable.ic_filter_7 : R.drawable.ic_filter_1);
+                item.setIcon(isWeekViewMode ? R.drawable.ic_week_view : R.drawable.ic_day_view);
                 return true;
         }
 

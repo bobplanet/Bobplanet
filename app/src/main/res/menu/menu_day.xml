@@ -6,7 +6,7 @@
     <item
         android:id="@+id/action_dayweek_toggle"
         android:title=""
-        android:icon="@drawable/ic_filter_1"
+        android:icon="@drawable/ic_day_view"
         app:showAsAction="always" />
 
     <!-- 아침메뉴 on/off -->

@@ -68,6 +68,7 @@
                     android:id="@+id/signal"
                     android:layout_width="@dimen/day_item_signal"
                     android:layout_height="@dimen/day_item_signal"
+                    android:layout_margin="4dp"
                     android:scaleType="centerInside"
                     android:layout_toRightOf="@id/name"
                     android:src="@drawable/signal_go" />
