@@ -168,10 +168,12 @@ public class DayActivity extends BaseActivity {
                 EventBus.getDefault().post(new MorningMenuToggleEvent(!morningEnabled));
                 return true;
 
+/*
             case R.id.action_dayweek_toggle:
                 isWeekViewMode = !isWeekViewMode;
                 item.setIcon(isWeekViewMode ? R.drawable.ic_week_view : R.drawable.ic_day_view);
                 return true;
+*/
         }
 
         return super.onOptionsItemSelected(item);
