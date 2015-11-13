@@ -6,6 +6,7 @@ import com.googlecode.objectify.Work;
 import com.googlecode.objectify.cmd.LoadType;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -153,5 +154,13 @@ public class MenuEndpoint extends BaseEndpoint {
                 .filter("user", new User(userId)).first().now();
         logger.info("myVote() vote = " + vote);
         return vote;
+    }
+
+    @ApiMethod(
+            name = "itemVoteSummary",
+            path = "item/vote"
+    )
+    public Collection<ItemVoteSummary> itemVoteSummary(@Named("itemNames") List<String> itemNames) {
+        return ofy().load().type(ItemVoteSummary.class).ids(itemNames).values();
     }
 }

@@ -9,7 +9,9 @@ import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import de.greenrobot.event.EventBus;
 import hugo.weaving.DebugLog;
@@ -23,6 +25,7 @@ import kr.bobplanet.backend.bobplanetApi.model.Menu;
 import kr.bobplanet.backend.bobplanetApi.model.Secret;
 import kr.bobplanet.backend.bobplanetApi.model.UserDevice;
 import kr.bobplanet.backend.bobplanetApi.model.Vote;
+import rx.Observable;
 
 /**
  * Google AppEngine(=GAE) API 호출 및 결과 caching을 담당하는 객체.
@@ -47,35 +50,16 @@ public class ApiProxy implements Constants {
      */
     private BobplanetApi api;
 
-    /**
-     * 캐쉬 최대 사이즈. 현재는 1MB.
-     */
-    private static final int MAX_SIZE = 1024 * 1024;
-
-    /**
-     * 캐쉬 유효기간. 현재는 2분.
-     */
-    private static final int CACHE_EXPIRE_SECONDS = 2 * 60;
-
-    /**
-     * LruCache 키값에서 클래스명과 ID를 연결하는 separator
-     */
-    private static final char KEY_SEPARATOR = ':';
-
-    /**
-     * JSON 문자열을 저장할 LruCache.
-     */
-    private final LruCache<String, Pair<Long, String>> jsonCache;
+    private EntityHolder entityHolder;
 
     /**
      * 기본 생성자.
      */
-    protected ApiProxy() {
+    protected ApiProxy(EntityHolder entityHolder) {
         this.api = new BobplanetApi.Builder(
                 AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
                 .setRootUrl(BACKEND_ROOT_URL).build();
-
-        this.jsonCache = new LruCache<>(MAX_SIZE);
+        this.entityHolder = entityHolder;
     }
 
     /**
@@ -201,9 +185,9 @@ public class ApiProxy implements Constants {
         ApiResultListener resultListener;
         String measureApiName;
         String cacheKey;
-        int cacheDuration = CACHE_EXPIRE_SECONDS;
         boolean cacheReadable = false;
         boolean cacheWritable = false;
+        private static final char KEY_SEPARATOR = ':';
 
         Builder(Class<T> resultType, ApiExecutor<T> apiExecutor, String measureApiName) {
             this.resultType = resultType;
@@ -243,16 +227,9 @@ public class ApiProxy implements Constants {
                 long now = new Date().getTime();
 
                 if (cacheReadable) {
-                    Pair<Long, String> cachedObj = jsonCache.get(cacheKey);
-
-                    if (cachedObj != null) {
-                        Long timestamp = cachedObj.first;
-                        String json = cachedObj.second;
-                        if (now - timestamp < CACHE_EXPIRE_SECONDS * 1000 && json != null) {
-                            Log.v(TAG, "Get cached entry for " + cacheKey);
-                            return EntityTranslator.parseEntity(resultType, json);
-                        }
-                        Log.v(TAG, "Cache expired for " + cacheKey);
+                    T result = entityHolder.getCachedEntity(resultType, cacheKey);
+                    if (result != null) {
+                        return result;
                     }
                 }
 
@@ -263,7 +240,7 @@ public class ApiProxy implements Constants {
                 MeasureLogEvent.measureApiLatency(measureApiName, new Date().getTime() - now);
 
                 if (cacheWritable) {
-                    jsonCache.put(cacheKey, new Pair<>(now, EntityTranslator.toString(result)));
+                    entityHolder.putCachedEntity(cacheKey, result);
                 }
 
                 return result;

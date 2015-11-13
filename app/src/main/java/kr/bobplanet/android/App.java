@@ -85,14 +85,6 @@ public class App extends Application {
     /**
      *
      */
-    public static void initComponents() {
-        instance.userManager.loadDevice();
-        instance.signInManager.loadSecret();
-    }
-
-    /**
-     *
-     */
     private void initializeTracker() {
         if (tracker == null) {
             Log.i(TAG, "Initializing Google Analytics");

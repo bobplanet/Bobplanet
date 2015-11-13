@@ -23,6 +23,7 @@ import kr.bobplanet.backend.bobplanetApi.model.Item;
 import kr.bobplanet.backend.bobplanetApi.model.ItemVoteSummary;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
 import kr.bobplanet.backend.bobplanetApi.model.Submenu;
+import rx.Observable;
 
 /**
  * DayAcvitiy에서 사용하는 ViewHolder. 아침-점심-저녁 메뉴의 listview를 관리함.
@@ -100,15 +101,10 @@ public class DayViewHolder extends BaseListAdapter.BaseViewHolder<Menu> implemen
         // 서브메뉴는 ','로 concatenate
         List<Submenu> submenus = menu.getSubmenu();
         if (submenus != null) {
-            List<String> subs = new ArrayList<>();
-            for (int i = 0; i < SUBMENU_DISPLAY_COUNT; i++) {
-                Item subItem = submenus.get(i).getItem();
-                if (subItem != null) {
-                    subs.add(subItem.getName());
-                }
-            }
-            subs.add("...");
-            submenu.setText(TextUtils.join(", ", subs));
+            Observable.from(submenus)
+                    .map(submenu -> submenu.getItem().getName())
+                    .toList()
+                    .subscribe(names -> submenu.setText(TextUtils.join(", ", names)));
         }
     }
 

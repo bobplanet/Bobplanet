@@ -59,7 +59,7 @@ public class UserManager implements ApiProxy.ApiResultListener<UserDevice> {
     /**
      * 사용자정보를 읽어온다. 없으면 서버에 등록요청.
      */
-    protected void loadDevice() {
+    public void loadDevice() {
         UserDevice loaded = prefs.loadDevice();
         if (loaded == null) {
             Log.i(TAG, "Device doesn't exists. Creating new device");

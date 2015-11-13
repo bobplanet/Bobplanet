@@ -24,7 +24,7 @@ import kr.bobplanet.android.signin.SignInManager;
  * Splashscreen을 띄운다거나, 한번만 실행하면 되는 초기화 로직을 실행하는 등의 용도로 만들었다.
  * <p/>
  * - GCM 등록로직 수행 (등록결과를 받아오기 위해 EventBus를 이용함)
- * - 한번이라도 실행되면 SharedPreferences에 관련 정보 저장
+ * -
  * - 본 앱의 기본화면인 DayViewActivity를 실행
  *
  * @author heonkyu.jin
@@ -60,7 +60,8 @@ public class StartActivity extends BaseActivity {
         initComponents.addAll(Arrays.asList(INIT_COMPONENTS));
 
         EventBus.getDefault().register(this);
-        App.initComponents();
+        App.getUserManager().loadDevice();
+        App.getSignInManager().loadSecret();
     }
 
     @Override
