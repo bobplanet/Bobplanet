@@ -36,7 +36,7 @@ public class Menu {
 
     @Load
     @IgnoreSave
-    private Ref<ItemVoteSummary> voteSummaryRef;
+    private Ref<ItemScore> voteSummaryRef;
 
     /**
 	 * 제공일자. "2015-10-09" 형식.

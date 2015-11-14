@@ -1,13 +1,8 @@
 package kr.bobplanet.backend.model;
 
-import com.googlecode.objectify.Key;
-import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.IgnoreLoad;
-import com.googlecode.objectify.annotation.IgnoreSave;
-import com.googlecode.objectify.annotation.Load;
-import com.googlecode.objectify.annotation.OnLoad;
 import com.googlecode.objectify.annotation.OnSave;
 
 import java.util.Date;
@@ -42,7 +37,7 @@ public class Item {
 	 */
     private String thumbnail;
 
-    private ItemVoteSummary voteSummary;
+    private ItemScore score;
 
     /**
      * 최종수정일
@@ -69,12 +64,12 @@ public class Item {
         return thumbnail;
     }
 
-    public ItemVoteSummary getVoteSummary() {
-        return voteSummary;
+    public ItemScore getScore() {
+        return score;
     }
 
-    public void setVoteSummary(ItemVoteSummary voteSummary) {
-        this.voteSummary = voteSummary;
+    public void setScore(ItemScore score) {
+        this.score = score;
     }
 
     @OnSave

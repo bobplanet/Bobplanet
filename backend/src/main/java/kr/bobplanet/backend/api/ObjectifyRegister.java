@@ -3,6 +3,7 @@ package kr.bobplanet.backend.api;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 
+import kr.bobplanet.backend.model.ItemScore;
 import kr.bobplanet.backend.model.Secret;
 import kr.bobplanet.backend.model.UserDevice;
 import kr.bobplanet.backend.model.Item;
@@ -11,7 +12,6 @@ import kr.bobplanet.backend.model.BaseMessage;
 import kr.bobplanet.backend.model.NextMenuMessage;
 import kr.bobplanet.backend.model.User;
 import kr.bobplanet.backend.model.Vote;
-import kr.bobplanet.backend.model.ItemVoteSummary;
 
 /**
  * Objectify를 통해 관리되어야 하는 객체를 등록해주는 클래스.
@@ -32,7 +32,7 @@ public final class ObjectifyRegister {
         ObjectifyService.register(User.class);
         ObjectifyService.register(UserDevice.class);
         ObjectifyService.register(Vote.class);
-        ObjectifyService.register(ItemVoteSummary.class);
+        ObjectifyService.register(ItemScore.class);
         ObjectifyService.register(BaseMessage.class);
         ObjectifyService.register(NextMenuMessage.class);
     }

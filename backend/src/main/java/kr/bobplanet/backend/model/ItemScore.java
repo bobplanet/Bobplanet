@@ -1,6 +1,5 @@
 package kr.bobplanet.backend.model;
 
-import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
@@ -10,7 +9,6 @@ import com.googlecode.objectify.annotation.Parent;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,7 +21,7 @@ import java.util.Map;
  * @version 15. 11. 7
  */
 @Entity
-public class ItemVoteSummary {
+public class ItemScore {
 	/**
 	 * 메뉴명.
 	 */
@@ -51,17 +49,23 @@ public class ItemVoteSummary {
     @IgnoreLoad
     protected Date updateDate;
 
-    public ItemVoteSummary(Item item) {
+    public ItemScore() { }
+
+    public ItemScore(Item item) {
         this.item = Ref.create(item);
         this.name = item.getName();
     }
 
-    public ItemVoteSummary(Vote vote) {
+    public ItemScore(Vote vote) {
         this(vote.getItem());
     }
 
     public String getName() {
         return name;
+    }
+
+    public Item getItem() {
+        return item == null ? null : item.get();
     }
 
     public int getNumThumbUps() {
