@@ -44,6 +44,7 @@ public class Vote {
      * 투표대상 메뉴번호
      */
     @Load
+    @Index
     protected Ref<Menu> menu;
 
     /**

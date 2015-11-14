@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.TypedArrayUtils;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +28,7 @@ import kr.bobplanet.android.ui.BaseDialogBuilder;
 import kr.bobplanet.backend.bobplanetApi.model.Item;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
 import kr.bobplanet.backend.bobplanetApi.model.Vote;
+import me.gujun.android.taggroup.TagGroup;
 
 /**
  * 사용자의 메뉴 평가 기능을 제공하는 객체.
@@ -43,7 +46,7 @@ public class VoteManager implements Constants {
 
     private static final String DIALOG_VOTE = "DIALOG_VOTE";
 
-    private BaseActivity activity;
+    private BaseActivity baseActivity;
     private Context context;
 
     private boolean userHasAccount;
@@ -51,28 +54,29 @@ public class VoteManager implements Constants {
 
     private int score;
     private List<String> comments;
+    private TagGroup tags;
 
     private EditText commentsEditText;
 
-    private Button positiveButton;
-
-    private VoteCompletionListener listener;
-
-    public VoteManager(BaseActivity activity, Menu menu) {
-        this.activity = activity;
-        this.context = activity.getBaseContext();
+    public VoteManager(BaseActivity baseActivity, Menu menu) {
+        this.baseActivity = baseActivity;
+        this.context = baseActivity.getBaseContext();
         this.menu = menu;
 
         EventBus.getDefault().register(this);
     }
 
-    public void showVoteDialog() {
+    public void showVoteDialog(int score) {
+        this.score = score;
         requestMyScore();
 
         View view = LayoutInflater.from(context).inflate(R.layout.vote_dialog, null);
 
-        AlertDialog voteDialog = new BaseDialogBuilder(activity, DIALOG_VOTE)
-                .setTitle(R.string.dialog_vote_label)
+        String title = baseActivity.getString(R.string.dialog_vote_label) + " - " +
+                baseActivity.getString(score == VOTE_UP ?
+                R.string.action_thumb_up : R.string.action_thumb_down);
+        AlertDialog voteDialog = new BaseDialogBuilder(baseActivity, DIALOG_VOTE)
+                .setTitle(title)
                 .setView(view)
                 .setPositiveButton(R.string.button_ok, (dialog, which) -> {
                     voteOrRequestSignin();
@@ -81,28 +85,20 @@ public class VoteManager implements Constants {
                 .setNegativeButton(R.string.button_cancel, null)
                 .create();
 
-        voteDialog.setOnShowListener(dialog -> {
-            positiveButton = voteDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-            positiveButton.setEnabled(false);
-        });
-
-        ImageButton buttonUp = ButterKnife.findById(view, R.id.button_thumb_up);
-        ImageButton buttonDown = ButterKnife.findById(view, R.id.button_thumb_down);
-
         commentsEditText = ButterKnife.findById(view, R.id.comment_edit);
 
-        View.OnClickListener clickListener = v -> {
-            positiveButton.setEnabled(true);
-
-            score = v.getId() == R.id.button_thumb_up ? VOTE_UP : VOTE_DOWN;
-            buttonUp.setSelected(score == VOTE_UP);
-            buttonDown.setSelected(score != VOTE_UP);
-        };
-
-        buttonUp.setOnClickListener(clickListener);
-        buttonDown.setOnClickListener(clickListener);
+        tags = ButterKnife.findById(view, R.id.tags);
+        tags.setOnTagClickListener(comment -> {
+            comments.remove(comment);
+            tags.setTags(getQuotedComments());
+            addComment(comment);
+        });
 
         voteDialog.show();
+    }
+
+    private List<String> getQuotedComments() {
+        return fj.data.List.list(comments).map(c -> '"' + c + '"').toJavaList();
     }
 
     /**
@@ -118,6 +114,9 @@ public class VoteManager implements Constants {
                         if (result != null) {
                             score = result.getScore();
                             comments = result.getComments();
+                            commentsEditText.setText(TextUtils.join(" ", comments));
+                            commentsEditText.setSelection(commentsEditText.length());
+                            tags.setTags(getQuotedComments());
                         }
                     }
             );
@@ -129,7 +128,7 @@ public class VoteManager implements Constants {
         if (userHasAccount) {
             uploadVote();
         } else {
-            App.getSignInManager().showSignInDialog(activity);
+            App.getSignInManager().showSignInDialog(baseActivity);
         }
     }
 
@@ -160,7 +159,7 @@ public class VoteManager implements Constants {
                     level, Util.endsWithConsonant(level) ? "이" : ""
             );
 
-            activity.showSnackbar(message);
+            baseActivity.showSnackbar(message);
         }
     }
 
@@ -178,11 +177,8 @@ public class VoteManager implements Constants {
         }
     }
 
-    public void setVoteCompletionListener(VoteCompletionListener listener) {
-        this.listener = listener;
-    }
-
-    public static interface VoteCompletionListener {
-        void onVoteCompleted(Item item);
+    private void addComment(String comment) {
+        Editable comments = commentsEditText.getText();
+        comments.append(comment).append(' ');
     }
 }

@@ -11,77 +11,10 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal">
-
-            <ImageButton
-                android:id="@+id/button_thumb_up"
-                style="@style/AppTheme.ToggleButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_thumb_up"
-                android:tint="@color/thumb_up" />
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:text="@string/action_thumb_up"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/thumb_up"
-                    android:textSize="24sp" />
-
-                <TextView
-                    android:id="@+id/thumb_up_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/thumb_up"
-                    android:textSize="24sp" />
-
-            </LinearLayout>
-
-            <ImageButton
-                android:id="@+id/button_thumb_down"
-                style="@style/AppTheme.ToggleButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/button_thumb_up"
-                android:src="@drawable/ic_thumb_down"
-                android:tint="@color/thumb_down" />
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:text="@string/action_thumb_down"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/thumb_down"
-                    android:textSize="24sp" />
-
-                <TextView
-                    android:id="@+id/thumb_down_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/thumb_down"
-                    android:textSize="24sp" />
-
-            </LinearLayout>
-        </LinearLayout>
-
         <android.support.design.widget.TextInputLayout
             android:id="@+id/tag_edit_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/button_thumb_up">
+            android:layout_height="wrap_content">
 
             <EditText
                 android:id="@+id/comment_edit"
@@ -91,8 +24,8 @@
 
         </android.support.design.widget.TextInputLayout>
 
-        <me.kaede.tagview.TagView
-            android:id="@+id/tag_view"
+        <me.gujun.android.taggroup.TagGroup
+            android:id="@+id/tags"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/tag_edit_container" />

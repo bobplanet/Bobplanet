@@ -26,12 +26,14 @@
     <string name="card_rating_my">나의 평가</string>
     <string name="card_submenu_label">서브메뉴</string>
     <string name="card_submenu_description">함께 제공되는 메뉴들</string>
+    <string name="fab_thumb_up">좋아요</string>
+    <string name="fab_thumb_down">별로에요</string>
 
     <!-- 메뉴 평가하기 Dialog -->
     <string name="dialog_vote_label">평가하기</string>
     <string name="vote_level_up">좋아요</string>
     <string name="vote_level_down">별로에요</string>
-    <string name="tag_hint">한마디 평가</string>
+    <string name="tag_hint">한마디 평가(스페이스로 구분됩니다)</string>
 	<string name="vote_notice_fmt" formatted="false">%s \"%s\"%s라고 평가해주셨네요~\n점수는 언제든 재평가 가능합니다 :)</string>
 
     <!-- 로그인 Dialog -->

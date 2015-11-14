@@ -1,36 +1,35 @@
 package kr.bobplanet.android.ui;
 
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.DrawableContainer;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
+import kr.bobplanet.android.Constants;
 import kr.bobplanet.android.R;
+import kr.bobplanet.android.Util;
+import kr.bobplanet.android.VoteManager;
 import kr.bobplanet.backend.bobplanetApi.model.Item;
 import kr.bobplanet.backend.bobplanetApi.model.ItemVoteSummary;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
 import kr.bobplanet.backend.bobplanetApi.model.Submenu;
-import rx.Observable;
 
 /**
  * DayAcvitiy에서 사용하는 ViewHolder. 아침-점심-저녁 메뉴의 listview를 관리함.
  *
  * - 메뉴 클릭할 경우 EventBus를 이용해서 @link{DayActivity}로 Onclick 이벤트 전송
  */
-public class DayViewHolder extends BaseListAdapter.BaseViewHolder<Menu> implements View.OnClickListener {
+public class DayViewHolder extends BaseListAdapter.BaseViewHolder<Menu> implements View.OnClickListener, Constants {
     private static final String TAG = DayViewHolder.class.getSimpleName();
 
     private static final int SUBMENU_DISPLAY_COUNT = 3;
@@ -47,10 +46,10 @@ public class DayViewHolder extends BaseListAdapter.BaseViewHolder<Menu> implemen
     ImageView signal;
     @Bind(R.id.submenu)
     TextView submenu;
-    @Bind(R.id.thumb_up_count)
-    TextView thumbUpCount;
-    @Bind(R.id.thumb_down_count)
-    TextView thumbDownCount;
+    @Bind(R.id.button_thumb_up)
+    Button buttonThumbUp;
+    @Bind(R.id.button_thumb_down)
+    Button buttonThumbDown;
     @Bind(R.id.thumb_up_comment)
     TextView thumbUpComment;
     @Bind(R.id.thumb_down_comment)
@@ -101,10 +100,11 @@ public class DayViewHolder extends BaseListAdapter.BaseViewHolder<Menu> implemen
         // 서브메뉴는 ','로 concatenate
         List<Submenu> submenus = menu.getSubmenu();
         if (submenus != null) {
-            Observable.from(submenus)
-                    .map(submenu -> submenu.getItem().getName())
-                    .toList()
-                    .subscribe(names -> submenu.setText(TextUtils.join(", ", names)));
+            String text = TextUtils.join(", ",
+                    fj.data.List.range(0, SUBMENU_DISPLAY_COUNT)
+                            .map(i -> submenus.get(i).getItem().getName())
+                            .toJavaList());
+            submenu.setText(text);
         }
     }
 
@@ -123,8 +123,12 @@ public class DayViewHolder extends BaseListAdapter.BaseViewHolder<Menu> implemen
         }
         signal.setImageDrawable(ContextCompat.getDrawable(itemView.getContext(), drawableResId));
 
-        thumbUpCount.setText(String.format("%,d", thumbUps));
-        thumbDownCount.setText(String.format("%,d", thumbDowns));
+        BaseActivity baseActivity = Util.getBaseActivity(itemView);
+
+        buttonThumbUp.setText(String.format("%,d", thumbUps));
+        buttonThumbUp.setOnClickListener(v -> new VoteManager(baseActivity, menu).showVoteDialog(VOTE_UP));
+        buttonThumbDown.setText(String.format("%,d", thumbDowns));
+        buttonThumbDown.setOnClickListener(v -> new VoteManager(baseActivity, menu).showVoteDialog(VOTE_DOWN));
     }
 
     @Override

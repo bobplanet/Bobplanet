@@ -3,7 +3,6 @@ package kr.bobplanet.android.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,6 +15,8 @@ import android.view.View;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
+
+import net.i2p.android.ext.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,16 +98,18 @@ public class MenuActivity extends BaseActivity implements Constants {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-        FloatingActionButton fab = ButterKnife.findById(this, R.id.fab);
-        fab.setOnClickListener((View v) -> showVoteDialog());
+        FloatingActionButton fabThumbUp = ButterKnife.findById(this, R.id.fab_thumb_up);
+        fabThumbUp.setOnClickListener(v -> showVoteDialog(VOTE_UP));
+        FloatingActionButton fabThumbDown = ButterKnife.findById(this, R.id.fab_thumb_down);
+        fabThumbDown.setOnClickListener(v -> showVoteDialog(VOTE_DOWN));
     }
 
     /**
      * 점수주기 dialog 표시
      */
-    private void showVoteDialog() {
+    private void showVoteDialog(int score) {
         VoteManager voteManager = new VoteManager(this, menu);
-        voteManager.showVoteDialog();
+        voteManager.showVoteDialog(score);
     }
 
     /**

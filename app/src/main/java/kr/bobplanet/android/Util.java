@@ -1,6 +1,8 @@
 package kr.bobplanet.android;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.res.Resources;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -8,6 +10,9 @@ import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
+import android.view.View;
+
+import kr.bobplanet.android.ui.BaseActivity;
 
 /**
  *
@@ -35,5 +40,16 @@ public class Util {
         int color = ContextCompat.getColor(context, colorResId);
         drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
         return drawable;
+    }
+
+    public static BaseActivity getBaseActivity(View view) {
+        Context context = view.getContext();
+        while (context instanceof ContextWrapper) {
+            if (context instanceof Activity) {
+                return (BaseActivity) context;
+            }
+            context = ((ContextWrapper) context).getBaseContext();
+        }
+        return null;
     }
 }

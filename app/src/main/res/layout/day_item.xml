@@ -45,10 +45,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:orientation="horizontal"
-            android:weightSum="10"
+            android:layout_marginRight="0dp"
             android:divider="?android:dividerHorizontal"
-            android:showDividers="middle" >
+            android:orientation="horizontal"
+            android:showDividers="middle"
+            android:weightSum="10">
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -69,8 +70,8 @@
                     android:layout_width="@dimen/day_item_signal"
                     android:layout_height="@dimen/day_item_signal"
                     android:layout_margin="4dp"
-                    android:scaleType="centerInside"
                     android:layout_toRightOf="@id/name"
+                    android:scaleType="centerInside"
                     android:src="@drawable/signal_go" />
 
                 <TextView
@@ -86,22 +87,18 @@
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="4dp">
+                android:layout_margin="0dp"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp">
 
-                <ImageView
+                <Button
                     android:id="@+id/button_thumb_up"
-                    android:layout_width="@dimen/day_item_thumb"
-                    android:layout_height="@dimen/day_item_thumb"
-                    android:src="@drawable/ic_thumb_up"
-                    android:tint="@color/thumb_up" />
-
-                <TextView
-                    android:id="@+id/thumb_up_count"
-                    android:layout_width="40dp"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/button_thumb_up"
-                    android:textColor="@color/thumb_up"
-                    android:textSize="@dimen/day_item_thumb_count"
+                    android:layout_width="60dp"
+                    android:layout_height="22dp"
+                    android:background="@color/thumb_up"
+                    android:drawableLeft="@drawable/ic_thumb_up_small"
+                    android:paddingLeft="8dp"
+                    android:textColor="@android:color/white"
                     tools:text="111" />
 
                 <TextView
@@ -118,22 +115,17 @@
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="4dp">
+                android:layout_margin="0dp"
+                android:paddingLeft="4dp">
 
-                <ImageView
+                <Button
                     android:id="@+id/button_thumb_down"
-                    android:layout_width="@dimen/day_item_thumb"
-                    android:layout_height="@dimen/day_item_thumb"
-                    android:src="@drawable/ic_thumb_down"
-                    android:tint="@color/thumb_down" />
-
-                <TextView
-                    android:id="@+id/thumb_down_count"
-                    android:layout_width="40dp"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/button_thumb_down"
-                    android:textColor="@color/thumb_down"
-                    android:textSize="@dimen/day_item_thumb_count"
+                    android:layout_width="60dp"
+                    android:layout_height="22dp"
+                    android:background="@color/thumb_down"
+                    android:drawableLeft="@drawable/ic_thumb_down_small"
+                    android:paddingLeft="8dp"
+                    android:textColor="@android:color/white"
                     tools:text="111" />
 
                 <TextView

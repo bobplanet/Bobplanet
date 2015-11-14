@@ -25,7 +25,6 @@ import kr.bobplanet.backend.bobplanetApi.model.Menu;
 import kr.bobplanet.backend.bobplanetApi.model.Secret;
 import kr.bobplanet.backend.bobplanetApi.model.UserDevice;
 import kr.bobplanet.backend.bobplanetApi.model.Vote;
-import rx.Observable;
 
 /**
  * Google AppEngine(=GAE) API 호출 및 결과 caching을 담당하는 객체.
@@ -166,7 +165,7 @@ public class ApiProxy implements Constants {
      */
     @DebugLog
     public void myVote(final String userId, final Menu menu, ApiResultListener<Vote> listener) {
-        new Builder<>(Vote.class, () -> api.myVote(userId, menu.getItem().getName()).execute(), "myVote")
+        new Builder<>(Vote.class, () -> api.myVote(userId, menu.getId()).execute(), "myVote")
                 .setResultListener(listener)
                 .execute();
     }

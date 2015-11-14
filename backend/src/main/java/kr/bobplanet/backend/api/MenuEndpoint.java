@@ -142,16 +142,19 @@ public class MenuEndpoint extends BaseEndpoint {
     @ApiMethod(
             name = "myVote",
             httpMethod = "GET",
-            path = "myVote"
+            path = "myVote/{userId}/{menuId}"
     )
-    public Vote myVote(@Named("userId") final String userId, @Named("itemName") final String itemName) {
+    public Vote myVote(@Named("userId") final String userId, @Named("menuId") final Long menuId) {
         logger.info(String.format(
-                        "Executing myVote() : { userId, itemName } = { %s, %s }",
-                        userId, itemName)
+                        "Executing myVote() : { userId, menuId } = { %s, %s }",
+                        userId, menuId)
         );
 
-        Vote vote = ofy().load().type(Vote.class).ancestor(new Item(itemName))
-                .filter("user", new User(userId)).first().now();
+        Vote vote = ofy().load().type(Vote.class)
+                .filter("user", new User(userId))
+                .filter("menu", new Menu(menuId))
+                .first().now();
+
         logger.info("myVote() vote = " + vote);
         return vote;
     }
