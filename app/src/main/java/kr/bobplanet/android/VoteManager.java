@@ -12,6 +12,8 @@ import android.widget.EditText;
 import com.google.common.collect.Lists;
 
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -63,6 +65,11 @@ public class VoteManager implements Constants {
     }
 
     public void showVoteDialog(int score) {
+        if (menu.getDate().compareTo(DATEFORMAT_YMD.format(new Date())) > 0) {
+            baseActivity.showSnackbar(R.string.vote_notyet);
+            return;
+        }
+
         this.score = score;
         requestMyScore();
 

@@ -2,6 +2,7 @@ package kr.bobplanet.android.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.StringRes;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -78,6 +79,10 @@ abstract public class BaseActivity extends AppCompatActivity implements Constant
     public void showSnackbar(String message) {
         CoordinatorLayout layout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
         Snackbar.make(layout, message, Snackbar.LENGTH_LONG).show();
+    }
+
+    public void showSnackbar(@StringRes int messageId) {
+        showSnackbar(getString(messageId));
     }
 
     @Override
