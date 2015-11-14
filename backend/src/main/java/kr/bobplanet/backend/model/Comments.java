@@ -5,8 +5,9 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * 사용자들이 메뉴에 매긴 comment
- * 
+ * 메뉴에 대한 사용자 코멘트 리스트 객체.
+ * 사용자가 평가를 수정하면서 과거 코멘트를 삭제하거나 새로운 코멘트를 추가할 수 있으므로,
+ * 코멘트에 대한 추가/삭제 기능을 담당한다.
  * 
  * @author heonkyu.jin
  * @version 15. 11. 7.

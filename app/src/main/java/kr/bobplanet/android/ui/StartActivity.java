@@ -75,7 +75,7 @@ public class StartActivity extends BaseActivity {
      * @param event
      */
     @DebugLog
-    @SuppressWarnings("UnusedDeclaration")
+    @SuppressWarnings("unused")
     public void onEvent(InitCompleteEvent event) {
         if (initComponents.contains(event.component)) {
             initComponents.remove(event.component);

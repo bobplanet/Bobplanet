@@ -16,7 +16,7 @@ import android.view.View;
 import kr.bobplanet.android.ui.BaseActivity;
 
 /**
- *
+ * 공용 유틸리티 객체.
  *
  * @author heonkyu.jin
  * @version 15. 10. 18

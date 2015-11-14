@@ -1,7 +1,7 @@
 package kr.bobplanet.backend.model;
 
 /**
- *
+ * 사용자가 남긴 코멘트.
  *
  * @author hkjinlee
  * @version 15. 11. 14..
@@ -13,12 +13,12 @@ public class Comment {
     private String text;
 
     /**
-     *
+     * 이 코멘트를 남긴 사람 수.
      */
     private int count;
 
     public Comment() {}
-    
+
     public Comment(String text) {
         this.text = text;
         this.count = 1;

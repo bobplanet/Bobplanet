@@ -41,12 +41,12 @@ public class ItemScore {
     protected int numThumbDowns;
 
     /**
-     *
+     * '좋아요'한 사람들이 남긴 코멘트
      */
     protected Comments upComments = new Comments();
 
     /**
-     *
+     * '싫어요'한 사람들이 남긴 코멘트
      */
     protected Comments downComments = new Comments();
 

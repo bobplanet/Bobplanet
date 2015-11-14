@@ -81,6 +81,9 @@ abstract public class BaseActivity extends AppCompatActivity implements Constant
         Snackbar.make(layout, message, Snackbar.LENGTH_LONG).show();
     }
 
+    /**
+     *
+     */
     public void showSnackbar(@StringRes int messageId) {
         showSnackbar(getString(messageId));
     }

@@ -58,6 +58,11 @@ public class BaseListAdapter<T> extends RecyclerView.Adapter<BaseListAdapter.Bas
         return itemList == null ? null : itemList.get(location);
     }
 
+    /**
+     * BaseListAdpater를 사용하려면 이 클래스를 상속받은 ViewHolder 클래스에서 setItem()을 구현해주면 됨.
+     *
+     * @param <T>
+     */
     protected abstract static class BaseViewHolder<T> extends RecyclerView.ViewHolder {
         private final ImageLoader imageLoader = App.getImageLoader();
 
