@@ -1,6 +1,7 @@
 package kr.bobplanet.android;
 
 import android.app.Application;
+import android.support.multidex.MultiDexApplication;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -23,7 +24,7 @@ import kr.bobplanet.android.signin.SignInManager;
  *
  * @author hkjinlee on 15. 9. 29..
  */
-public class App extends Application {
+public class App extends MultiDexApplication {
     public static final String TAG = App.class.getSimpleName();
 
     /**
@@ -40,6 +41,8 @@ public class App extends Application {
      * OAuth 로그인 관리
      */
     private SignInManager signInManager;
+
+    private EntityHolder entityHolder;
 
     /**
      * ApiProxy 객체.
@@ -72,7 +75,8 @@ public class App extends Application {
         instance = this;
 
         prefs = new Preferences(this);
-        apiProxy = new ApiProxy();
+        entityHolder = new EntityHolder();
+        apiProxy = new ApiProxy(entityHolder);
         initializeTracker();
 
         userManager = new UserManager(this, prefs);
