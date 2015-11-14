@@ -46,7 +46,7 @@ import kr.bobplanet.backend.bobplanetApi.model.Menu;
  * @version 2015. 10. 10
  */
 public class MenuActivity extends BaseActivity implements Constants {
-    @SuppressWarnings("UnusedDeclaration")
+    @SuppressWarnings("unused")
     private static final String TAG = MenuActivity.class.getSimpleName();
 
     private final ImageLoader imageLoader = App.getImageLoader();
@@ -66,12 +66,11 @@ public class MenuActivity extends BaseActivity implements Constants {
         menu = EntityTranslator.parseEntity(Menu.class, getIntent().getStringExtra(KEY_MENU));
 
         initLayout();
-        findViewById(R.id.toolbar).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MenuActivity.this, SettingsActivity.class));
-            }
-        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     /**

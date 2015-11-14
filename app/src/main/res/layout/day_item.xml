@@ -27,7 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:scaleType="centerCrop"
-                android:transitionName="menu_icon" />
+                android:transitionName="@string/image_transition" />
 
             <TextView
                 android:id="@+id/when"

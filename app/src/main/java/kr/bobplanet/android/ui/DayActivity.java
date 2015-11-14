@@ -4,7 +4,10 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.util.Pair;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
@@ -26,6 +29,7 @@ import java.util.Date;
 import java.util.List;
 
 import de.greenrobot.event.EventBus;
+import hugo.weaving.DebugLog;
 import kr.bobplanet.android.App;
 import kr.bobplanet.android.Constants;
 import kr.bobplanet.android.Preferences;
@@ -121,12 +125,6 @@ public class DayActivity extends BaseActivity {
 
         // 처음 사용하는 사람들을 위해 좌우스와이프 안내메시지 노출
         showSwipeNotice();
-        findViewById(R.id.view_pager).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(DayActivity.this, MenuActivity.class));
-            }
-        });
     }
 
     @Override
@@ -265,20 +263,18 @@ public class DayActivity extends BaseActivity {
     /**
      * TODO Activity 전환 transition 효과 복구.
      */
+    @DebugLog
     private void startMenuViewActivity(DayViewHolder viewHolder) {
         Menu menu = viewHolder.menu;
 
         Intent intent = new Intent(this, MenuActivity.class);
         intent.putExtra(KEY_MENU, menu.toString());
 
-        /*
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
-                new Pair<View, String>(viewHolder.thumbnail, EXTRA_MENU_ICON),
-                new Pair<View, String>(viewHolder.title, EXTRA_MENU_TITLE));
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
+                new Pair<>(viewHolder.image, viewHolder.image.getTransitionName())/*,
+                new Pair<View, String>(viewHolder.name, EXTRA_MENU_TITLE)*/);
 
-        ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
-        */
-        startActivity(intent);
+        ActivityCompat.startActivity(this, intent, options.toBundle());
     }
 
     /**

@@ -156,8 +156,10 @@ public class DayFragment extends BaseFragment {
 
         EventBus.getDefault().register(this);
 
-        App.getApiProxy().loadMenuOfDate(getArguments().getString(ARGUMENT_DATE),
-                dailyMenu -> onDailyMenuLoaded(dailyMenu));
+        if (menuList == EMPTY_MENU_LIST) {
+            App.getApiProxy().loadMenuOfDate(getArguments().getString(ARGUMENT_DATE),
+                    dailyMenu -> onDailyMenuLoaded(dailyMenu));
+        }
     }
 
     /**

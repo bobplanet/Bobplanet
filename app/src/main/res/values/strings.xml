@@ -3,6 +3,7 @@
     <string name="app_name">Bobplanet</string>
     <string name="facebook_app_id">904326906329787</string>
     <string name="action_settings">Settings</string>
+    <string name="image_transition">imageTransition</string>
     <string name="button_ok">확인</string>
     <string name="button_cancel">취소</string>
 
