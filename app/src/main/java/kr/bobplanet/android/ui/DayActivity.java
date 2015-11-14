@@ -213,7 +213,7 @@ public class DayActivity extends BaseActivity {
     }
 
     /**
-     * DayViewFragment가 데이터 로딩을 끝냈을 때 호출.
+     * DayFragment가 데이터 로딩을 끝냈을 때 호출.
      * 식당이 매일 문열지는 않으므로, 이 때까지는 전날-다음날 메뉴가 있는지 없는지만 알 수 있음.
      * 메뉴가 있을 경우 PagerAdapter에 추가해서 swipe scroll이 가능하게 함
      */

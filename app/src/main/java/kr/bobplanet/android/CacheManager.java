@@ -12,8 +12,8 @@ import java.util.Date;
  * @author heonkyu.jin
  * @version 2015-11-13
  */
-public class EntityHolder {
-    private static final String TAG = EntityHolder.class.getSimpleName();
+public class CacheManager {
+    private static final String TAG = CacheManager.class.getSimpleName();
 
     /**
      * 캐쉬 최대 사이즈. 현재는 1MB.
@@ -21,9 +21,9 @@ public class EntityHolder {
     private static final int MAX_SIZE = 1024 * 1024;
 
     /**
-     * 캐쉬 유효기간. 현재는 2분.
+     * 캐쉬 유효기간. default는 2분.
      */
-    private static final int CACHE_EXPIRE_SECONDS = 2 * 60;
+    protected static final int DEFAULT_LIFETIME_SECONDS = 2 * 60 * 1000;
 
     /**
      * LruCache 키값에서 클래스명과 ID를 연결하는 separator
@@ -38,10 +38,10 @@ public class EntityHolder {
     /**
      *
      */
-    protected EntityHolder() {
+    protected CacheManager() {
     }
 
-    protected <T> T getCachedEntity(Class<T> resultType, String key) {
+    protected <T> T getCachedEntity(Class<T> resultType, String key, int cacheLifetime) {
         long now = new Date().getTime();
 
         Pair<Long, String> cachedObj = jsonCache.get(key);
@@ -49,7 +49,7 @@ public class EntityHolder {
         if (cachedObj != null) {
             Long timestamp = cachedObj.first;
             String json = cachedObj.second;
-            if (now - timestamp < CACHE_EXPIRE_SECONDS * 1000 && json != null) {
+            if (now - timestamp < cacheLifetime && json != null) {
                 Log.v(TAG, "Get cached entry for " + key);
                 return EntityTranslator.parseEntity(resultType, json);
             }

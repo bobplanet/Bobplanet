@@ -34,6 +34,10 @@ dependencies {
     compile 'com.ganyo:gcm-server:1.0.2'
     compile 'javax.servlet:servlet-api:2.5'
     compile 'joda-time:joda-time:2.8.2'
+    testCompile 'com.google.appengine:appengine-testing:1.9.28'
+    testCompile 'junit:junit:4.12'
+    testCompile 'com.google.appengine:appengine-api-stubs:1.9.28'
+    testCompile 'com.google.appengine:appengine-api-labs:1.9.28'
 }
 
 appengine {

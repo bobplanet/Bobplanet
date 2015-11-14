@@ -1,7 +1,6 @@
 package kr.bobplanet.android.ui;
 
 import android.support.v4.content.ContextCompat;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -9,7 +8,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
 
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.Bind;
@@ -19,8 +21,9 @@ import kr.bobplanet.android.Constants;
 import kr.bobplanet.android.R;
 import kr.bobplanet.android.Util;
 import kr.bobplanet.android.VoteManager;
+import kr.bobplanet.backend.bobplanetApi.model.Comment;
 import kr.bobplanet.backend.bobplanetApi.model.Item;
-import kr.bobplanet.backend.bobplanetApi.model.ItemVoteSummary;
+import kr.bobplanet.backend.bobplanetApi.model.ItemScore;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
 import kr.bobplanet.backend.bobplanetApi.model.Submenu;
 
@@ -68,7 +71,7 @@ public class DayViewHolder extends BaseListAdapter.BaseViewHolder<Menu> implemen
         if (menu == null) return;
         this.menu = menu;
         setMeta();
-        setVote();
+        setScore();
     }
 
     private void setMeta() {
@@ -100,20 +103,18 @@ public class DayViewHolder extends BaseListAdapter.BaseViewHolder<Menu> implemen
         // 서브메뉴는 ','로 concatenate
         List<Submenu> submenus = menu.getSubmenu();
         if (submenus != null) {
-            String text = TextUtils.join(", ",
-                    fj.data.List.range(0, SUBMENU_DISPLAY_COUNT)
-                            .map(i -> submenus.get(i).getItem().getName())
-                            .toJavaList());
+            String text = Joiner.on(", ").join(Lists.transform(submenus,
+                    submenu -> submenu.getItem().getName()).subList(0, SUBMENU_DISPLAY_COUNT));
             submenu.setText(text);
         }
     }
 
-    private void setVote() {
+    private void setScore() {
         Item item = menu.getItem();
-        ItemVoteSummary voteSummary = item.getVoteSummary();
+        ItemScore itemScore = item.getScore();
 
-        int thumbUps = voteSummary.getNumThumbUps();
-        int thumbDowns = voteSummary.getNumThumbDowns();
+        int thumbUps = itemScore != null ? itemScore.getNumThumbUps() : 0;
+        int thumbDowns = itemScore != null ? itemScore.getNumThumbDowns() : 0;
 
         int drawableResId = R.drawable.signal_wait;
         if (thumbUps + 1> (thumbDowns + 1) * 2) {
@@ -129,6 +130,19 @@ public class DayViewHolder extends BaseListAdapter.BaseViewHolder<Menu> implemen
         buttonThumbUp.setOnClickListener(v -> new VoteManager(baseActivity, menu).showVoteDialog(VOTE_UP));
         buttonThumbDown.setText(String.format("%,d", thumbDowns));
         buttonThumbDown.setOnClickListener(v -> new VoteManager(baseActivity, menu).showVoteDialog(VOTE_DOWN));
+
+        if (itemScore == null) return;
+
+        if (itemScore.getUpComments().getSize() > 0) {
+            List<Comment> comments = itemScore.getUpComments().getComments();
+            Collections.sort(comments, (a, b) -> a.getCount() - b.getCount());
+            thumbUpComment.setText(Util.getQuotedString(comments.get(0).getText()));
+        }
+        if (itemScore.getDownComments().getSize() > 0) {
+            List<Comment> comments = itemScore.getDownComments().getComments();
+            Collections.sort(comments, (a, b) -> a.getCount() - b.getCount());
+            thumbDownComment.setText(Util.getQuotedString(comments.get(0).getText()));
+        }
     }
 
     @Override

@@ -10,6 +10,7 @@ import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
+import android.text.TextUtils;
 import android.view.View;
 
 import kr.bobplanet.android.ui.BaseActivity;
@@ -30,6 +31,11 @@ public class Util {
         char c = str.charAt(str.length() - 1);
         int f = (c - 0xAC00) % 28;
         return f != 0;
+    }
+
+    public static String getQuotedString(String text) {
+        return TextUtils.isEmpty(text) ? "" :
+                new StringBuilder(text.length() + 2).append('"').append(text).append('"').toString();
     }
 
     public static Drawable getTintedDrawable(Context context, @DrawableRes int drawableResId,

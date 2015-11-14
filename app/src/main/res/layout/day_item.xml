@@ -85,7 +85,7 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:layout_width="wrap_content"
+                android:layout_width="68dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="0dp"
                 android:paddingLeft="4dp"
@@ -93,7 +93,7 @@
 
                 <Button
                     android:id="@+id/button_thumb_up"
-                    android:layout_width="60dp"
+                    android:layout_width="match_parent"
                     android:layout_height="22dp"
                     android:background="@color/thumb_up"
                     android:drawableLeft="@drawable/ic_thumb_up_small"
@@ -103,9 +103,10 @@
 
                 <TextView
                     android:id="@+id/thumb_up_comment"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/button_thumb_up"
+                    android:gravity="center_horizontal"
                     android:paddingTop="2dp"
                     android:textColor="@color/thumb_up"
                     tools:text='"해장메뉴"' />
@@ -113,14 +114,14 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:layout_width="wrap_content"
+                android:layout_width="68dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="0dp"
                 android:paddingLeft="4dp">
 
                 <Button
                     android:id="@+id/button_thumb_down"
-                    android:layout_width="60dp"
+                    android:layout_width="match_parent"
                     android:layout_height="22dp"
                     android:background="@color/thumb_down"
                     android:drawableLeft="@drawable/ic_thumb_down_small"
@@ -130,9 +131,10 @@
 
                 <TextView
                     android:id="@+id/thumb_down_comment"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/button_thumb_down"
+                    android:gravity="center"
                     android:paddingTop="2dp"
                     android:textColor="@color/thumb_down"
                     tools:text='"소금국"' />

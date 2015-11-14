@@ -8,23 +8,22 @@ import com.googlecode.objectify.annotation.OnSave;
 import com.googlecode.objectify.annotation.Parent;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * 메뉴아이템의 평점 요약 객체.
- * 
+ * <p>
  * - '좋아요'는 1점, '싫어요'는 -1점 기준
  * - 태그별 호응자 수
- * 
+ *
  * @author heonkyu.jin
  * @version 15. 11. 7
  */
 @Entity
 public class ItemScore {
-	/**
-	 * 메뉴명.
-	 */
+    /**
+     * 메뉴명.
+     */
     @Parent
     private Ref<Item> item;
 
@@ -41,7 +40,15 @@ public class ItemScore {
      */
     protected int numThumbDowns;
 
-    protected Map<String, Integer> commentWithCounts = new HashMap<>();
+    /**
+     *
+     */
+    protected Comments upComments = new Comments();
+
+    /**
+     *
+     */
+    protected Comments downComments = new Comments();
 
     /**
      * 최종수정일
@@ -49,7 +56,8 @@ public class ItemScore {
     @IgnoreLoad
     protected Date updateDate;
 
-    public ItemScore() { }
+    public ItemScore() {
+    }
 
     public ItemScore(Item item) {
         this.item = Ref.create(item);
@@ -76,22 +84,35 @@ public class ItemScore {
         return numThumbDowns;
     }
 
-    public Map<String, Integer> getCommentWithCounts() {
-        return commentWithCounts;
+    public Comments getUpComments() {
+        return upComments;
+    }
+
+    public Comments getDownComments() {
+        return downComments;
+    }
+
+    private Comments selectComments(int score) {
+        return score > 0 ? upComments : downComments;
     }
 
     public void applyVote(Vote vote) {
-        numThumbUps += vote.getScore() > 0 ? 1 : 0;
-        numThumbDowns += vote.getScore() < 0 ? 1 : 0;
+        int score = vote.getScore();
+
+        numThumbUps += score > 0 ? 1 : 0;
+        numThumbDowns += score < 0 ? 1 : 0;
 
         if (vote.getComments() != null) {
+            Comments comments = selectComments(score);
             for (String comment : vote.getComments()) {
-                commentWithCounts.put(comment, 1);
+                comments.add(comment);
             }
         }
     }
 
     public void applyVote(Vote vote, Vote oldVote) {
+        Logger logger = Logger.getLogger(this.getClass().getName());
+
         int score = vote.getScore();
         int oldScore = oldVote.getScore();
 
@@ -101,21 +122,13 @@ public class ItemScore {
         numThumbDowns -= oldScore < 0 ? 1 : 0;
 
         if (vote.getComments() != null) {
-            for (String c : vote.getComments()) {
-                commentWithCounts.put(c, commentWithCounts.containsKey(c) ?
-                        commentWithCounts.get(c) + 1 : 1);
-            }
+            Comments comments = selectComments(score);
+            comments.add(vote.getComments());
         }
+
         if (oldVote.getComments() != null) {
-            for (String c : oldVote.getComments()) {
-                commentWithCounts.put(c, commentWithCounts.containsKey(c) ?
-                        commentWithCounts.get(c) - 1 : 0);
-            }
-        }
-        for (String c : commentWithCounts.keySet()) {
-            if (commentWithCounts.get(c) == 0) {
-                commentWithCounts.remove(c);
-            }
+            Comments comments = selectComments(oldScore);
+            comments.remove(oldVote.getComments());
         }
     }
 

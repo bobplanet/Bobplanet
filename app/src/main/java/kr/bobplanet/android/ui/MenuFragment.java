@@ -12,11 +12,9 @@ import com.dexafree.materialList.view.MaterialListView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
-import kr.bobplanet.android.ApiProxy;
-import kr.bobplanet.android.App;
 import kr.bobplanet.android.EntityTranslator;
 import kr.bobplanet.android.R;
-import kr.bobplanet.android.event.ItemChangeEvent;
+import kr.bobplanet.android.event.ItemScoreChangeEvent;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
 
 /**
@@ -85,6 +83,6 @@ public class MenuFragment extends BaseFragment {
         materialListView.addAll(summaryCard, submenuCard);
     }
 
-    public void onEvent(ItemChangeEvent event) {
+    public void onEvent(ItemScoreChangeEvent event) {
     }
 }

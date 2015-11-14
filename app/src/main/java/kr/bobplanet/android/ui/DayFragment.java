@@ -10,30 +10,32 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
 import fr.castorflex.android.smoothprogressbar.SmoothProgressDrawable;
-import kr.bobplanet.android.ApiProxy;
+import hugo.weaving.DebugLog;
 import kr.bobplanet.android.App;
-import kr.bobplanet.android.Preferences;
 import kr.bobplanet.android.R;
-import kr.bobplanet.android.event.ItemChangeEvent;
+import kr.bobplanet.android.event.ItemScoreChangeEvent;
 import kr.bobplanet.android.event.MorningMenuToggleEvent;
 import kr.bobplanet.android.event.NetworkExceptionEvent;
 import kr.bobplanet.backend.bobplanetApi.model.DailyMenu;
+import kr.bobplanet.backend.bobplanetApi.model.ItemScore;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
 import kr.bobplanet.backend.bobplanetApi.model.UserDevice;
 
 /**
  * 특정 일자의 아침-점심-저녁 메뉴를 보여주는 fragment.
- * DayViewActivity에 삽입되어 실제 메뉴를 화면에 보여주는 역할을 담당함.
+ * DayActivity에 삽입되어 실제 메뉴를 화면에 보여주는 역할을 담당함.
  * <p>
  * - 날짜 parameter는 fragment 생성시에 bundle로 전달되어 <code>getArguments()</code>를 통해 조회
  * - 서버로부터 메뉴 데이터를 가져오면 activity에도 알려줌 (좌우 fragment를 미리 만들어둘 수 있도록)
@@ -46,7 +48,7 @@ import kr.bobplanet.backend.bobplanetApi.model.UserDevice;
  * @version 2015. 9. 27.
  */
 public class DayFragment extends BaseFragment {
-    @SuppressWarnings("UnusedDeclaration")
+    @SuppressWarnings("unused")
     private static final String TAG = DayFragment.class.getSimpleName();
     private static final String ARGUMENT_DATE = "ARGUMENT_DATE";
 
@@ -73,7 +75,7 @@ public class DayFragment extends BaseFragment {
     /**
      * 메뉴정보를 관리하는 ListAdapter
      */
-    BaseListAdapter adapter;
+    BaseListAdapter<Menu> adapter;
 
     /**
      * 메뉴정보를 표시하는 RecyclerView
@@ -154,35 +156,59 @@ public class DayFragment extends BaseFragment {
 
         EventBus.getDefault().register(this);
 
-        // 데이터 로딩이 끝나면 그에 맞게 UI 업데이트하고 activity에도 데이터로딩 끝났음을 전달
-        ApiProxy.ApiResultListener<DailyMenu> listener = (DailyMenu dailyMenu) -> {
-            if (dailyMenu == null) return;
+        App.getApiProxy().loadMenuOfDate(getArguments().getString(ARGUMENT_DATE),
+                dailyMenu -> onDailyMenuLoaded(dailyMenu));
+    }
 
-            menuList = dailyMenu.getMenu();
+    /**
+     *
+     *
+     * @param dailyMenu
+     */
+    private void onDailyMenuLoaded(DailyMenu dailyMenu) {
+        menuList = dailyMenu.getMenu();
 
-            // 이게 null이면 식당 노는날이라는 뜻임.
-            if (menuList != null) {
-                BaseListAdapter.BaseViewHolderFactory factory = (View view) -> new DayViewHolder(view);
+        // 이게 null이면 식당 노는날이라는 뜻임.
+        if (menuList != null) {
+            BaseListAdapter.BaseViewHolderFactory factory = view -> new DayViewHolder(view);
 
-                UserDevice device = App.getUserManager().getDevice();
-                if (!device.getMorningMenuEnabled()) {
-                    morningMenu = menuList.get(0);
-                    menuList.remove(0);
-                }
-                adapter = new BaseListAdapter(factory, menuList, R.layout.day_item);
-                recyclerView.setAdapter(adapter);
-            } else {
-                recyclerView.setVisibility(View.GONE);
-                emptyView.setVisibility(View.VISIBLE);
+            UserDevice device = App.getUserManager().getDevice();
+            if (!device.getMorningMenuEnabled()) {
+                morningMenu = menuList.get(0);
+                menuList.remove(0);
             }
 
-            progressBar.setIndeterminate(false);
-            progressBar.setVisibility(View.INVISIBLE);
+            adapter = new BaseListAdapter<>(factory, menuList, R.layout.day_item);
+            recyclerView.setAdapter(adapter);
 
-            EventBus.getDefault().post(new DataLoadCompleteEvent(dailyMenu));
-        };
+            App.getApiProxy().loadItemScores(
+                    Lists.transform(menuList, (Menu menu) -> menu.getItem().getName()),
+                    itemScores -> onItemScoresLoaded(itemScores.getItems())
+            );
+        } else {
+            recyclerView.setVisibility(View.GONE);
+            emptyView.setVisibility(View.VISIBLE);
+        }
 
-        App.getApiProxy().loadMenuOfDate(getArguments().getString(ARGUMENT_DATE), listener);
+        progressBar.setIndeterminate(false);
+        progressBar.setVisibility(View.INVISIBLE);
+
+        EventBus.getDefault().post(new DataLoadCompleteEvent(dailyMenu));
+    }
+
+    @DebugLog
+    private void onItemScoresLoaded(List<ItemScore> itemScores) {
+        if (itemScores == null) return;
+
+        Map<String, ItemScore> map = Maps.uniqueIndex(itemScores, score -> score.getItem().getName());
+
+        for (Menu menu : menuList) {
+            String key = menu.getItem().getName();
+            if (map.containsKey(key)) {
+                menu.getItem().setScore(map.get(key));
+            }
+        }
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -206,21 +232,31 @@ public class DayFragment extends BaseFragment {
         if (adapter == null) return;
 
         if (!e.isActive) {
-            adapter.removeItem(0);
+            adapter.remove(0);
             adapter.notifyItemRemoved(0);
         } else {
-            adapter.addItem(0, morningMenu);
+            adapter.add(0, morningMenu);
             adapter.notifyItemInserted(0);
             layoutManager.scrollToPosition(0);
         }
     }
 
-    public void onEventMainThread(ItemChangeEvent e) {
-        recyclerView.invalidate();
+    @SuppressWarnings("unused")
+    @DebugLog
+    public void onEvent(ItemScoreChangeEvent e) {
+        if (adapter == null) return;
+
+        for (int i = 0; i < adapter.getItemCount(); i++) {
+            Menu menu = adapter.get(i);
+            if (e.isFor(menu)) {
+                e.apply(menu);
+                adapter.notifyItemChanged(i);
+            }
+        }
     }
 
     /**
-     * 해당 일자의 메뉴데이터 로딩이 끝날 경우 DayViewActivity로 전달되는 이벤트 클래스.
+     * 해당 일자의 메뉴데이터 로딩이 끝날 경우 DayActivity로 전달되는 이벤트 클래스.
      */
     static class DataLoadCompleteEvent {
         private final DailyMenu dailyMenu;

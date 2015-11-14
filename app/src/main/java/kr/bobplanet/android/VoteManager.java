@@ -1,19 +1,15 @@
 package kr.bobplanet.android;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.TypedArrayUtils;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
+
+import com.google.common.collect.Lists;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,11 +17,11 @@ import java.util.List;
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
 import hugo.weaving.DebugLog;
+import kr.bobplanet.android.event.ItemScoreChangeEvent;
 import kr.bobplanet.android.event.UserAccountEvent;
 import kr.bobplanet.android.log.UserLogEvent;
 import kr.bobplanet.android.ui.BaseActivity;
 import kr.bobplanet.android.ui.BaseDialogBuilder;
-import kr.bobplanet.backend.bobplanetApi.model.Item;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
 import kr.bobplanet.backend.bobplanetApi.model.Vote;
 import me.gujun.android.taggroup.TagGroup;
@@ -79,7 +75,7 @@ public class VoteManager implements Constants {
                 .setTitle(title)
                 .setView(view)
                 .setPositiveButton(R.string.button_ok, (dialog, which) -> {
-                    voteOrRequestSignin();
+                    voteOrRequestSignIn();
                     dialog.dismiss();
                 })
                 .setNegativeButton(R.string.button_cancel, null)
@@ -98,7 +94,7 @@ public class VoteManager implements Constants {
     }
 
     private List<String> getQuotedComments() {
-        return fj.data.List.list(comments).map(c -> '"' + c + '"').toJavaList();
+        return Lists.transform(comments, c -> Util.getQuotedString(c));
     }
 
     /**
@@ -110,10 +106,9 @@ public class VoteManager implements Constants {
         if (um.hasAccount()) {
             userHasAccount = true;
             App.getApiProxy().myVote(um.getUserId(), menu,
-                    (kr.bobplanet.backend.bobplanetApi.model.Vote result) -> {
-                        if (result != null) {
-                            score = result.getScore();
-                            comments = result.getComments();
+                    vote -> {
+                        comments = vote.getComments();
+                        if (comments.size() > 0) {
                             commentsEditText.setText(TextUtils.join(" ", comments));
                             commentsEditText.setSelection(commentsEditText.length());
                             tags.setTags(getQuotedComments());
@@ -124,7 +119,7 @@ public class VoteManager implements Constants {
     }
 
     @DebugLog
-    private void voteOrRequestSignin() {
+    private void voteOrRequestSignIn() {
         if (userHasAccount) {
             uploadVote();
         } else {
@@ -140,17 +135,19 @@ public class VoteManager implements Constants {
         if (score != 0) {
             ApiProxy proxy = App.getApiProxy();
 
+            List<String> comments = commentsEditText.toString().trim().length() > 0 ?
+                    Arrays.asList(commentsEditText.getText().toString().split(" ")) : null;
+
             Vote vote = new Vote()
                     .setUserId(App.getUserManager().getUserId())
                     .setMenuId(menu.getId())
                     .setItemName(menu.getItem().getName())
                     .setScore(score)
-                    .setComments(Arrays.asList(commentsEditText.getText().toString().split(" ")));
+                    .setComments(comments);
 
             proxy.vote(vote, result -> {
-                if (result != null) {
-                    Log.v(TAG, result.toString());
-                }
+                Log.v(TAG, result.toString());
+                EventBus.getDefault().post(new ItemScoreChangeEvent(result));
             });
 
             String level = context.getString(score > 0 ? R.string.vote_level_up : R.string.vote_level_down);
@@ -168,7 +165,7 @@ public class VoteManager implements Constants {
      *
      * @param event
      */
-    @SuppressWarnings("UnusedDeclaration")
+    @SuppressWarnings("unused")
     @DebugLog
     public void onEvent(UserAccountEvent event) {
         if (event instanceof UserAccountEvent.SignIn) {

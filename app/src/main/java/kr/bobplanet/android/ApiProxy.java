@@ -1,15 +1,12 @@
 package kr.bobplanet.android;
 
 import android.os.AsyncTask;
-import android.support.v4.util.LruCache;
-import android.support.v4.util.Pair;
 import android.util.Log;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -19,8 +16,8 @@ import kr.bobplanet.android.log.MeasureLogEvent;
 import kr.bobplanet.android.event.NetworkExceptionEvent;
 import kr.bobplanet.backend.bobplanetApi.BobplanetApi;
 import kr.bobplanet.backend.bobplanetApi.model.DailyMenu;
-import kr.bobplanet.backend.bobplanetApi.model.Item;
-import kr.bobplanet.backend.bobplanetApi.model.ItemVoteSummary;
+import kr.bobplanet.backend.bobplanetApi.model.ItemScore;
+import kr.bobplanet.backend.bobplanetApi.model.ItemScoreCollection;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
 import kr.bobplanet.backend.bobplanetApi.model.Secret;
 import kr.bobplanet.backend.bobplanetApi.model.UserDevice;
@@ -49,16 +46,16 @@ public class ApiProxy implements Constants {
      */
     private BobplanetApi api;
 
-    private EntityHolder entityHolder;
+    private CacheManager cacheManager;
 
     /**
      * 기본 생성자.
      */
-    protected ApiProxy(EntityHolder entityHolder) {
+    protected ApiProxy(CacheManager cacheManager) {
         this.api = new BobplanetApi.Builder(
                 AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
                 .setRootUrl(BACKEND_ROOT_URL).build();
-        this.entityHolder = entityHolder;
+        this.cacheManager = cacheManager;
     }
 
     /**
@@ -81,6 +78,14 @@ public class ApiProxy implements Constants {
         new Builder<>(DailyMenu.class, () -> api.menuOfDate(date).execute(), "menuOfDate")
                 .setResultListener(listener)
                 .setCacheKey(date)
+                .setCacheLifetime(60 * 60)
+                .execute();
+    }
+
+    @DebugLog
+    public void loadItemScores(final List<String> itemNames, ApiResultListener<ItemScoreCollection> listener) {
+        new Builder<>(ItemScoreCollection.class, () -> api.itemScores(itemNames).execute(), "itemScores")
+                .setResultListener(listener)
                 .execute();
     }
 
@@ -148,10 +153,11 @@ public class ApiProxy implements Constants {
      * @param vote
      */
     @DebugLog
-    public void vote(Vote vote, ApiResultListener<ItemVoteSummary> listener) {
-        new Builder<>(ItemVoteSummary.class, () -> api.vote(vote).execute(), "vote")
+    public void vote(Vote vote, ApiResultListener<ItemScore> listener) {
+        new Builder<>(ItemScore.class, () -> api.vote(vote).execute(), "vote")
                 .setResultListener(listener)
                 .setCacheKey(vote.getMenuId())
+                .setCacheReadable(false)
                 .setCacheWritable(true)
                 .execute();
     }
@@ -186,6 +192,7 @@ public class ApiProxy implements Constants {
         String cacheKey;
         boolean cacheReadable = false;
         boolean cacheWritable = false;
+        int cacheLifetime = CacheManager.DEFAULT_LIFETIME_SECONDS;
         private static final char KEY_SEPARATOR = ':';
 
         Builder(Class<T> resultType, ApiExecutor<T> apiExecutor, String measureApiName) {
@@ -216,17 +223,21 @@ public class ApiProxy implements Constants {
             return this;
         }
 
+        Builder<T> setCacheLifetime(int lifetime) {
+            this.cacheLifetime = lifetime * 1000;
+            return this;
+        }
+
         /**
          * 캐쉬에서 객체 조회하고 없거나 이미 expire되었으면 네트웤API를 호출해서 가져옴
          */
         @Override
-        @DebugLog
         protected T doInBackground(Void... params) {
             try {
                 long now = new Date().getTime();
 
                 if (cacheReadable) {
-                    T result = entityHolder.getCachedEntity(resultType, cacheKey);
+                    T result = cacheManager.getCachedEntity(resultType, cacheKey, cacheLifetime);
                     if (result != null) {
                         return result;
                     }
@@ -239,7 +250,7 @@ public class ApiProxy implements Constants {
                 MeasureLogEvent.measureApiLatency(measureApiName, new Date().getTime() - now);
 
                 if (cacheWritable) {
-                    entityHolder.putCachedEntity(cacheKey, result);
+                    cacheManager.putCachedEntity(cacheKey, result);
                 }
 
                 return result;
@@ -251,9 +262,9 @@ public class ApiProxy implements Constants {
         }
 
         @Override
-        protected void onPostExecute(T entity) {
-            if (resultListener != null) {
-                resultListener.onApiResult(entity);
+        protected void onPostExecute(T result) {
+            if (resultListener != null && result != null) {
+                resultListener.onApiResult(result);
             }
         }
     }

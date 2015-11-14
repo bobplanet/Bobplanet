@@ -18,8 +18,8 @@ import kr.bobplanet.android.App;
  * @author heonkyu.jin
  * @version 15. 10. 17
  */
-public class BaseListAdapter extends RecyclerView.Adapter<BaseListAdapter.BaseViewHolder> {
-    final List itemList;
+public class BaseListAdapter<T> extends RecyclerView.Adapter<BaseListAdapter.BaseViewHolder> {
+    final List<T> itemList;
     final BaseViewHolderFactory factory;
     @LayoutRes final int layoutResId;
 
@@ -37,15 +37,15 @@ public class BaseListAdapter extends RecyclerView.Adapter<BaseListAdapter.BaseVi
 
     @Override
     final public void onBindViewHolder(BaseViewHolder holder, int position) {
-        Object item = getItem(position);
+        Object item = get(position);
         holder.setItem(item);
     }
 
-    public void addItem(int position, Object item) {
+    public void add(int position, T item) {
         itemList.add(position, item);
     }
 
-    public void removeItem(int position) {
+    public void remove(int position) {
         itemList.remove(position);
     }
 
@@ -54,7 +54,7 @@ public class BaseListAdapter extends RecyclerView.Adapter<BaseListAdapter.BaseVi
         return itemList == null ? 0 : itemList.size();
     }
 
-    private Object getItem(int location) {
+    public T get(int location) {
         return itemList == null ? null : itemList.get(location);
     }
 

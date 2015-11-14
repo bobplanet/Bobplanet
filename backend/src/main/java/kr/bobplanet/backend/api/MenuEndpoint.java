@@ -105,13 +105,12 @@ public class MenuEndpoint extends BaseEndpoint {
                     vote.setId(oldVote.getId());
                 }
 
-                ItemScore itemScore =
-                        ofy().load().type(ItemScore.class).id(item.getName()).now();
+                ItemScore itemScore = ofy().load().type(ItemScore.class).parent(item).id(item.getName()).now();
                 if (itemScore == null) {
                     itemScore = new ItemScore(vote);
                 }
 
-                logger.info("vote = " + oldVote);
+                logger.info("oldVote = " + oldVote);
                 if (oldVote != null) {
                     logger.info("Vote exists. Updates score");
 

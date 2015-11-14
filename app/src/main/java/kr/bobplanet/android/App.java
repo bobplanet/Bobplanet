@@ -1,11 +1,8 @@
 package kr.bobplanet.android;
 
-import android.app.Application;
 import android.support.multidex.MultiDexApplication;
-import android.text.TextUtils;
 import android.util.Log;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
@@ -42,7 +39,7 @@ public class App extends MultiDexApplication {
      */
     private SignInManager signInManager;
 
-    private EntityHolder entityHolder;
+    private CacheManager cacheManager;
 
     /**
      * ApiProxy 객체.
@@ -75,8 +72,8 @@ public class App extends MultiDexApplication {
         instance = this;
 
         prefs = new Preferences(this);
-        entityHolder = new EntityHolder();
-        apiProxy = new ApiProxy(entityHolder);
+        cacheManager = new CacheManager();
+        apiProxy = new ApiProxy(cacheManager);
         initializeTracker();
 
         userManager = new UserManager(this, prefs);
