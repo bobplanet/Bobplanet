@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!-- DayFragment 레이아웃 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,7 +13,7 @@
         android:id="@+id/progress_bar"
         style="@android:style/Widget.Holo.ProgressBar.Horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="4dp"
+        android:layout_height="6dp"
         android:indeterminate="true"
         android:max="100"
         android:progress="0" />
@@ -23,10 +23,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:paddingTop="0dp">
+        android:orientation="vertical">
 
         <!-- 메뉴 리스트 -->
         <android.support.v7.widget.RecyclerView
@@ -64,4 +61,4 @@
 
         </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+</FrameLayout>

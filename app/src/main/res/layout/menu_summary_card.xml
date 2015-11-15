@@ -10,7 +10,7 @@
         android:id="@+id/cardView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="2dp"
+        android:layout_marginBottom="@dimen/card_margin_bottom"
         app:cardCornerRadius="@dimen/card_corner_radius"
         app:cardElevation="@dimen/card_elevation">
 
@@ -40,40 +40,53 @@
                 tools:text="And this is the description" />
 
             <TextView
-                android:id="@+id/averageScoreLabel"
+                android:id="@+id/originLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/descriptionTextView"
-                android:paddingRight="10dp"
-                android:text="@string/card_rating_average" />
-
-            <RatingBar
-                android:id="@+id/rating"
-                style="?android:attr/ratingBarStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/descriptionTextView"
-                android:layout_toRightOf="@id/averageScoreLabel"
-                android:numStars="5"
-                android:theme="@style/AppTheme" />
+                android:text="@string/card_summary_origin"
+                android:theme="@style/AppTheme.SummaryCardLabel" />
 
             <TextView
-                android:id="@+id/myScoreLabel"
+                android:id="@+id/originValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/averageScoreLabel"
-                android:paddingRight="10dp"
-                android:text="@string/card_rating_my" />
+                android:layout_below="@id/descriptionTextView"
+                android:layout_toRightOf="@id/originLabel"
+                android:theme="@style/AppTheme.SummaryCardValue" />
 
-            <RatingBar
-                android:id="@+id/myRating"
-                style="?android:attr/ratingBarStyleSmall"
+            <TextView
+                android:id="@+id/caloriesLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/rating"
-                android:layout_toRightOf="@id/myScoreLabel"
-                android:numStars="5"
-                android:theme="@style/AppTheme" />
+                android:layout_below="@id/descriptionTextView"
+                android:layout_toRightOf="@id/originValue"
+                android:text="@string/card_summary_calories"
+                android:theme="@style/AppTheme.SummaryCardLabel" />
+
+            <TextView
+                android:id="@+id/caloriesValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/caloriesLabel"
+                android:layout_below="@id/descriptionTextView"
+                android:theme="@style/AppTheme.SummaryCardValue" />
+
+            <TextView
+                android:id="@+id/countsLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/caloriesLabel"
+                android:text="@string/card_summary_counts"
+                android:theme="@style/AppTheme.SummaryCardLabel" />
+
+            <TextView
+                android:id="@+id/countsValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/caloriesValue"
+                android:layout_toRightOf="@id/countsLabel"
+                android:theme="@style/AppTheme.SummaryCardValue" />
 
         </RelativeLayout>
 

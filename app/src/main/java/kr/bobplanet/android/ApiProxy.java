@@ -18,6 +18,7 @@ import kr.bobplanet.backend.bobplanetApi.BobplanetApi;
 import kr.bobplanet.backend.bobplanetApi.model.DailyMenu;
 import kr.bobplanet.backend.bobplanetApi.model.ItemScore;
 import kr.bobplanet.backend.bobplanetApi.model.ItemScoreCollection;
+import kr.bobplanet.backend.bobplanetApi.model.ItemStat;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
 import kr.bobplanet.backend.bobplanetApi.model.Secret;
 import kr.bobplanet.backend.bobplanetApi.model.UserDevice;
@@ -82,9 +83,15 @@ public class ApiProxy implements Constants {
                 .execute();
     }
 
-    @DebugLog
     public void loadItemScores(final List<String> itemNames, ApiResultListener<ItemScoreCollection> listener) {
         new Builder<>(ItemScoreCollection.class, () -> api.itemScores(itemNames).execute(), "itemScores")
+                .setResultListener(listener)
+                .execute();
+    }
+
+    @DebugLog
+    public void loadItemStat(final String itemName, ApiResultListener<ItemStat> listener) {
+        new Builder<>(ItemStat.class, () -> api.itemStat(itemName).execute(), "itemStat")
                 .setResultListener(listener)
                 .execute();
     }
@@ -234,7 +241,7 @@ public class ApiProxy implements Constants {
         @Override
         protected T doInBackground(Void... params) {
             try {
-                long now = new Date().getTime();
+                long now = System.currentTimeMillis();
 
                 if (cacheReadable) {
                     T result = cacheManager.getCachedEntity(resultType, cacheKey, cacheLifetime);
@@ -247,7 +254,7 @@ public class ApiProxy implements Constants {
                 T result = apiExecutor.fromRemoteApi();
                 Log.v(TAG, "result = " + result);
 
-                MeasureLogEvent.measureApiLatency(measureApiName, new Date().getTime() - now);
+                MeasureLogEvent.measureApiLatency(measureApiName, System.currentTimeMillis() - now);
 
                 if (cacheWritable) {
                     cacheManager.putCachedEntity(cacheKey, result);

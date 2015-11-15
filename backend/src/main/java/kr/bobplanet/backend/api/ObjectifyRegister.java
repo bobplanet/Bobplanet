@@ -4,6 +4,7 @@ import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 
 import kr.bobplanet.backend.model.ItemScore;
+import kr.bobplanet.backend.model.ItemStat;
 import kr.bobplanet.backend.model.Secret;
 import kr.bobplanet.backend.model.UserDevice;
 import kr.bobplanet.backend.model.Item;
@@ -33,6 +34,7 @@ public final class ObjectifyRegister {
         ObjectifyService.register(UserDevice.class);
         ObjectifyService.register(Vote.class);
         ObjectifyService.register(ItemScore.class);
+        ObjectifyService.register(ItemStat.class);
         ObjectifyService.register(BaseMessage.class);
         ObjectifyService.register(NextMenuMessage.class);
     }

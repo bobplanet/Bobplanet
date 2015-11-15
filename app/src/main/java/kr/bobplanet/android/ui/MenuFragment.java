@@ -12,9 +12,11 @@ import com.dexafree.materialList.view.MaterialListView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
+import kr.bobplanet.android.App;
 import kr.bobplanet.android.EntityTranslator;
 import kr.bobplanet.android.R;
 import kr.bobplanet.android.event.ItemScoreChangeEvent;
+import kr.bobplanet.backend.bobplanetApi.model.ItemStat;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
 
 /**
@@ -30,8 +32,7 @@ public class MenuFragment extends BaseFragment {
     private static final String TAG = MenuFragment.class.getSimpleName();
 
     private Menu menu;
-
-    @Bind(R.id.material_listview) MaterialListView materialListView;
+    private ItemStat itemStat;
 
     private Card summaryCard;
 
@@ -45,6 +46,10 @@ public class MenuFragment extends BaseFragment {
         String menu_json = getActivity().getIntent().getStringExtra(KEY_MENU);
         menu = EntityTranslator.parseEntity(Menu.class, menu_json);
 
+        App.getApiProxy().loadItemStat(menu.getItem().getName(), itemStat -> {
+            this.itemStat = itemStat;
+            //if (summaryCard != null) summaryCard.
+        } );
         EventBus.getDefault().register(this);
     }
 
@@ -67,10 +72,9 @@ public class MenuFragment extends BaseFragment {
         MaterialListView materialListView = ButterKnife.findById(view, R.id.material_listview);
 
         summaryCard = new Card.Builder(getContext())
-                .withProvider(MenuScoreCardProvider.class)
-                .setTitle(R.string.card_rating_label)
-                .setAverageScore(0 /* TODO */)
-                .setMyScore(0)
+                .withProvider(MenuSummaryCardProvider.class)
+                .setTitle(R.string.card_summary_label)
+                .setMenu(menu)
                 .endConfig().build();
 
         Card submenuCard = new Card.Builder(getContext())

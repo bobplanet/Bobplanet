@@ -13,6 +13,7 @@ import java.util.List;
 import javax.inject.Named;
 
 import kr.bobplanet.backend.model.ItemScore;
+import kr.bobplanet.backend.model.ItemStat;
 import kr.bobplanet.backend.model.Menu;
 import kr.bobplanet.backend.model.Item;
 import kr.bobplanet.backend.model.DailyMenu;
@@ -160,5 +161,13 @@ public class MenuEndpoint extends BaseEndpoint {
             keys.add(Key.create(Key.create(Item.class, name), ItemScore.class, name));
         }
         return ofy().load().keys(keys).values();
+    }
+
+    @ApiMethod(
+            name = "itemStat",
+            path = "item/stat/{itemName}"
+    )
+    public ItemStat itemStat(@Named("itemName") String itemName) {
+        return ofy().load().type(ItemStat.class).id(itemName).now();
     }
 }

@@ -44,10 +44,24 @@
         <item name="colorAccent">@color/primary_dark</item>
     </style>
 
+    <!-- 로그인용 토글버튼 -->
     <style name="AppTheme.ToggleButton" parent="android:style/Widget.ImageButton">
         <item name="android:scaleType">fitXY</item>
         <item name="android:background">@drawable/signin_button_border</item>
         <item name="android:padding">6dp</item>
         <item name="android:foreground">?android:attr/selectableItemBackground</item>
+    </style>
+
+    <!-- 메뉴상세페이지 카드 -->
+    <style name="AppTheme.SummaryCardLabel">
+        <item name="android:textColor">@color/primary_dark</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:paddingRight">6dp</item>
+        <item name="android:layout_marginBottom">6dp</item>
+    </style>
+    <style name="AppTheme.SummaryCardValue">
+        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:layout_marginBottom">6dp</item>
     </style>
 </resources>

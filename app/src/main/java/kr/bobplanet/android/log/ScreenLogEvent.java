@@ -26,7 +26,7 @@ public final class ScreenLogEvent extends LogEvent {
      *
      */
     public static void activityView(Activity src) {
-        new ScreenLogEvent(Category.ACTIVITY_VIEW, src.getClass().getName()).dispatch();
+        new ScreenLogEvent(Category.ACTIVITY_VIEW, src.getClass().getSimpleName()).dispatch();
     }
 
     /**
@@ -34,7 +34,7 @@ public final class ScreenLogEvent extends LogEvent {
      *
      */
     public static void fragmentView(Fragment src) {
-        new ScreenLogEvent(Category.FRAGMENT_VIEW, src.getClass().getName()).dispatch();
+        new ScreenLogEvent(Category.FRAGMENT_VIEW, src.getClass().getSimpleName()).dispatch();
     }
 
     protected void dispatch(Tracker tracker) {

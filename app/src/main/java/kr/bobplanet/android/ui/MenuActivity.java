@@ -1,6 +1,5 @@
 package kr.bobplanet.android.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
@@ -11,7 +10,6 @@ import android.support.v4.util.Pair;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
@@ -32,7 +30,7 @@ import kr.bobplanet.backend.bobplanetApi.model.Menu;
 /**
  * 메뉴 상세화면을 담당하는 activity.
  * <p>
- * - 메뉴 개요 탭(MenuFragment)과 세부평가 탭(MenuScoreFragment)의 2개 탭으로 구성.
+ * - 메뉴 개요 탭(MenuFragment)과 세부평가 탭(MenuStatFragment)의 2개 탭으로 구성.
  * - 메뉴정보는 intent에 통째로 넣어서 받는다. (푸쉬메시지 수신한 경우, extra에 넣어서 본 화면 호출해야 함)
  * - 메뉴에 점수를 매긴 경우 점수데이터를 다시 불러와야 하므로 ApiProxy.ApiResultListener 구현 필요
  * <p>
@@ -121,7 +119,7 @@ public class MenuActivity extends BaseActivity implements Constants {
 
         // fragment 두개 더해줌
         adapter.addFragment(new MenuFragment(), getString(R.string.tab_menu_label));
-        adapter.addFragment(new MenuScoreFragment(), getString(R.string.tab_menu_score_label));
+        adapter.addFragment(new MenuStatFragment(), getString(R.string.tab_menu_score_label));
 
         return adapter;
     }

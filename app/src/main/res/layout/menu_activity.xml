@@ -52,7 +52,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_gravity="bottom"
-                android:background="?attr/colorPrimary" />
+                android:background="?attr/colorPrimary"
+                app:tabIndicatorHeight="6dp" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
@@ -62,7 +63,6 @@
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:layout="@layout/menu_fragment" />
 

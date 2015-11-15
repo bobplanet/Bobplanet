@@ -17,7 +17,7 @@ public class MeasureLogEvent extends LogEvent {
     private static final String API_LATENCY = "API_LATENCY";
 
     private String category;
-    private String label;
+    private String name;
 
     /**
      * 측정값
@@ -28,29 +28,29 @@ public class MeasureLogEvent extends LogEvent {
      * 생성자.
      *
      * @param category 측정종류(대분류)
-     * @param label 측정대상(소분류)
+     * @param name 측정대상(소분류)
      * @param value 측정값
      */
-    private MeasureLogEvent(String category, String label, long value) {
+    private MeasureLogEvent(String category, String name, long value) {
         this.category = category;
-        this.label = label;
+        this.name = name;
         this.value = value;
     }
 
     /**
      * 객체를 생성하는 factory method.
      *
-     * @param label 측정대상(소분류)
+     * @param apiName 측정대상(소분류)
      * @param value 측정값
      */
-    public static void measureApiLatency(String label, long value) {
-        new MeasureLogEvent(API_LATENCY, label, value).dispatch();
+    public static void measureApiLatency(String apiName, long value) {
+        new MeasureLogEvent(API_LATENCY, apiName, value).dispatch();
     }
 
     protected void dispatch(Tracker tracker) {
         tracker.send(new HitBuilders.TimingBuilder()
                 .setCategory(category)
-                .setLabel(label)
+                .setVariable(name)
                 .setValue(value)
                 .build());
     }

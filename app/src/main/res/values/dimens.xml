@@ -1,4 +1,5 @@
 <resources>
+    <dimen name="day_item_image_height">100dp</dimen>
     <dimen name="day_item_name">22sp</dimen>
     <dimen name="day_item_signal">16dp</dimen>
     <dimen name="day_item_submenu">13sp</dimen>
@@ -13,7 +14,8 @@
 
 	<!-- Cardview 공통 -->
 	<dimen name="card_elevation">2dp</dimen>
-	<dimen name="card_corner_radius">4dp</dimen>
+	<dimen name="card_corner_radius">0dp</dimen>
+    <dimen name="card_margin_bottom">8dp</dimen>
 
 	<!-- 썸네일 공통 -->
 	<dimen name="thumbnail_label_size">12dp</dimen>

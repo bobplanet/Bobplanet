@@ -10,7 +10,7 @@
     <!-- StartActivity -->
     <string name="need_google_play_service">Google Play Services가 있는 기기에서만 동작합니다</string>
 
-    <!-- 일간보기 화면 -->
+    <!-- 일간보기 -->
     <string name="closed_today">오늘은 회사식당 쉽니다.\n좌우로 화면을 넘겨보세요.\n(그런데.. 왜 휴일에 이 앱을 보고 계신가요?)</string>
     <string name="swipe_notice">좌우로 화면을 넘기면 다른 날의 메뉴도 볼 수 있어요.</string>
     <string name="swipe_notice_goaway">알았음</string>
@@ -18,17 +18,22 @@
     <string name="morning_menu_active">아침 메뉴를 화면에 표시합니다.</string>
     <string name="morning_menu_inactive">아침 메뉴를 화면에서 제외합니다.</string>
 
-    <!-- 메뉴보기 화면 -->
+    <!-- 메뉴보기 -->
     <string name="title_menu">메뉴보기</string>
     <string name="tab_menu_label">메뉴정보</string>
     <string name="tab_menu_score_label">상세평점</string>
-    <string name="card_rating_label">평점</string>
-    <string name="card_rating_average">전체 평균</string>
-    <string name="card_rating_my">나의 평가</string>
+    <string name="card_summary_label">기본정보</string>
+    <string name="card_summary_origin">원산지</string>
+    <string name="card_summary_calories">열량</string>
+    <string name="card_summary_counts">최근제공횟수</string>
+    <string name="card_summary_counts_fmt" formatted="false">최근 30일(%d회), 90일(%d회), 180일(%d회)</string>
     <string name="card_submenu_label">서브메뉴</string>
     <string name="card_submenu_description">함께 제공되는 메뉴들</string>
     <string name="fab_thumb_up">좋아요</string>
     <string name="fab_thumb_down">별로에요</string>
+
+    <!-- 메뉴보기 | 상세통계 -->
+    <string name="under_construction">아직 개발중입니다. 개선의견이 있으신 분은\nbobplanet.team@gmail.com으로 보내주세요.</string>
 
     <!-- 메뉴 평가하기 Dialog -->
     <string name="dialog_vote_label">평가하기</string>
