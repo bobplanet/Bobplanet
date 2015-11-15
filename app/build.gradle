@@ -93,6 +93,7 @@ dependencies {
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.github.dexafree:materiallist:3.0.1'
     compile 'me.gujun.android.taggroup:library:1.4@aar'
+    compile 'org.altbeacon:android-beacon-library:2+'
 }
 
 if (rootProject.file('secrets.properties').exists()) {

@@ -13,6 +13,7 @@ import com.google.android.gms.analytics.Tracker;
 public final class UserLogEvent extends LogEvent {
     private static final String LOGIN = "LOGIN";
     private static final String ACCOUNT_SELECT = "ACCOUNT_SELECT";
+    private static final String BEACON_SEEN = "BEACON_SEEN";
 
     private String category;
     private String label;
@@ -44,6 +45,10 @@ public final class UserLogEvent extends LogEvent {
      */
     public static void accountSelect(String accountType, int displayOrder) {
         new UserLogEvent(ACCOUNT_SELECT, accountType, displayOrder).dispatch();
+    }
+
+    public static void seenBeacon(String beaconAddress, double distance) {
+        new UserLogEvent(BEACON_SEEN, beaconAddress, (long) (distance * 100)).dispatch();
     }
 
     protected void dispatch(Tracker tracker) {
