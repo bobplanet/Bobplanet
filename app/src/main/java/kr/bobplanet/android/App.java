@@ -76,6 +76,8 @@ public class App extends MultiDexApplication {
      */
     private Preferences prefs;
 
+    private BeaconDetector beaconDetector;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -91,6 +93,8 @@ public class App extends MultiDexApplication {
 
         requestQueue = Volley.newRequestQueue(getApplicationContext());
         imageLoader = new ImageLoader(requestQueue, new LruBitmapCache());
+
+        beaconDetector = new BeaconDetector(this);
     }
 
     @Override

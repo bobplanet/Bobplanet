@@ -25,6 +25,7 @@ import de.greenrobot.event.EventBus;
 import kr.bobplanet.android.ApiProxy;
 import kr.bobplanet.android.Constants;
 import kr.bobplanet.android.App;
+import kr.bobplanet.android.NotifyManager;
 import kr.bobplanet.android.ui.MenuActivity;
 import kr.bobplanet.android.R;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
@@ -81,11 +82,8 @@ public class GcmServices implements Constants {
      * - 서버는 메뉴ID만 보내주고, 위 activity에 전달할 정보는 EntityVault와 ImageLoader를 이용해서 값을 채운다.
      * - Volley를 이용해 async로 이미지를 띄울 수 있도록 ImageListener 구현.
      */
-    public static class MessageListener extends GcmListenerService implements ImageLoader.ImageListener {
+    public static class MessageListener extends GcmListenerService {
         private static final String TAG = MessageListener.class.getSimpleName();
-
-        private Menu menu = null;
-        private Bundle data = null;
 
         /**
          * GCM메시지가 도착했을 때 호출됨. 실제 수신부.
@@ -98,102 +96,9 @@ public class GcmServices implements Constants {
             Log.i(TAG, "GCM message received. Message = " + data.toString());
 
             long menuId = Long.valueOf(data.getString("menuId"));
-            this.data = data;
 
-            ApiProxy apiProxy = App.getApiProxy();
-            final ImageLoader imageLoader = App.getImageLoader();
-
-            apiProxy.loadMenu(menuId, new ApiProxy.ApiResultListener<Menu>() {
-                @Override
-                public void onApiResult(Menu result) {
-                    menu = result;
-                    imageLoader.get(result.getItem().getThumbnail(), MessageListener.this);
-                }
-            });
-        }
-
-        /**
-         * 이미지가 로딩되었을 때 Volley에서 호출해주는 callback.
-         * 정확하게는 모르겠으나 두 번 호출되는 듯함. (첫번째 호출때는 image가 null이다.)
-         *
-         * @param response
-         * @param isImmediate
-         */
-        @Override
-        public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
-            Bitmap bitmap = response.getBitmap();
-            if (bitmap != null) {
-                registerNotification(menu, data, bitmap);
-            }
-        }
-
-        /**
-         * Volley에서 이미지를 로딩하지 못했을 때 호출하는 callback.
-         * 지금까지는 한번도 호출된 적이 없음.
-         *
-         * @param error
-         */
-        @Override
-        public void onErrorResponse(VolleyError error) {
-            Log.w(TAG, "Image fetch error", error.getCause());
-            registerNotification(menu, data, null);
-        }
-
-        /**
-         * 실제 Notification을 생성/등록한다.
-         *
-         * @param menu
-         * @param data
-         * @param bitmap
-         */
-        private void registerNotification(Menu menu, Bundle data, @Nullable Bitmap bitmap) {
-            Intent intent = new Intent(this, MenuActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.putExtra(KEY_MENU, menu.toString());
-
-            String title = getDefaultString(data, "title", menu.getDate() + ": " + menu.getItem().getName());
-            String message = getDefaultString(data, "message", "Get it while you can");
-            String detail = data.getString("detail");
-
-            PendingIntent pending = PendingIntent.getActivity(this, 0, intent,
-                    PendingIntent.FLAG_ONE_SHOT);
-
-            Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-
-            // 이미지가 있으면 BigPicture 스타일, 없으면 BigText 스타일.
-            NotificationCompat.Style style = bitmap != null ?
-                    new NotificationCompat.BigPictureStyle()
-                            .bigPicture(bitmap).setBigContentTitle(title)
-                            .setSummaryText(message) :
-                    new NotificationCompat.BigTextStyle()
-                            .setBigContentTitle(title).setSummaryText(detail);
-
-            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                    .setSmallIcon(R.mipmap.ic_launcher)
-                    .setContentTitle(title)
-                    .setContentText(message)
-                    .setStyle(style)
-                    .setAutoCancel(true)
-                    .setSound(defaultSoundUri)
-                    .setContentIntent(pending);
-
-            NotificationManager notificationManager =
-                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.notify(0, notificationBuilder.build());
-        }
-
-        /**
-         * 서버에서 전달받은 메시지 본문을 Bundle에서 꺼내는 유틸리티 함수.
-         *
-         * @param data
-         * @param key
-         * @param defaultValue
-         * @return
-         */
-        private String getDefaultString(Bundle data, String key, String defaultValue) {
-            String value = data.getString(key);
-            return (value == null || value.length() == 0) ?
-                    defaultValue : value;
+            NotifyManager notifyManager = new NotifyManager(this);
+            notifyManager.requestNextMenuNotification(menuId, data);
         }
     }
 

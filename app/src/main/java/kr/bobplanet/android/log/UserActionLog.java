@@ -51,6 +51,10 @@ public final class UserActionLog extends Log {
         new UserActionLog(BEACON_SEEN, beaconAddress, (long) (distance * 100)).dispatch();
     }
 
+    public static void seenBeacon(String beaconAddress, double distance) {
+        new UserLogEvent(BEACON_SEEN, beaconAddress, (long) (distance * 100)).dispatch();
+    }
+
     protected void dispatch(Tracker tracker) {
         HitBuilders.EventBuilder builder = new HitBuilders.EventBuilder()
                 .setCategory(category)
