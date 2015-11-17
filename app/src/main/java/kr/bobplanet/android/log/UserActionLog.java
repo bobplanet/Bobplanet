@@ -10,21 +10,22 @@ import com.google.android.gms.analytics.Tracker;
  * @author heonkyu.jin
  * @version 2015. 10. 11
  */
-public final class UserLogEvent extends LogEvent {
+public final class UserActionLog extends Log {
     private static final String LOGIN = "LOGIN";
     private static final String ACCOUNT_SELECT = "ACCOUNT_SELECT";
+    private static final String BEACON_SEEN = "BEACON_SEEN";
 
     private String category;
     private String label;
     private long value;
 
-    private UserLogEvent(String category, String label, long value) {
+    private UserActionLog(String category, String label, long value) {
         this.category = category;
         this.label = label;
         this.value = value;
     }
 
-    private UserLogEvent(String category, String label) {
+    private UserActionLog(String category, String label) {
         this(category, label, -1);
     }
 
@@ -32,7 +33,7 @@ public final class UserLogEvent extends LogEvent {
      * 사용자 로그인 완료.
      */
     public static void login(String accountType) {
-        new UserLogEvent(LOGIN, accountType).dispatch();
+        new UserActionLog(LOGIN, accountType).dispatch();
     }
 
     /**
@@ -43,7 +44,11 @@ public final class UserLogEvent extends LogEvent {
      * @param displayOrder
      */
     public static void accountSelect(String accountType, int displayOrder) {
-        new UserLogEvent(ACCOUNT_SELECT, accountType, displayOrder).dispatch();
+        new UserActionLog(ACCOUNT_SELECT, accountType, displayOrder).dispatch();
+    }
+
+    public static void beaconSeen(String beaconAddress, double distance) {
+        new UserActionLog(BEACON_SEEN, beaconAddress, (long) (distance * 100)).dispatch();
     }
 
     protected void dispatch(Tracker tracker) {

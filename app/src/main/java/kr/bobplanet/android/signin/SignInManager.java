@@ -21,7 +21,7 @@ import kr.bobplanet.android.App;
 import kr.bobplanet.android.Constants;
 import kr.bobplanet.android.R;
 import kr.bobplanet.android.event.InitCompleteEvent;
-import kr.bobplanet.android.log.UserLogEvent;
+import kr.bobplanet.android.log.UserActionLog;
 import kr.bobplanet.android.ui.BaseActivity;
 import kr.bobplanet.android.ui.BaseDialogBuilder;
 import kr.bobplanet.backend.bobplanetApi.model.Secret;
@@ -157,7 +157,7 @@ public class SignInManager implements Constants {
                 .setView(view)
                 .setPositiveButton(R.string.button_ok, (dialog, which) -> {
                     SignInInfo signInInfo = (SignInInfo) view.getTag();
-                    UserLogEvent.accountSelect(signInInfo.accountType, signInInfo.displayOrder);
+                    UserActionLog.accountSelect(signInInfo.accountType, signInInfo.displayOrder);
 
                     SignInProvider provider = getSignInProvider(signInInfo.accountType);
                     activity.setSignInProvider(provider);

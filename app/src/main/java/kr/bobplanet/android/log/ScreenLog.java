@@ -12,11 +12,11 @@ import com.google.android.gms.analytics.Tracker;
  * @author heonkyu.jin
  * @version 2015. 10. 11
  */
-public final class ScreenLogEvent extends LogEvent {
+public final class ScreenLog extends Log implements Rollupable {
     private Category category;
     private String screenName;
 
-    private ScreenLogEvent(Category category, String screenName) {
+    private ScreenLog(Category category, String screenName) {
         this.category = category;
         this.screenName = screenName;
     }
@@ -26,7 +26,7 @@ public final class ScreenLogEvent extends LogEvent {
      *
      */
     public static void activityView(Activity src) {
-        new ScreenLogEvent(Category.ACTIVITY_VIEW, src.getClass().getSimpleName()).dispatch();
+        new ScreenLog(Category.ACTIVITY_VIEW, src.getClass().getSimpleName()).dispatch();
     }
 
     /**
@@ -34,7 +34,7 @@ public final class ScreenLogEvent extends LogEvent {
      *
      */
     public static void fragmentView(Fragment src) {
-        new ScreenLogEvent(Category.FRAGMENT_VIEW, src.getClass().getSimpleName()).dispatch();
+        new ScreenLog(Category.FRAGMENT_VIEW, src.getClass().getSimpleName()).dispatch();
     }
 
     protected void dispatch(Tracker tracker) {

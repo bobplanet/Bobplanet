@@ -9,24 +9,24 @@ import com.google.android.gms.analytics.Tracker;
  * @author heonkyu.jin
  * @version 15. 10. 25
  */
-public class DialogLogEvent extends LogEvent {
+public class DialogLog extends Log {
     private static final String ACTION_VIEW = "ACTION_VIEW";
     private static final String ACTION_CANCEL = "ACTION_CANCEL";
 
     private String dialogType;
     private String action;
 
-    private DialogLogEvent(String dialogType, String action) {
+    private DialogLog(String dialogType, String action) {
         this.dialogType = dialogType;
         this.action = action;
     }
 
     public static void dialogView(String dialogType) {
-        new DialogLogEvent(dialogType, ACTION_VIEW).dispatch();
+        new DialogLog(dialogType, ACTION_VIEW).dispatch();
     }
 
     public static void dialogCancel(String dialogType) {
-        new DialogLogEvent(dialogType, ACTION_CANCEL).dispatch();
+        new DialogLog(dialogType, ACTION_CANCEL).dispatch();
     }
 
     protected void dispatch(Tracker tracker) {

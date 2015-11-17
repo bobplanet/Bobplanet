@@ -7,12 +7,11 @@ import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 
 import de.greenrobot.event.EventBus;
 import hugo.weaving.DebugLog;
-import kr.bobplanet.android.log.MeasureLogEvent;
+import kr.bobplanet.android.log.MeasureLog;
 import kr.bobplanet.android.event.NetworkExceptionEvent;
 import kr.bobplanet.backend.bobplanetApi.BobplanetApi;
 import kr.bobplanet.backend.bobplanetApi.model.DailyMenu;
@@ -254,7 +253,7 @@ public class ApiProxy implements Constants {
                 T result = apiExecutor.fromRemoteApi();
                 Log.v(TAG, "result = " + result);
 
-                MeasureLogEvent.measureApiLatency(measureApiName, System.currentTimeMillis() - now);
+                MeasureLog.measureApiLatency(measureApiName, System.currentTimeMillis() - now);
 
                 if (cacheWritable) {
                     cacheManager.putCachedEntity(cacheKey, result);

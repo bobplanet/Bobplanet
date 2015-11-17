@@ -11,8 +11,8 @@ import com.google.android.gms.analytics.Tracker;
  * @author heonkyu.jin
  * @version 2015. 10. 11
  */
-public class MeasureLogEvent extends LogEvent {
-    private static final String TAG = MeasureLogEvent.class.getSimpleName();
+public class MeasureLog extends Log {
+    private static final String TAG = MeasureLog.class.getSimpleName();
 
     private static final String API_LATENCY = "API_LATENCY";
 
@@ -31,7 +31,7 @@ public class MeasureLogEvent extends LogEvent {
      * @param name 측정대상(소분류)
      * @param value 측정값
      */
-    private MeasureLogEvent(String category, String name, long value) {
+    private MeasureLog(String category, String name, long value) {
         this.category = category;
         this.name = name;
         this.value = value;
@@ -44,7 +44,7 @@ public class MeasureLogEvent extends LogEvent {
      * @param value 측정값
      */
     public static void measureApiLatency(String apiName, long value) {
-        new MeasureLogEvent(API_LATENCY, apiName, value).dispatch();
+        new MeasureLog(API_LATENCY, apiName, value).dispatch();
     }
 
     protected void dispatch(Tracker tracker) {

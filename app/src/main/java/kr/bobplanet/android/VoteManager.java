@@ -12,7 +12,6 @@ import android.widget.EditText;
 import com.google.common.collect.Lists;
 
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -21,7 +20,7 @@ import de.greenrobot.event.EventBus;
 import hugo.weaving.DebugLog;
 import kr.bobplanet.android.event.ItemScoreChangeEvent;
 import kr.bobplanet.android.event.UserAccountEvent;
-import kr.bobplanet.android.log.UserLogEvent;
+import kr.bobplanet.android.log.UserActionLog;
 import kr.bobplanet.android.ui.BaseActivity;
 import kr.bobplanet.android.ui.BaseDialogBuilder;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
@@ -176,7 +175,7 @@ public class VoteManager implements Constants {
     @DebugLog
     public void onEvent(UserAccountEvent event) {
         if (event instanceof UserAccountEvent.SignIn) {
-            UserLogEvent.login(event.accountType);
+            UserActionLog.login(event.accountType);
             uploadVote();
         }
     }

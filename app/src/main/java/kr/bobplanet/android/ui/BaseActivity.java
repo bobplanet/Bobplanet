@@ -12,7 +12,7 @@ import android.view.MenuItem;
 
 import kr.bobplanet.android.Constants;
 import kr.bobplanet.android.R;
-import kr.bobplanet.android.log.ScreenLogEvent;
+import kr.bobplanet.android.log.ScreenLog;
 import kr.bobplanet.android.signin.SignInProvider;
 
 /**
@@ -68,7 +68,7 @@ abstract public class BaseActivity extends AppCompatActivity implements Constant
     @Override
     protected void onResume() {
         super.onResume();
-        ScreenLogEvent.activityView(this);
+        ScreenLog.activityView(this);
     }
 
     /**

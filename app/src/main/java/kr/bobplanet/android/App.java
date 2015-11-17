@@ -7,8 +7,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.Logger;
 import com.google.android.gms.analytics.Tracker;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 import kr.bobplanet.android.signin.SignInManager;
 
@@ -52,6 +52,16 @@ public class App extends MultiDexApplication {
     private Tracker tracker;
 
     /**
+     *
+     */
+    private Tracker rollupTracker;
+
+    /**
+     *
+     */
+    private MixpanelAPI mixpanel;
+
+    /**
      * Volley의 RequestQueue.
      */
     private RequestQueue requestQueue;
@@ -83,16 +93,23 @@ public class App extends MultiDexApplication {
         imageLoader = new ImageLoader(requestQueue, new LruBitmapCache());
     }
 
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+
+        mixpanel.flush();
+    }
+
     /**
      *
      */
     private void initializeTracker() {
-        if (tracker == null) {
-            Log.i(TAG, "Initializing Google Analytics");
-            GoogleAnalytics ga = GoogleAnalytics.getInstance(this);
-            tracker = ga.newTracker(R.xml.ga_config);
-            ga.getLogger().setLogLevel(Logger.LogLevel.VERBOSE);
-        }
+        Log.i(TAG, "Initializing Trackers");
+        GoogleAnalytics ga = GoogleAnalytics.getInstance(this);
+        tracker = ga.newTracker(R.xml.ga_config);
+        rollupTracker = ga.newTracker(R.xml.ga_rollup_config);
+
+        mixpanel = MixpanelAPI.getInstance(this, getString(R.string.mixpanel_token));
     }
 
     /**
@@ -116,6 +133,14 @@ public class App extends MultiDexApplication {
      */
     public static Tracker getTracker() {
         return instance.tracker;
+    }
+
+    public static Tracker getRollupTracker() {
+        return instance.rollupTracker;
+    }
+
+    public static MixpanelAPI getMixpanel() {
+        return instance.mixpanel;
     }
 
     /**
