@@ -33,14 +33,16 @@ abstract public class Log {
             mixpanel.alias(userId, deviceId);
         }
 
-        dispatch(tracker);
+        dispatchGA(tracker);
         if (this instanceof Rollupable) {
-            dispatch(rollup);
+            dispatchGA(rollup);
         }
     }
 
     /**
      * 이벤트를 서버로 전송 요청
      */
-    abstract protected void dispatch(Tracker tracker);
+    abstract protected void dispatchGA(Tracker tracker);
+
+    abstract protected void dispatchMixpanel(MixpanelAPI mixpanel);
 }

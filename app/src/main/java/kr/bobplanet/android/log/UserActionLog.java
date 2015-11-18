@@ -2,6 +2,7 @@ package kr.bobplanet.android.log;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 /**
  * 사용자의 액션에 의해 일어나는 이벤트를 측정하기 위한 객체.
@@ -51,11 +52,8 @@ public final class UserActionLog extends Log {
         new UserActionLog(BEACON_SEEN, beaconAddress, (long) (distance * 100)).dispatch();
     }
 
-    public static void seenBeacon(String beaconAddress, double distance) {
-        new UserLogEvent(BEACON_SEEN, beaconAddress, (long) (distance * 100)).dispatch();
-    }
-
-    protected void dispatch(Tracker tracker) {
+    @Override
+    protected void dispatchGA(Tracker tracker) {
         HitBuilders.EventBuilder builder = new HitBuilders.EventBuilder()
                 .setCategory(category)
                 .setLabel(label);
@@ -65,5 +63,9 @@ public final class UserActionLog extends Log {
         }
 
         tracker.send(builder.build());
+    }
+
+    @Override
+    protected void dispatchMixpanel(MixpanelAPI mixpanel) {
     }
 }

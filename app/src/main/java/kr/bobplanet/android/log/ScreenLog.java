@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 /**
  * Activity나 Fragment와 같이 화면전환 이벤트를 측정하기 위한 객체.
@@ -37,9 +38,15 @@ public final class ScreenLog extends Log implements Rollupable {
         new ScreenLog(Category.FRAGMENT_VIEW, src.getClass().getSimpleName()).dispatch();
     }
 
-    protected void dispatch(Tracker tracker) {
+    @Override
+    protected void dispatchGA(Tracker tracker) {
         tracker.setScreenName(screenName);
         tracker.send(new HitBuilders.ScreenViewBuilder().build());
+    }
+
+    @Override
+    protected void dispatchMixpanel(MixpanelAPI mixpanel) {
+        mixpanel.track(screenName);
     }
 
     private enum Category {

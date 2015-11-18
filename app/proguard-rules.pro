@@ -62,3 +62,6 @@
 # Google Analytics로 전송되는 Activity나 Fragment 이름 유지
 -keep public class * extends android.app.Activity
 -keep public class * extends android.support.v4.app.Fragment
+
+# Mixpanel
+-dontwarn com.mixpanel.**
