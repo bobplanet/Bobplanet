@@ -76,4 +76,10 @@ public class Item {
     public void onSave() {
         this.updateDate = new Date();
     }
+
+    @Override
+    public String toString() {
+        return String.format("Item { name=%s image=%s thumbnail=%s }",
+                getName(), getImage(), getThumbnail());
+    }
 }

@@ -5,6 +5,7 @@ import com.google.android.gcm.server.Result;
 import com.google.android.gcm.server.Sender;
 import com.google.api.server.spi.config.ApiClass;
 import com.google.api.server.spi.config.ApiMethod;
+import com.google.appengine.repackaged.com.google.common.collect.Lists;
 
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDateTime;
@@ -16,6 +17,7 @@ import java.util.List;
 
 import kr.bobplanet.backend.Constants;
 import kr.bobplanet.backend.model.BaseMessage;
+import kr.bobplanet.backend.model.User;
 import kr.bobplanet.backend.model.UserDevice;
 import kr.bobplanet.backend.model.Menu;
 import kr.bobplanet.backend.model.NextMenuMessage;
@@ -38,6 +40,8 @@ public class MessageEndpoint extends BaseEndpoint {
 	 */
     private static final DateTimeFormatter DATETIME_FORMAT_YMD = DateTimeFormat.forPattern("yyyy-MM-dd");
 
+    private static final String[] WDAY_NAME = new String[] { "월", "화", "수", "목", "금", "토", "일" };
+
     /**
      * 다음 메뉴 알림 메시지 발송. cron에 의해 호출됨.
      */
@@ -52,15 +56,19 @@ public class MessageEndpoint extends BaseEndpoint {
         LocalDateTime now = new LocalDateTime(DateTimeZone.forOffsetHours(9));
 
         String today = DATETIME_FORMAT_YMD.print(now);
-
         int hour = now.getHourOfDay();
         String type = hour < 12 ? BaseMessage.TYPE_NEXT_LUNCH : BaseMessage.TYPE_NEXT_DINNER;
         String when = hour < 12 ? "점심" : "저녁";
 
+        int wday = now.getDayOfWeek();
+        String title = String.format("%d월 %d일(%s) %s메뉴 알림",
+                now.getMonthOfYear(), now.getDayOfMonth(), WDAY_NAME[wday - 1], when);
+
         List<Menu> menuList = ofy().load().type(Menu.class).filter("date", today).filter("when", when).list();
+        logger.info("menuList = " + menuList);
         if (menuList.size() > 0) {
             NextMenuMessage message = NextMenuMessage.fromMenuList(type, menuList);
-            message.setTitle("오늘의 " + when + " 메뉴 알림");
+            message.setTitle(title);
             sendMessage(message);
         }
     }
@@ -72,12 +80,6 @@ public class MessageEndpoint extends BaseEndpoint {
         logger.info("Executing sendMessage() : message = " + message);
 
         Sender sender = new Sender(Constants.GCM_API_KEY);
-        Message msg = new Message.Builder()
-                .addData("type", message.getType())
-                .addData("title", message.getTitle())
-                .addData("menuId", message.getExtra("menuId"))
-                .addData("message", "오늘은 어떤 메뉴가 나올까요?")
-                .build();
 
         String filterCol = "";
         switch (message.getType()) {
@@ -95,6 +97,8 @@ public class MessageEndpoint extends BaseEndpoint {
                     .list();
 
             int errors = 0;
+            Message msg = message.toMessage();
+            logger.info("message = " + msg);
             for (UserDevice device : devices) {
                 Result result = sender.send(msg, device.getGcmToken(), 5);
                 if (result.getErrorCodeName() != null) {

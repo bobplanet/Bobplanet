@@ -1,5 +1,7 @@
 package kr.bobplanet.backend.model;
 
+import com.google.android.gcm.server.Message;
+import com.google.appengine.api.xmpp.MessageBuilder;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.OnSave;
@@ -37,6 +39,8 @@ abstract public class BaseMessage {
      */
     private String title;
 
+    private String text;
+
     /**
      *
      */
@@ -73,6 +77,14 @@ abstract public class BaseMessage {
         this.title = title;
     }
 
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
     public String getExtra(String name) {
         return extras.get(name);
     }
@@ -87,6 +99,17 @@ abstract public class BaseMessage {
 
     public void setNumErrors(int numErrors) {
         this.numErrors = numErrors;
+    }
+
+    public Message toMessage() {
+        Message.Builder builder = new Message.Builder()
+                .addData("type", getType())
+                .addData("title", getTitle())
+                .addData("text", getText());
+        for (String key : extras.keySet()) {
+            builder.addData(key, extras.get(key));
+        }
+        return builder.build();
     }
 
     @OnSave

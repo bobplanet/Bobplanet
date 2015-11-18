@@ -15,22 +15,30 @@ import java.util.List;
 public class NextMenuMessage extends BaseMessage {
     /**
      *
-     * @param menuIdList
      */
-    private NextMenuMessage(String messageType, List<Long> menuIdList) {
+    private NextMenuMessage(String messageType, List<Menu> menuList) {
         super(messageType);
-        putExtra("menuId", menuIdList.get(0).toString());
+        Menu menu1 = menuList.get(0);
+
+        String menuName;
+        if (menuList.size() == 1) {
+            menuName = menu1.getItem().getName();
+        } else {
+            Menu menu2 = menuList.get(1);
+            menuName = String.format("%s vs %s", menu1.getItem().getName(), menu2.getItem().getName());
+            putExtra("menu2.id", String.valueOf(menu2.getID()));
+            putExtra("menu2.image", menu2.getItem().getImage());
+        }
+
+        setText(menuName);
+        putExtra("menu1.id", String.valueOf(menu1.getID()));
+        putExtra("menu1.image", menu1.getItem().getImage());
     }
 
     /**
      *
      */
     public static NextMenuMessage fromMenuList(String messageType, List<Menu> menuList) {
-        List<Long> menuIdList = new ArrayList<>();
-        for (Menu menu : menuList) {
-            menuIdList.add(menu.getID());
-        }
-
-        return new NextMenuMessage(messageType, menuIdList);
+        return new NextMenuMessage(messageType, menuList);
     }
 }

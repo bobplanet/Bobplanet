@@ -107,6 +107,11 @@ public class Menu {
     public List<Submenu> getSubmenu() {
         return submenu;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Menu { ID=%d when=%s type=%s item=%s }", getID(), getWhen(), getType(), getItem());
+    }
 }
 
 /**

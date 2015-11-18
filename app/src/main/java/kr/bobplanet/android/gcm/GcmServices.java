@@ -22,13 +22,8 @@ import com.google.android.gms.iid.InstanceID;
 import com.google.android.gms.iid.InstanceIDListenerService;
 
 import de.greenrobot.event.EventBus;
-import kr.bobplanet.android.ApiProxy;
 import kr.bobplanet.android.Constants;
-import kr.bobplanet.android.App;
 import kr.bobplanet.android.NotifyManager;
-import kr.bobplanet.android.ui.MenuActivity;
-import kr.bobplanet.android.R;
-import kr.bobplanet.backend.bobplanetApi.model.Menu;
 
 /**
  * Google Cloud Messaging(GCM) 처리를 위해 필요한 여러 서비스를 모아놓은 상위클래스.
@@ -95,10 +90,8 @@ public class GcmServices implements Constants {
         public void onMessageReceived(String from, Bundle data) {
             Log.i(TAG, "GCM message received. Message = " + data.toString());
 
-            long menuId = Long.valueOf(data.getString("menuId"));
-
             NotifyManager notifyManager = new NotifyManager(this);
-            notifyManager.requestNextMenuNotification(menuId, data);
+            notifyManager.requestNextMenuNotification(data);
         }
     }
 

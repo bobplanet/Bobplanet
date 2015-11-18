@@ -4,14 +4,21 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.text.TextUtils;
+import android.util.Size;
 import android.view.View;
+
+import java.util.List;
 
 import kr.bobplanet.android.ui.BaseActivity;
 
@@ -57,5 +64,17 @@ public class Util {
             context = ((ContextWrapper) context).getBaseContext();
         }
         return null;
+    }
+
+    public static Bitmap combineBitmaps(Bitmap bitmap1, Bitmap bitmap2) {
+        int width = bitmap1.getWidth();
+        int height = bitmap1.getHeight();
+        Bitmap out = Bitmap.createBitmap(width, height / 2, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(out);
+        canvas.drawBitmap(bitmap1, null,
+                new Rect(0, 0, width / 2, height / 2), null);
+        canvas.drawBitmap(bitmap2, null,
+                new Rect(width / 2, 0, width, height / 2), null);
+        return out;
     }
 }
