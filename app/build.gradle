@@ -11,8 +11,6 @@ android {
         applicationId "kr.bobplanet.android"
         minSdkVersion 11
         targetSdkVersion 22
-        versionCode 4
-        versionName "1.0beta"
         multiDexEnabled true
     }
     dexOptions {
