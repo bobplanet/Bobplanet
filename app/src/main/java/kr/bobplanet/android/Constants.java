@@ -1,5 +1,7 @@
 package kr.bobplanet.android;
 
+import android.net.Uri;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -63,4 +65,9 @@ public interface Constants {
      * WebView에 사용자ID를 넘길 때 사용되는 패러미터 이름
      */
     String WEBVIEW_USERID = "bobp_userId";
+
+    Uri TEAM_URL = Uri.parse("http://bobplanet.kr/team.html");
+    Uri PRIVACY_URL = Uri.parse("http://bobplanet.kr/privacy.html");
+    Uri OPENSOURCE_URL = Uri.parse("http://bobplanet.kr/opensource.html");
+    Uri MAIL_URL = Uri.parse("mailto:bobplanet.team@gmail.com");
 }

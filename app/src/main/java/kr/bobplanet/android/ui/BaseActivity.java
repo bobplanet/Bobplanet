@@ -87,30 +87,4 @@ abstract public class BaseActivity extends AppCompatActivity implements Constant
     public void showSnackbar(@StringRes int messageId) {
         showSnackbar(getString(messageId));
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        if (!(this instanceof EmptyOptionsMenu)) {
-            getMenuInflater().inflate(R.menu.menu_common, menu);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (!(this instanceof EmptyOptionsMenu)) {
-            int id = item.getItemId();
-
-            if (id == R.id.action_settings) {
-                startActivity(new Intent(this, SettingsActivity.class));
-                return true;
-            }
-
-            return super.onOptionsItemSelected(item);
-        } else {
-            return false;
-        }
-    }
 }

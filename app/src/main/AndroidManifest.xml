@@ -64,7 +64,8 @@
             android:theme="@style/AppTheme.Settings" />
 
         <!-- 웹뷰 Activity -->
-        <activity android:name=".ui.WebViewActivity">
+        <activity android:name=".ui.WebViewActivity"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <data android:scheme="http" />
                 <data android:scheme="https" />

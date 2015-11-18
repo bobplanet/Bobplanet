@@ -2,7 +2,11 @@ package kr.bobplanet.android.ui;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.media.audiofx.BassBoost;
+import android.support.design.internal.NavigationMenu;
+import android.support.design.internal.NavigationMenuItemView;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -51,7 +55,7 @@ import kr.bobplanet.backend.bobplanetApi.model.UserDevice;
  * - 체감속도 향상을 위해 DayViewFragment는 좌우 1개씩 미리 생성
  * - Fragment가 데이터 로딩을 끝내면 PagerAdapter에 추가
  */
-public class DayActivity extends BaseActivity {
+public class DayActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = DayActivity.class.getSimpleName();
 
     /**
@@ -91,10 +95,8 @@ public class DayActivity extends BaseActivity {
         drawerLayout.setDrawerListener(drawerToggle);
 
         // Drawer 설정
-        NetworkImageView profileView = (NetworkImageView) findViewById(R.id.profile_image);
-        if (App.getUserManager().hasAccount()) {
-            profileView.setImageUrl(App.getUserManager().getUserImage(), App.getImageLoader());
-        }
+        NavigationView navigation = (NavigationView) findViewById(R.id.navigation);
+        navigation.setNavigationItemSelectedListener(this);
 
         // DayFragment가 보내주는 데이터로딩완료 메시지 수신을 위해 EventBus 등록
         EventBus.getDefault().register(this);
@@ -175,6 +177,35 @@ public class DayActivity extends BaseActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        drawerLayout.closeDrawers();
+
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                return true;
+
+            case R.id.action_team:
+                startActivity(new Intent(this, WebViewActivity.class).setData(TEAM_URL));
+                return true;
+
+            case R.id.action_privacy:
+                startActivity(new Intent(this, WebViewActivity.class).setData(PRIVACY_URL));
+                return true;
+
+            case R.id.action_opensource:
+                startActivity(new Intent(this, WebViewActivity.class).setData(PRIVACY_URL));
+                return true;
+
+            case R.id.action_mail:
+                startActivity(new Intent(this, WebViewActivity.class).setData(MAIL_URL));
+                return true;
+        }
+
+        return false;
     }
 
     @Override

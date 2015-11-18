@@ -41,17 +41,4 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/settings_etc_category">
-
-        <Preference
-            android:key="ABOUT"
-            android:title="@string/settings_etc_about">
-            <intent
-                android:action="kr.bobplanet.android.ACTION_WEBVIEW"
-                android:data="@string/bobplanet_about_url"
-                android:targetClass="kr.bobplanet.android.ui.WebViewActivity" />
-        </Preference>
-
-    </PreferenceCategory>
-
 </PreferenceScreen>

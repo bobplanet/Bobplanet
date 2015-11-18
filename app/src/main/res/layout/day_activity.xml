@@ -39,7 +39,7 @@
     </android.support.design.widget.CoordinatorLayout>
 
     <android.support.design.widget.NavigationView
-        android:id="@+id/drawer"
+        android:id="@+id/navigation"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
@@ -47,34 +47,6 @@
         app:itemIconTint="#333"
         app:itemTextColor="#333"
         app:menu="@menu/drawer_items">
-
-        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="40dp">
-
-<!--
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/drawer_background" />
--->
-
-            <com.android.volley.toolbox.NetworkImageView
-                android:id="@+id/profile_image"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="36dp" />
-
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_margin="16dp" />
-
-        </FrameLayout>
-
     </android.support.design.widget.NavigationView>
 
 </android.support.v4.widget.DrawerLayout>

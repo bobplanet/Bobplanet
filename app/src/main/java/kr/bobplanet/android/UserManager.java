@@ -118,7 +118,7 @@ public class UserManager implements ApiProxy.ApiResultListener<UserDevice> {
      * @return
      */
     public String getUserId() {
-        return device.getUser().getId();
+        return device.getUser() != null ? device.getUser().getId() : null;
     }
 
     /**

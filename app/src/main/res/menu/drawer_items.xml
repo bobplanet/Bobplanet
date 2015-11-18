@@ -2,29 +2,30 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="all">
                 
-<!--
         <item
-            android:id="@+id/navItem1"
-            android:icon="@drawable/ic_action_location_found_dark"
-            android:title="Home" />
+            android:id="@+id/action_settings"
+            android:icon="@drawable/ic_settings"
+            android:title="@string/drawer_settings" />
+
+        <item
+            android:id="@+id/action_team"
+            android:icon="@drawable/ic_people"
+            android:title="@string/drawer_team" />
+
+        <item
+            android:id="@+id/action_privacy"
+            android:icon="@drawable/ic_local_library"
+            android:title="@string/drawer_privacy" />
+
+        <item
+            android:id="@+id/action_opensource"
+            android:icon="@drawable/ic_link"
+            android:title="@string/drawer_opensource" />
+
+        <item
+            android:id="@+id/action_mail"
+            android:icon="@drawable/ic_chat"
+            android:title="@string/drawer_mail" />
                
-        <item
-                    android:id="@+id/navItem2"
-                    android:icon="@drawable/ic_action_location_found_dark"
-                    android:title="Blog"/>
-         
-                
-        <item
-                    android:id="@+id/navItem3"
-                    android:icon="@drawable/ic_action_location_found_dark"
-                    android:title="About"/>
-         
-                
-        <item
-                    android:id="@+id/navItem4"
-                    android:icon="@drawable/ic_action_location_found_dark"
-                    android:title="Contact"/>
-            
--->
     </group>
 </menu>

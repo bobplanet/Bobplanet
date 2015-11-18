@@ -16,6 +16,11 @@
     <string name="last_page_notice">마지막 페이지입니다.\n메뉴는 매주 토요일 새벽에 갱신됩니다.</string>
     <string name="morning_menu_active">아침 메뉴를 화면에 표시합니다.</string>
     <string name="morning_menu_inactive">아침 메뉴를 화면에서 제외합니다.</string>
+    <string name="drawer_settings">환경설정</string>
+    <string name="drawer_team">만든사람들</string>
+    <string name="drawer_privacy">개인정보취급방침</string>
+    <string name="drawer_opensource">오픈소스 라이선스</string>
+    <string name="drawer_mail">개선의견 보내기</string>
 
     <!-- 메뉴보기 -->
     <string name="title_menu">메뉴보기</string>
@@ -68,10 +73,12 @@
 	<string name="settings_etc_about">이 앱을 만든 사람들</string>
 
     <!-- URL -->
-    <string name="bobplanet_about_url">http://bobplanet.github.io/about/</string>
+    <string name="bobplanet_about_url">http://bobplanet.kr/about.html</string>
+    <string name="bobplanet_privacy_url">http://bobplanet.kr/privacy.html</string>
     
     <!-- Notification -->
-    <string name="notification_title">Menu notification</string>
+    <string name="notification_title">밥플래닛 알림</string>
+    <string name="notification_meessage">밥플래닛에서 공지말씀 드립니다</string>
     <string name="action_thumb_up">좋아요</string>
     <string name="action_thumb_down">싫어요</string>
 
