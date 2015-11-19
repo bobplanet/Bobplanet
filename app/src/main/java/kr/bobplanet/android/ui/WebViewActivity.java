@@ -53,24 +53,20 @@ public class WebViewActivity extends BaseActivity {
      * @return
      */
     private String modifyUrl(Uri uri) {
-        String userId = userManager.getUserId();
-        if (!TextUtils.isEmpty(userId)) {
-            StringBuilder sb = new StringBuilder()
-                    .append(uri.getScheme()).append("://")
-                    .append(uri.getHost())
-                    .append(uri.getPort() != 80 && uri.getPort() > 0 ? ":" + uri.getPort() : "")
-                    .append(uri.getPath())
-                    .append(TextUtils.isEmpty(uri.getEncodedQuery()) ? "?" :
-                            uri.getEncodedQuery() + "&")
-                    .append(WEBVIEW_USERID + '=').append(userManager.getUserId())
-                    .append(TextUtils.isEmpty(uri.getEncodedFragment()) ? "" : uri.getEncodedFragment());
+        StringBuilder sb = new StringBuilder()
+                .append(uri.getScheme()).append("://")
+                .append(uri.getHost())
+                .append(uri.getPort() != 80 && uri.getPort() > 0 ? ":" + uri.getPort() : "")
+                .append(uri.getPath())
+                .append("?type=webview&")
+                .append(TextUtils.isEmpty(uri.getEncodedQuery()) ? "" : uri.getEncodedQuery())
+                .append(userManager.hasAccount() ?
+                        String.format("&%s=%s", WEBVIEW_USERID, userManager.getUserId()) : "")
+                .append(TextUtils.isEmpty(uri.getEncodedFragment()) ? "" : uri.getEncodedFragment());
 
-            String url = sb.toString();
-            Log.i(TAG, "url = " + url);
-            return url;
-        } else {
-            return uri.toString();
-        }
+        String url = sb.toString();
+        Log.i(TAG, "url = " + url);
+        return url;
     }
 
     static class DefaultWebViewClient extends WebViewClient {

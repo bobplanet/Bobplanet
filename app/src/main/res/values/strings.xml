@@ -20,7 +20,9 @@
     <string name="drawer_team">만든사람들</string>
     <string name="drawer_privacy">개인정보취급방침</string>
     <string name="drawer_opensource">오픈소스 라이선스</string>
-    <string name="drawer_mail">개선의견 보내기</string>
+    <string name="drawer_voc">개선의견 보내기</string>
+    <string name="voc_subject">밥플래닛 개선의견</string>
+    <string name="voc_chooser_title">이메일 프로그램 선택</string>
 
     <!-- 메뉴보기 -->
     <string name="title_menu">메뉴보기</string>

@@ -34,12 +34,6 @@ public interface Constants {
 	 */
     String BACKEND_ROOT_URL = BuildConfig.BACKEND_ROOT_URL;
 
-    /**
-	 * Google Cloud Message의 기본 발신자ID.
-	 * Google Cloud의 프로젝트 단위로 지정되므로 개발/상용이 동일한 값을 가짐
-	 */
-    String GCM_SENDER_ID = "603054087850";
-
 	/**
 	 * Intent나 Bundle, Preferences에서 이용될 key값들.
 	 */
@@ -69,5 +63,5 @@ public interface Constants {
     Uri TEAM_URL = Uri.parse("http://bobplanet.kr/team.html");
     Uri PRIVACY_URL = Uri.parse("http://bobplanet.kr/privacy.html");
     Uri OPENSOURCE_URL = Uri.parse("http://bobplanet.kr/opensource.html");
-    Uri MAIL_URL = Uri.parse("mailto:bobplanet.team@gmail.com");
+    Uri MAIL_URL = Uri.fromParts("mailto", "bobplanet.team@gmail.com", null);
 }

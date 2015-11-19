@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="mixpanel_token">36cc8303f20d992326aa63283098079c</string>
+    <string name="gcm_sender_id"></string>
 </resources>

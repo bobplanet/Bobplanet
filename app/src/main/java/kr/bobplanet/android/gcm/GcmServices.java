@@ -24,6 +24,7 @@ import com.google.android.gms.iid.InstanceIDListenerService;
 import de.greenrobot.event.EventBus;
 import kr.bobplanet.android.Constants;
 import kr.bobplanet.android.NotifyManager;
+import kr.bobplanet.android.R;
 
 /**
  * Google Cloud Messaging(GCM) 처리를 위해 필요한 여러 서비스를 모아놓은 상위클래스.
@@ -51,7 +52,7 @@ public class GcmServices implements Constants {
         protected void onHandleIntent(Intent intent) {
             try {
                 InstanceID instanceID = InstanceID.getInstance(this);
-                String token = instanceID.getToken(GCM_SENDER_ID,
+                String token = instanceID.getToken(getString(R.string.gcm_sender_id),
                         GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
                 Log.i(TAG, "GCM Registration Token: " + token);
 

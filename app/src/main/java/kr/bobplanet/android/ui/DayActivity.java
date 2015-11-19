@@ -2,9 +2,6 @@ package kr.bobplanet.android.ui;
 
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.media.audiofx.BassBoost;
-import android.support.design.internal.NavigationMenu;
-import android.support.design.internal.NavigationMenuItemView;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -20,10 +17,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
-import com.android.volley.toolbox.NetworkImageView;
 import com.commonsware.cwac.pager.PageDescriptor;
 import com.commonsware.cwac.pager.SimplePageDescriptor;
 import com.commonsware.cwac.pager.v4.ArrayPagerAdapter;
@@ -197,11 +192,15 @@ public class DayActivity extends BaseActivity implements NavigationView.OnNaviga
                 return true;
 
             case R.id.action_opensource:
-                startActivity(new Intent(this, WebViewActivity.class).setData(PRIVACY_URL));
+                startActivity(new Intent(this, WebViewActivity.class).setData(OPENSOURCE_URL));
                 return true;
 
             case R.id.action_mail:
-                startActivity(new Intent(this, WebViewActivity.class).setData(MAIL_URL));
+                startActivity(Intent.createChooser(
+                        new Intent(Intent.ACTION_SENDTO, MAIL_URL)
+                                .putExtra(Intent.EXTRA_SUBJECT, getString(R.string.voc_subject)),
+                        getString(R.string.voc_chooser_title)
+                ));
                 return true;
         }
 

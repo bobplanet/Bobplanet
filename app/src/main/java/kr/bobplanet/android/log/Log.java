@@ -37,6 +37,7 @@ abstract public class Log {
         if (this instanceof Rollupable) {
             dispatchGA(rollup);
         }
+        dispatchMixpanel(mixpanel);
     }
 
     /**
