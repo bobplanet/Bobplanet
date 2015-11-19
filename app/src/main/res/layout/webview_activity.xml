@@ -21,6 +21,16 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <!-- 네트웤에서 데이터 가져올 때 동작하는 ProgressBar -->
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="@android:style/Widget.Holo.ProgressBar.Horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="6dp"
+        android:indeterminate="true"
+        android:max="100"
+        android:progress="0" />
+
     <!-- WebView 들어갈 자리 -->
     <WebView
         android:id="@+id/webview"

@@ -1,13 +1,19 @@
 package kr.bobplanet.android.ui;
 
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.animation.AccelerateInterpolator;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 
+import butterknife.ButterKnife;
+import fr.castorflex.android.smoothprogressbar.SmoothProgressDrawable;
 import kr.bobplanet.android.App;
 import kr.bobplanet.android.R;
 import kr.bobplanet.android.UserManager;
@@ -25,18 +31,31 @@ import kr.bobplanet.android.UserManager;
  */
 public class WebViewActivity extends BaseActivity {
     private static final String TAG = WebViewActivity.class.getSimpleName();
+
+    /**
+     * 네트웤에서 데이터를 가져올 때 동작하는 ProgressBar
+     */
+    ProgressBar progressBar;
+
     private WebView webView;
-    private UserManager userManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.webview_activity);
 
-        userManager = App.getUserManager();
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        progressBar = ButterKnife.findById(this, R.id.progress_bar);
+        Drawable d = new SmoothProgressDrawable.Builder(this)
+                .interpolator(new AccelerateInterpolator()).build();
+        d.setColorFilter(ContextCompat.getColor(this, R.color.progress),
+                android.graphics.PorterDuff.Mode.SRC_IN);
+        progressBar.setIndeterminateDrawable(d);
 
         webView = (WebView) findViewById(R.id.webview);
         webView.getSettings().setJavaScriptEnabled(true);
@@ -53,6 +72,8 @@ public class WebViewActivity extends BaseActivity {
      * @return
      */
     private String modifyUrl(Uri uri) {
+        UserManager userManager = App.getUserManager();
+
         StringBuilder sb = new StringBuilder()
                 .append(uri.getScheme()).append("://")
                 .append(uri.getHost())
@@ -69,7 +90,10 @@ public class WebViewActivity extends BaseActivity {
         return url;
     }
 
-    static class DefaultWebViewClient extends WebViewClient {
-
+    private class DefaultWebViewClient extends WebViewClient {
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            progressBar.setIndeterminate(false);
+        }
     }
 }

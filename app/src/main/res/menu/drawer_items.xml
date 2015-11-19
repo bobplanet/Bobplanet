@@ -1,36 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group android:checkableBehavior="all">
+    <group android:checkableBehavior="none">
                 
         <item
             android:id="@+id/action_settings"
-            android:checkable="false"
             android:icon="@drawable/ic_settings"
             android:title="@string/drawer_settings" />
 
         <item
-            android:id="@+id/action_team"
-            android:checkable="false"
-            android:icon="@drawable/ic_people"
-            android:title="@string/drawer_team" />
-
-        <item
             android:id="@+id/action_privacy"
-            android:checkable="false"
             android:icon="@drawable/ic_local_library"
             android:title="@string/drawer_privacy" />
 
         <item
+            android:id="@+id/action_team"
+            android:icon="@drawable/ic_people"
+            android:title="@string/drawer_team" />
+
+        <item
             android:id="@+id/action_opensource"
-            android:checkable="false"
             android:icon="@drawable/ic_link"
             android:title="@string/drawer_opensource" />
 
         <item
             android:id="@+id/action_mail"
-            android:checkable="false"
-            android:icon="@drawable/ic_chat"
-            android:title="@string/drawer_voc" />
+            android:icon="@drawable/ic_email"
+            android:title="@string/drawer_email" />
                
     </group>
 </menu>

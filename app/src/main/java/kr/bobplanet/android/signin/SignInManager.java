@@ -2,6 +2,7 @@ package kr.bobplanet.android.signin;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -113,11 +114,6 @@ public class SignInManager implements Constants {
         final List<String> accountTypes = Arrays.asList(ACCOUNT_GOOGLE, ACCOUNT_FACEBOOK, ACCOUNT_NAVER);
         Collections.shuffle(accountTypes);
 
-        Map<String, Integer> buttonDrawables = new HashMap<>();
-        buttonDrawables.put(ACCOUNT_GOOGLE, R.drawable.google_signin);
-        buttonDrawables.put(ACCOUNT_FACEBOOK, R.drawable.facebook_signin);
-        buttonDrawables.put(ACCOUNT_NAVER, R.drawable.naver_signin);
-
         int[] buttonIds = { R.id.signin_button_1, R.id.signin_button_2, R.id.signin_button_3 };
         ImageButton[] buttons = new ImageButton[buttonIds.length];
 
@@ -127,7 +123,7 @@ public class SignInManager implements Constants {
             ImageButton button = (ImageButton) view.findViewById(buttonIds[i]);
 
             button.setTag(new SignInInfo(accountType, i + 1));
-            button.setImageDrawable(ContextCompat.getDrawable(context, buttonDrawables.get(accountType)));
+            button.setImageDrawable(getAccountTypeDrawable(context, accountType));
 
             button.setOnClickListener(v -> {
                 positiveButton.setEnabled(true);
@@ -142,6 +138,15 @@ public class SignInManager implements Constants {
         }
 
         return view;
+    }
+
+    public static Drawable getAccountTypeDrawable(Context context, String accountType) {
+        Map<String, Integer> buttonDrawables = new HashMap<>();
+        buttonDrawables.put(ACCOUNT_GOOGLE, R.drawable.google_signin);
+        buttonDrawables.put(ACCOUNT_FACEBOOK, R.drawable.facebook_signin);
+        buttonDrawables.put(ACCOUNT_NAVER, R.drawable.naver_signin);
+
+        return ContextCompat.getDrawable(context, buttonDrawables.get(accountType));
     }
 
     /**

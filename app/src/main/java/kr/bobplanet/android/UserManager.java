@@ -128,6 +128,10 @@ public class UserManager implements ApiProxy.ApiResultListener<UserDevice> {
         return device.getUser() != null ? device.getUser().getNickName() : null;
     }
 
+    public String getUserEmail() {
+        return device.getUser() != null ? device.getUser().getEmail() : null;
+    }
+
     /**
      *
      */
@@ -142,6 +146,10 @@ public class UserManager implements ApiProxy.ApiResultListener<UserDevice> {
      */
     public boolean hasAccount() {
         return device.getUser() != null && device.getUser().getAccountId() != null;
+    }
+
+    public String getAccountType() {
+        return hasAccount() ? device.getUser().getAccountType() : null;
     }
 
     /**

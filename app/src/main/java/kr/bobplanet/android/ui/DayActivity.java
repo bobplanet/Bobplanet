@@ -17,6 +17,9 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.commonsware.cwac.pager.PageDescriptor;
@@ -27,13 +30,18 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
 import hugo.weaving.DebugLog;
 import kr.bobplanet.android.App;
 import kr.bobplanet.android.Constants;
 import kr.bobplanet.android.Preferences;
 import kr.bobplanet.android.R;
+import kr.bobplanet.android.UserManager;
 import kr.bobplanet.android.event.MorningMenuToggleEvent;
+import kr.bobplanet.android.event.UserAccountEvent;
+import kr.bobplanet.android.log.UserActionLog;
+import kr.bobplanet.android.signin.SignInManager;
 import kr.bobplanet.backend.bobplanetApi.model.DailyMenu;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
 import kr.bobplanet.backend.bobplanetApi.model.UserDevice;
@@ -63,6 +71,8 @@ public class DayActivity extends BaseActivity implements NavigationView.OnNaviga
      */
     private DrawerLayout drawerLayout;
 
+    private View drawerHeaderView;
+
     /**
      * Drawer를 켰다꺼는 토글버튼
      */
@@ -78,23 +88,11 @@ public class DayActivity extends BaseActivity implements NavigationView.OnNaviga
         super.onCreate(savedInstanceState);
         setContentView(R.layout.day_activity);
 
-        // Toolbar 표시 & 버튼 노출
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        // Drawer 표시
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
-                R.string.app_name, R.string.app_name);
-        drawerLayout.setDrawerListener(drawerToggle);
-
-        // Drawer 설정
-        NavigationView navigation = (NavigationView) findViewById(R.id.navigation);
-        navigation.setNavigationItemSelectedListener(this);
-
         // DayFragment가 보내주는 데이터로딩완료 메시지 수신을 위해 EventBus 등록
         EventBus.getDefault().register(this);
+
+        initToolbar();
+        initDrawerMenu();
 
         // intent에 날짜가 있으면 그 날짜, 없으면 오늘 날짜 이용
         Date start_date;
@@ -122,6 +120,45 @@ public class DayActivity extends BaseActivity implements NavigationView.OnNaviga
 
         // 처음 사용하는 사람들을 위해 좌우스와이프 안내메시지 노출
         showSwipeNotice();
+    }
+
+    private void initToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void initDrawerMenu() {
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
+                R.string.app_name, R.string.app_name);
+        drawerLayout.setDrawerListener(drawerToggle);
+
+        NavigationView navigation = (NavigationView) findViewById(R.id.navigation);
+        navigation.setNavigationItemSelectedListener(this);
+
+        drawerHeaderView = navigation.getHeaderView(0);
+        setUpDrawerMenuHeader();
+    }
+
+    private void setUpDrawerMenuHeader() {
+        UserManager userManager = App.getUserManager();
+
+        ImageView userAccount = ButterKnife.findById(drawerHeaderView, R.id.user_account);
+        TextView userId = ButterKnife.findById(drawerHeaderView, R.id.user_name);
+        TextView userText = ButterKnife.findById(drawerHeaderView, R.id.user_text);
+
+        if (userManager.hasAccount()) {
+            userAccount.setImageDrawable(
+                    SignInManager.getAccountTypeDrawable(this, userManager.getAccountType()));
+            userAccount.setVisibility(View.VISIBLE);
+            userId.setText(userManager.getUserName());
+            userText.setText(userManager.getUserEmail());
+        } else {
+            userAccount.setVisibility(View.GONE);
+            userId.setText(R.string.drawer_no_user_name);
+            userText.setText(R.string.drawer_login_noti);
+        }
     }
 
     @Override
@@ -198,13 +235,27 @@ public class DayActivity extends BaseActivity implements NavigationView.OnNaviga
             case R.id.action_mail:
                 startActivity(Intent.createChooser(
                         new Intent(Intent.ACTION_SENDTO, MAIL_URL)
-                                .putExtra(Intent.EXTRA_SUBJECT, getString(R.string.voc_subject)),
-                        getString(R.string.voc_chooser_title)
+                                .putExtra(Intent.EXTRA_SUBJECT, getString(R.string.mail_subject)),
+                        getString(R.string.mail_chooser_title)
                 ));
                 return true;
         }
 
         return false;
+    }
+
+    /**
+     * 로그인이 완료되었을 때 호출되는 callback.
+     *
+     * @param event
+     */
+    @SuppressWarnings("unused")
+    @DebugLog
+    public void onEvent(UserAccountEvent event) {
+        if (event instanceof UserAccountEvent.SignIn) {
+            UserActionLog.login(event.accountType);
+            setUpDrawerMenuHeader();
+        }
     }
 
     @Override

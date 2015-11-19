@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="kr.bobplanet.android"
-    android:versionCode="5"
-    android:versionName="1.0beta5">
+    android:versionCode="6"
+    android:versionName="1.0beta6">
 
     <!-- 네트웤에서 데이터 가져와야 하므로 기본적으로 필요 -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -63,10 +63,13 @@
         <activity
             android:name=".ui.SettingsActivity"
             android:label="@string/title_settings"
+            android:parentActivityName=".ui.DayActivity"
             android:theme="@style/AppTheme.Settings" />
 
         <!-- 웹뷰 Activity -->
-        <activity android:name=".ui.WebViewActivity"
+        <activity
+            android:name=".ui.WebViewActivity"
+            android:parentActivityName=".ui.DayActivity"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <data android:scheme="http" />
