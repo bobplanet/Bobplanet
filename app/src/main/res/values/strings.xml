@@ -83,8 +83,10 @@
     <string name="bobplanet_privacy_url">http://bobplanet.kr/privacy.html</string>
     
     <!-- Notification -->
-    <string name="notification_title">밥플래닛 알림</string>
-    <string name="notification_meessage">밥플래닛에서 공지말씀 드립니다</string>
+    <string name="noti_default_title">밥플래닛 알림</string>
+    <string name="noti_default_text">밥플래닛에서 공지말씀 드립니다</string>
+	<string name="noti_beacon_title">방금 식당을 떠나신 당신께</string>
+	<string name="noti_beacon_text">오늘 드신 메뉴를 평가해 주세요</string>
     <string name="action_thumb_up">좋아요</string>
     <string name="action_thumb_down">싫어요</string>
 

@@ -1,6 +1,5 @@
 package kr.bobplanet.android;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -8,21 +7,16 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.MainThread;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.ImageView;
-import android.widget.RemoteViews;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.google.common.collect.Lists;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,8 +24,6 @@ import java.util.Map;
 import de.greenrobot.event.EventBus;
 import hugo.weaving.DebugLog;
 import kr.bobplanet.android.ui.DayActivity;
-import kr.bobplanet.android.ui.MenuActivity;
-import kr.bobplanet.backend.bobplanetApi.model.Menu;
 
 /**
  * @author heonkyu.jin
@@ -71,8 +63,8 @@ public class NotifyManager implements Constants {
         Intent intent = new Intent(context, DayActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-        String title = getDefaultString(bundle, "title", context.getString(R.string.notification_title));
-        String text = getDefaultString(bundle, "text", context.getString(R.string.notification_meessage));
+        String title = getDefaultString(bundle, "title", context.getString(R.string.noti_default_title));
+        String text = getDefaultString(bundle, "text", context.getString(R.string.noti_default_text));
         NotificationCompat.Style style = new NotificationCompat.BigPictureStyle()
                 .bigPicture(imageBatchLoader.getBitmap())
                 .setSummaryText(text);

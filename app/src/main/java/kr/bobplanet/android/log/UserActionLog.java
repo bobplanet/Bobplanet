@@ -14,6 +14,9 @@ import com.mixpanel.android.mpmetrics.MixpanelAPI;
 public final class UserActionLog extends Log {
     private static final String LOGIN = "LOGIN";
     private static final String ACCOUNT_SELECT = "ACCOUNT_SELECT";
+
+    private static final String REGION_ENTER = "REGION_ENTER";
+    private static final String REGION_LEAVE = "REGION_LEAVE";
     private static final String BEACON_SEEN = "BEACON_SEEN";
 
     private String category;
@@ -46,6 +49,14 @@ public final class UserActionLog extends Log {
      */
     public static void accountSelect(String accountType, int displayOrder) {
         new UserActionLog(ACCOUNT_SELECT, accountType, displayOrder).dispatch();
+    }
+
+    public static void regionEnter(String beaconAddress) {
+        new UserActionLog(REGION_ENTER, beaconAddress);
+    }
+
+    public static void regionLeave(String beaconAddress) {
+        new UserActionLog(REGION_LEAVE, beaconAddress);
     }
 
     public static void beaconSeen(String beaconAddress, double distance) {
