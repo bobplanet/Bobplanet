@@ -6,6 +6,8 @@ import android.util.Log;
 
 import java.util.Date;
 
+import kr.bobplanet.android.util.EntityTranslator;
+
 /**
  * 서버 API를 호출해서 받아온 결과값 객체를 관리하는 Cache.
  * 원래 ApiProxy의 일부였으나 분리함. (아직 깔끔하게 분리되지는 않아 리팩토링 필요)

@@ -6,6 +6,7 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 
+import kr.bobplanet.android.util.EntityTranslator;
 import kr.bobplanet.backend.bobplanetApi.model.UserDevice;
 
 /**

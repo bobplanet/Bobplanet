@@ -1,4 +1,4 @@
-package kr.bobplanet.android;
+package kr.bobplanet.android.util;
 
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.json.JsonFactory;

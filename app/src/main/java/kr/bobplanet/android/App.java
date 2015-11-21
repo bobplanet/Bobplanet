@@ -10,7 +10,9 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
+import kr.bobplanet.android.beacon.BeaconMonitor;
 import kr.bobplanet.android.signin.SignInManager;
+import kr.bobplanet.android.util.LruBitmapCache;
 
 /**
  * 커스텀 애플리케이션 클래스.
@@ -39,6 +41,9 @@ public class App extends MultiDexApplication {
      */
     private SignInManager signInManager;
 
+    /**
+     * 서버 API로부터 받아온 데이터의 캐슁 객체.
+     */
     private CacheManager cacheManager;
 
     /**
@@ -47,17 +52,22 @@ public class App extends MultiDexApplication {
     private ApiProxy apiProxy;
 
     /**
+     * 비콘 감시용 객체.
+     */
+    private BeaconMonitor beaconMonitor;
+
+    /**
      * Google Analytics 이용을 위한 Tracker 객체.
      */
     private Tracker tracker;
 
     /**
-     *
+     * Google Analytics의 rollup 리포트를 위한 Tracker
      */
     private Tracker rollupTracker;
 
     /**
-     *
+     * Mixpanel 객체
      */
     private MixpanelAPI mixpanel;
 
@@ -76,8 +86,6 @@ public class App extends MultiDexApplication {
      */
     private Preferences prefs;
 
-    private BeaconDetector beaconDetector;
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -94,7 +102,7 @@ public class App extends MultiDexApplication {
         requestQueue = Volley.newRequestQueue(getApplicationContext());
         imageLoader = new ImageLoader(requestQueue, new LruBitmapCache());
 
-        beaconDetector = new BeaconDetector(this);
+        beaconMonitor = new BeaconMonitor(this);
     }
 
     @Override
@@ -124,7 +132,6 @@ public class App extends MultiDexApplication {
     }
 
     /**
-     *
      * @return
      */
     public static SignInManager getSignInManager() {
@@ -132,7 +139,6 @@ public class App extends MultiDexApplication {
     }
 
     /**
-     *
      * @return
      */
     public static Tracker getTracker() {
@@ -147,6 +153,10 @@ public class App extends MultiDexApplication {
         return instance.mixpanel;
     }
 
+    public static BeaconMonitor getBeaconMonitor() {
+        return instance.beaconMonitor;
+    }
+
     /**
      * ApiProxy 조회
      */
@@ -155,7 +165,6 @@ public class App extends MultiDexApplication {
     }
 
     /**
-     *
      * @return
      */
     public static Preferences getPreferences() {
@@ -163,7 +172,6 @@ public class App extends MultiDexApplication {
     }
 
     /**
-     *
      * @return
      */
     public static RequestQueue getRequestQueue() {

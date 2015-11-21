@@ -1,7 +1,6 @@
 package kr.bobplanet.android.ui;
 
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,7 +18,7 @@ import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
 import kr.bobplanet.android.Constants;
 import kr.bobplanet.android.R;
-import kr.bobplanet.android.Util;
+import kr.bobplanet.android.util.Util;
 import kr.bobplanet.android.VoteManager;
 import kr.bobplanet.backend.bobplanetApi.model.Comment;
 import kr.bobplanet.backend.bobplanetApi.model.Item;

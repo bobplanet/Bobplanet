@@ -83,7 +83,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-gcm:8.3.0'
     compile 'com.google.android.gms:play-services-analytics:8.3.0'
     compile 'com.facebook.android:facebook-android-sdk:4.5.0'
-    compile 'com.commonsware.cwac:pager:0.2.+'
+    compile 'com.commonsware.cwac:pager:0.2.4'
     compile 'net.i2p.android.ext:floatingactionbutton:1.10.0'
     compile 'de.greenrobot:eventbus:2.4.0'
     compile 'com.mcxiaoke.volley:library:1.0.19'
@@ -91,7 +91,7 @@ dependencies {
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.github.dexafree:materiallist:3.0.1'
     compile 'me.gujun.android.taggroup:library:1.4@aar'
-    compile 'org.altbeacon:android-beacon-library:2+'
+    compile 'org.altbeacon:android-beacon-library:2.7.1'
     compile "com.mixpanel.android:mixpanel-android:4.6.4"
 }
 

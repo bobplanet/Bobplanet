@@ -23,6 +23,7 @@ import kr.bobplanet.android.event.UserAccountEvent;
 import kr.bobplanet.android.log.UserActionLog;
 import kr.bobplanet.android.ui.BaseActivity;
 import kr.bobplanet.android.ui.BaseDialogBuilder;
+import kr.bobplanet.android.util.Util;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
 import kr.bobplanet.backend.bobplanetApi.model.Vote;
 import me.gujun.android.taggroup.TagGroup;

@@ -1,4 +1,4 @@
-package kr.bobplanet.android;
+package kr.bobplanet.android.util;
 
 import com.android.volley.toolbox.ImageLoader.ImageCache;
 

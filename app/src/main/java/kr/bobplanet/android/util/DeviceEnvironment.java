@@ -1,9 +1,6 @@
-package kr.bobplanet.android;
+package kr.bobplanet.android.util;
 
 import android.app.Activity;
-import android.bluetooth.BluetoothClass;
-import android.content.Context;
-import android.net.wifi.WifiManager;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;

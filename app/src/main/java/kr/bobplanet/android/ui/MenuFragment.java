@@ -9,11 +9,10 @@ import android.view.ViewGroup;
 import com.dexafree.materialList.card.Card;
 import com.dexafree.materialList.view.MaterialListView;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
 import kr.bobplanet.android.App;
-import kr.bobplanet.android.EntityTranslator;
+import kr.bobplanet.android.util.EntityTranslator;
 import kr.bobplanet.android.R;
 import kr.bobplanet.android.event.ItemScoreChangeEvent;
 import kr.bobplanet.backend.bobplanetApi.model.ItemStat;
