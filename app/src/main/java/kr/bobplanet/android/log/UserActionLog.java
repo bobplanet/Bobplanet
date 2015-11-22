@@ -12,7 +12,8 @@ import com.mixpanel.android.mpmetrics.MixpanelAPI;
  * @version 2015. 10. 11
  */
 public final class UserActionLog extends Log {
-    private static final String LOGIN = "LOGIN";
+    private static final String SIGNIN = "SIGNIN";
+    private static final String SIGNOUT = "SIGNOUT";
     private static final String ACCOUNT_SELECT = "ACCOUNT_SELECT";
 
     private static final String REGION_ENTER = "REGION_ENTER";
@@ -36,8 +37,15 @@ public final class UserActionLog extends Log {
     /**
      * 사용자 로그인 완료.
      */
-    public static void login(String accountType) {
-        new UserActionLog(LOGIN, accountType).dispatch();
+    public static void signIn(String accountType) {
+        new UserActionLog(SIGNIN, accountType).dispatch();
+    }
+
+    /**
+     * 사용자 로그아웃 완료.
+     */
+    public static void signOut(String accountType) {
+        new UserActionLog(SIGNOUT, accountType).dispatch();
     }
 
     /**

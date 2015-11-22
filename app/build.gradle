@@ -63,9 +63,8 @@ apply plugin: 'com.jakewharton.hugo'
 apply plugin: 'me.tatarka.retrolambda'
 
 repositories {
-    maven {
-        url "https://repo.commonsware.com.s3.amazonaws.com"
-    }
+    maven { url "https://repo.commonsware.com.s3.amazonaws.com" }
+    maven { url "https://jitpack.io" }
     mavenCentral()
 }
 
@@ -92,7 +91,8 @@ dependencies {
     compile 'com.github.dexafree:materiallist:3.0.1'
     compile 'me.gujun.android.taggroup:library:1.4@aar'
     compile 'org.altbeacon:android-beacon-library:2.7.1'
-    compile "com.mixpanel.android:mixpanel-android:4.6.4"
+    compile 'com.mixpanel.android:mixpanel-android:4.6.4'
+    compile 'com.github.jkwiecien:CountingTextView:1.0.10'
 }
 
 if (rootProject.file('secrets.properties').exists()) {

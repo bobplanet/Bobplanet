@@ -22,11 +22,11 @@ import kr.bobplanet.backend.bobplanetApi.model.UserDevice;
  * <p>
  * - 기기정보는 항상 존재하고, 사용자정보는 로그인한 경우에만 존재함
  * - 앱이 실행되면 가장 먼저 기기번호(UUID)를 직접 생성한 뒤 서버에 등록 요청
- *   - 동일한 androidId의 기기가 이미 존재할 경우 서버가 새로운 UUID를 내려줄 수 있음
+ * - 동일한 androidId의 기기가 이미 존재할 경우 서버가 새로운 UUID를 내려줄 수 있음
  * - 기기정보 등록이 완료되면 서버에 GCM토큰 업로드하고 preference에 UUID + GCM토큰 저장
  * - SignInManager에 의해 OAuth 계정이 등록되면 이를 서버/preference에 저장
- *   - 이미 동일한 계정이 존재할 경우 서버는 Device까지 그 밑에 붙여서 내려줄 수 있음
- *   - 저장이 끝나면 UserSignInEvent를 발생시켜 후처리 진행
+ * - 이미 동일한 계정이 존재할 경우 서버는 Device까지 그 밑에 붙여서 내려줄 수 있음
+ * - 저장이 끝나면 UserSignInEvent를 발생시켜 후처리 진행
  *
  * @author heonkyu.jin
  * @version 15. 10. 18
@@ -203,19 +203,21 @@ public class UserManager implements ApiProxy.ApiResultListener<UserDevice> {
         device.setUser(user.setId(UUID.randomUUID().toString()));
 
         App.getApiProxy().registerUser(device, result -> {
-            if (result != null) {
-                this.device = result;
-                prefs.storeDevice(device);
+            this.device = result;
+            prefs.storeDevice(device);
 
-                EventBus.getDefault().post(new UserAccountEvent.SignIn(user.getAccountType()));
-            }
+            EventBus.getDefault().post(new UserAccountEvent.SignIn(user.getAccountType()));
         });
     }
 
+    @DebugLog
     public void unregisterUser() {
         App.getApiProxy().unregisterUser(device, result -> {
-            EventBus.getDefault().post(new UserAccountEvent.SignOut(device.getUser().getAccountType()));
-            device.setUser(null);
+            String accountType = this.device.getUser().getAccountType();
+            this.device = result;
+            prefs.storeDevice(device);
+
+            EventBus.getDefault().post(new UserAccountEvent.SignOut(accountType));
         });
     }
 }

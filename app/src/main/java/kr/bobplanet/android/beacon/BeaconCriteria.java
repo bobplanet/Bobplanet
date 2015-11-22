@@ -1,12 +1,14 @@
 package kr.bobplanet.android.beacon;
 
 import android.support.v4.util.Pair;
+import android.util.Log;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import java.util.List;
 
+import hugo.weaving.DebugLog;
 import kr.bobplanet.android.util.Time;
 
 /**
@@ -19,15 +21,17 @@ import kr.bobplanet.android.util.Time;
  * @version 15. 11. 21
  */
 public class BeaconCriteria {
+    private static final String TAG = BeaconCriteria.class.getSimpleName();
+
     /**
      * 식당 내에 3분 이상 머무르면 식사로 판단.
      */
     private static final long RESIDE_CRITERIA = 3 * 60;
 
     /**
-     * 식사시간의 스캔주기. 5분.
+     * 식사시간의 스캔주기. 2분.
      */
-    private static final long DINE_SCAN_INTERVAL = 5 * 60;
+    private static final long DINE_SCAN_INTERVAL = 2 * 60;
 
     /**
      * 식사시간이 아닌 때의 스캔주기. 10분.
@@ -48,6 +52,7 @@ public class BeaconCriteria {
      *
      * @return
      */
+    @DebugLog
     protected static boolean isForDining(Time time) {
         return Iterables.any(BeaconCriteria.DINE_HM, target -> time.between(target));
     }
@@ -57,6 +62,7 @@ public class BeaconCriteria {
      *
      * @return
      */
+    @DebugLog
     protected static long getScanInterval() {
         return (isForDining(Time.now()) ? DINE_SCAN_INTERVAL : NO_DINE_SCAN_INTERVAL) * 1000;
     }
@@ -90,11 +96,14 @@ public class BeaconCriteria {
             lastSeen = firstSeen;
         }
 
+        @DebugLog
         protected void markStillResiding() {
             lastSeen = Time.now();
         }
 
+        @DebugLog
         protected boolean isForDining() {
+            Log.v(TAG, "RegionEntrance = " + this);
             return BeaconCriteria.isForDining(firstSeen) &&
                     lastSeen.differenceInSeconds(firstSeen) >= RESIDE_CRITERIA;
         }

@@ -62,6 +62,6 @@ public interface Constants {
 
     Uri TEAM_URL = Uri.parse("http://bobplanet.kr/team.html");
     Uri PRIVACY_URL = Uri.parse("http://bobplanet.kr/privacy.html");
-    Uri OPENSOURCE_URL = Uri.parse("http://bobplanet.kr/opensource.html");
+    Uri LICENSE_URL = Uri.parse("http://bobplanet.kr/license.html");
     Uri MAIL_URL = Uri.fromParts("mailto", "bobplanet.team@gmail.com", null);
 }

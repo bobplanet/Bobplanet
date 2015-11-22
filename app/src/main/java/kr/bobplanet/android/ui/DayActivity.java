@@ -122,12 +122,6 @@ public class DayActivity extends BaseActivity implements NavigationView.OnNaviga
         showSwipeNotice();
     }
 
-    private void initToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
     private void initDrawerMenu() {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
@@ -228,8 +222,8 @@ public class DayActivity extends BaseActivity implements NavigationView.OnNaviga
                 startActivity(new Intent(this, WebViewActivity.class).setData(PRIVACY_URL));
                 return true;
 
-            case R.id.action_opensource:
-                startActivity(new Intent(this, WebViewActivity.class).setData(OPENSOURCE_URL));
+            case R.id.action_license:
+                startActivity(new Intent(this, WebViewActivity.class).setData(LICENSE_URL));
                 return true;
 
             case R.id.action_mail:
@@ -253,7 +247,10 @@ public class DayActivity extends BaseActivity implements NavigationView.OnNaviga
     @DebugLog
     public void onEvent(UserAccountEvent event) {
         if (event instanceof UserAccountEvent.SignIn) {
-            UserActionLog.login(event.accountType);
+            UserActionLog.signIn(event.accountType);
+            setUpDrawerMenuHeader();
+        } else if (event instanceof UserAccountEvent.SignOut) {
+            UserActionLog.signOut(event.accountType);
             setUpDrawerMenuHeader();
         }
     }

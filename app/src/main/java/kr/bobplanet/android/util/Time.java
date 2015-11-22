@@ -6,6 +6,7 @@ import com.google.common.collect.Iterables;
 
 import java.util.Calendar;
 
+import hugo.weaving.DebugLog;
 import kr.bobplanet.android.beacon.BeaconCriteria;
 
 /**
@@ -36,8 +37,9 @@ public class Time implements Comparable<Time> {
         return compareTo(interval.first) > 0 && compareTo(interval.second) < 0;
     }
 
+    @DebugLog
     public long differenceInSeconds(Time from) {
-        return (from.timestamp - timestamp) / 1000;
+        return (timestamp - from.timestamp) / 1000;
     }
 
     @Override

@@ -57,14 +57,14 @@ public class Util {
     }
 
     /**
-     * 문자열 앞뒤에 "나 ' 등을 넣어 인용처리.
+     * 문자열 앞에 #를 넣어준다.
      *
      * @param text
      * @return
      */
-    public static String getQuotedString(String text) {
+    public static String getHashtaggedString(String text) {
         return TextUtils.isEmpty(text) ? "" :
-                new StringBuilder(text.length() + 2).append('"').append(text).append('"').toString();
+                new StringBuilder(text.length() + 1).append('#').append(text).toString();
     }
 
     /**

@@ -135,12 +135,12 @@ public class DayViewHolder extends BaseListAdapter.BaseViewHolder<Menu> implemen
         if (itemScore.getUpComments().getSize() > 0) {
             List<Comment> comments = itemScore.getUpComments().getComments();
             Collections.sort(comments, (a, b) -> a.getCount() - b.getCount());
-            thumbUpComment.setText(Util.getQuotedString(comments.get(0).getText()));
+            thumbUpComment.setText(Util.getHashtaggedString(comments.get(0).getText()));
         }
         if (itemScore.getDownComments().getSize() > 0) {
             List<Comment> comments = itemScore.getDownComments().getComments();
             Collections.sort(comments, (a, b) -> a.getCount() - b.getCount());
-            thumbDownComment.setText(Util.getQuotedString(comments.get(0).getText()));
+            thumbDownComment.setText(Util.getHashtaggedString(comments.get(0).getText()));
         }
     }
 

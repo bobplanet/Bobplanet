@@ -44,7 +44,8 @@ public class SignInManager implements Constants {
     private static final String TAG = SignInManager.class.getSimpleName();
     private Context context;
 
-    private static final String DIALOG_LOGIN = "DIALOG_LOGIN";
+    private static final String DIALOG_SIGN_IN = "DIALOG_SIGN_IN";
+    private static final String DIALOG_SIGN_OUT = "DIALOG_SIGN_OUT";
 
     /**
      * 페이스북, 네이버의 OAuth 인증을 위해 필요한 ID, secret 등이 저장된 객체
@@ -98,7 +99,7 @@ public class SignInManager implements Constants {
     @DebugLog
     public void showSignInDialog(BaseActivity activity) {
         View view = createDialogView(activity);
-        Dialog signInDialog = createDialog(activity, view);
+        Dialog signInDialog = createSignInDialog(activity, view);
         signInDialog.show();
     }
 
@@ -156,9 +157,9 @@ public class SignInManager implements Constants {
      * @param view
      * @return
      */
-    private Dialog createDialog(BaseActivity activity, View view) {
-        AlertDialog signInDialog = new BaseDialogBuilder(activity, DIALOG_LOGIN)
-                .setTitle(R.string.dialog_login_label)
+    private Dialog createSignInDialog(BaseActivity activity, View view) {
+        AlertDialog signInDialog = new BaseDialogBuilder(activity, DIALOG_SIGN_IN)
+                .setTitle(R.string.dialog_sign_in_label)
                 .setView(view)
                 .setPositiveButton(R.string.button_ok, (dialog, which) -> {
                     SignInInfo signInInfo = (SignInInfo) view.getTag();
@@ -178,6 +179,21 @@ public class SignInManager implements Constants {
         });
 
         return signInDialog;
+    }
+
+    /**
+     * 구글/페이스북 계정 등록 요청 dialog 표시
+     */
+    @DebugLog
+    public void showSignOutDialog(BaseActivity activity) {
+        new BaseDialogBuilder(activity, DIALOG_SIGN_OUT)
+                .setTitle(R.string.dialog_sign_out_label)
+                .setMessage(R.string.dialog_sign_out_desc)
+                .setPositiveButton(R.string.button_ok, (dialog, which) -> {
+                    App.getUserManager().unregisterUser();
+                })
+                .setNegativeButton(R.string.button_cancel, null)
+                .show();
     }
 
     /**

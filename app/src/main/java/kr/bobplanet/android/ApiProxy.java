@@ -115,7 +115,6 @@ public class ApiProxy implements Constants {
      * @param device
      * @param listener
      */
-    @DebugLog
     public void registerDevice(final UserDevice device, ApiResultListener<UserDevice> listener) {
         new Builder<>(UserDevice.class, () -> api.registerDevice(device).execute(), "registerDevice")
                 .setResultListener(listener)
@@ -127,7 +126,6 @@ public class ApiProxy implements Constants {
      *
      * @param device
      */
-    @DebugLog
     public void updateDevice(final UserDevice device) {
         new Builder<>(Void.class, () -> api.updateDevice(device).execute(), "updateDevice")
                 .execute();
@@ -138,7 +136,6 @@ public class ApiProxy implements Constants {
      *
      * @param device
      */
-    @DebugLog
     public void registerUser(final UserDevice device, ApiResultListener<UserDevice> listener) {
         new Builder<>(UserDevice.class, () ->
                 api.registerUser(device.getId(), device.getUser()).execute(), "registerUser")
@@ -146,8 +143,8 @@ public class ApiProxy implements Constants {
                 .execute();
     }
 
-    public void unregisterUser(final UserDevice device, ApiResultListener<Void> listener) {
-        new Builder<>(Void.class, () ->
+    public void unregisterUser(final UserDevice device, ApiResultListener<UserDevice> listener) {
+        new Builder<>(UserDevice.class, () ->
                 api.unregisterUser(device.getId(), device.getUser()).execute(), "unregisterUser")
                 .setResultListener(listener)
                 .execute();
@@ -158,7 +155,6 @@ public class ApiProxy implements Constants {
      *
      * @param vote
      */
-    @DebugLog
     public void vote(Vote vote, ApiResultListener<ItemScore> listener) {
         new Builder<>(ItemScore.class, () -> api.vote(vote).execute(), "vote")
                 .setResultListener(listener)
@@ -175,7 +171,6 @@ public class ApiProxy implements Constants {
      * @param menu
      * @param listener
      */
-    @DebugLog
     public void myVote(final String userId, final Menu menu, ApiResultListener<Vote> listener) {
         new Builder<>(Vote.class, () -> api.myVote(userId, menu.getId()).execute(), "myVote")
                 .setResultListener(listener)
@@ -193,7 +188,7 @@ public class ApiProxy implements Constants {
     private class Builder<T> extends AsyncTask<Void, Void, T> {
         private Class<T> resultType;
         ApiExecutor<T> apiExecutor;
-        ApiResultListener resultListener;
+        ApiResultListener<T> resultListener;
         String measureApiName;
         String cacheKey;
         boolean cacheReadable = false;

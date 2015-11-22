@@ -29,15 +29,26 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/settings_dev_category">
+    <PreferenceCategory android:title="@string/settings_app_category">
 
-        <EditTextPreference
-            android:key="USER_ID"
-            android:title="@string/settings_dev_user_id" />
+        <Preference
+            android:editable="false"
+            android:key="APP_VERSION"
+            android:title="@string/settings_app_app_version" />
 
-        <EditTextPreference
+        <Preference
+            android:editable="false"
             android:key="DEVICE_ID"
-            android:title="@string/settings_dev_device_id" />
+            android:title="@string/settings_app_device_id" />
+
+        <Preference
+            android:editable="false"
+            android:key="USER_ID"
+            android:title="@string/settings_app_user_id" />
+
+        <Preference
+            android:editable="false"
+            android:key="USER_SIGN_INOUT" />
 
     </PreferenceCategory>
 

@@ -101,7 +101,7 @@ public class VoteManager implements Constants {
     }
 
     private List<String> getQuotedComments() {
-        return Lists.transform(comments, c -> Util.getQuotedString(c));
+        return Lists.transform(comments, c -> Util.getHashtaggedString(c));
     }
 
     /**
@@ -176,7 +176,7 @@ public class VoteManager implements Constants {
     @DebugLog
     public void onEvent(UserAccountEvent event) {
         if (event instanceof UserAccountEvent.SignIn) {
-            UserActionLog.login(event.accountType);
+            UserActionLog.signIn(event.accountType);
             uploadVote();
         }
     }

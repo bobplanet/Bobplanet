@@ -76,7 +76,7 @@ public class UserEndpoint extends BaseEndpoint {
 
     /**
      * 사용자 등록. 사용자가 Google 로그인 등 account 정보를 등록했을 때 호출.
-     * 
+     *
      * @param deviceId
      * @param user
      */
@@ -126,9 +126,20 @@ public class UserEndpoint extends BaseEndpoint {
             path = "user/unregister",
             httpMethod = "POST"
     )
-    public void unregisterUser(@Named("deviceId") final String deviceId, final User user) {
+    public UserDevice unregisterUser(@Named("deviceId") final String deviceId, final User user) {
         logger.info(String.format("unregisterUser(): deviceId = %s, user = %s", deviceId, user));
 
-        ofy().delete().entity(user).now();
+        return ofy().transact(new Work<UserDevice>() {
+            @Override
+            public UserDevice run() {
+                UserDevice device = new UserDevice(deviceId);
+                ofy().delete().entities(device, user).now();
+
+                device.setUser(null);
+                ofy().save().entity(device).now();
+
+                return device;
+            }
+        });
     }
 }

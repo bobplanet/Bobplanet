@@ -23,7 +23,7 @@
     <string name="drawer_settings">환경설정</string>
     <string name="drawer_team">만든사람들</string>
     <string name="drawer_privacy">개인정보취급방침</string>
-    <string name="drawer_opensource">오픈소스 라이선스</string>
+    <string name="drawer_license">지적재산권</string>
     <string name="drawer_email">개선의견 보내기</string>
     <string name="mail_subject">밥플래닛 개선의견</string>
     <string name="mail_chooser_title">이메일 프로그램 선택</string>
@@ -53,10 +53,14 @@
 	<string name="vote_notice_fmt" formatted="false">%s \"%s\"%s라고 평가해주셨네요~\n점수는 언제든 재평가 가능합니다 :)</string>
     <string name="vote_notyet">아직 나오지 않은 미래의 메뉴는 평가하실 수 없사옵니다.</string>
 
-    <!-- 로그인 Dialog -->
-    <string name="dialog_login_label">로그인 필요</string>
-    <string name="dialog_login_desc">로그인하시면 계속 진행하실 수 있습니다.\n아래 인터넷서비스 계정을 이용해서 로그인해주세요.</string>
+    <!-- 로그인/로그아웃 Dialog -->
+    <string name="dialog_sign_in_label">로그인 필요</string>
+    <string name="dialog_sign_in_desc">로그인하시면 계속 진행하실 수 있습니다.\n아래 인터넷서비스 계정을 이용해서 로그인해주세요.</string>
     <string name="pick_account_needed">구글계정 선택 안함!</string>
+    <string name="dialog_sign_out_label">회원 탈퇴</string>
+    <string name="dialog_sign_out_desc">회원에서 탈퇴하셔도 기존의 메뉴 평가는 삭제되지 않습니다. 탈퇴하시겠습니까?</string>
+    <string name="sign_in_completed">회원으로 가입하셨습니다. 이제 메뉴 평가가 가능합니다</string>
+    <string name="sign_out_completed">회원에서 탈퇴하셨습니다. 앱은 비회원 상태로 이용가능합니다</string>
 
     <!-- 설정화면 -->
     <string name="title_settings">설정</string>
@@ -71,17 +75,16 @@
 	<string name="settings_push_dinner">저녁메뉴 알림</string>
 	<string name="settings_push_dinner_summary_on">저녁메뉴 알림메시지를 수신합니다</string>
 	<string name="settings_push_dinner_summary_off">저녁메뉴 알림메시지를 수신하지 않습니다</string>
-    <string name="settings_dev_category">개발자정보</string>
-    <string name="settings_dev_user_id">회원번호</string>
-    <string name="settings_dev_user_null">(회원등록 전)</string>
-    <string name="settings_dev_device_id">기기번호</string>
-	<string name="settings_etc_category">기타</string>
-	<string name="settings_etc_about">이 앱을 만든 사람들</string>
+    <string name="settings_app_category">개발자정보</string>
+    <string name="settings_app_app_version">앱 버전</string>
+    <string name="settings_app_device_id">기기번호</string>
+    <string name="settings_app_user_id">회원번호</string>
+    <string name="settings_app_user_null">(회원등록 전)</string>
+    <string name="settings_app_user_sign_in">회원 가입</string>
+    <string name="settings_app_user_sign_in_summary">구글/페이스북/네이버 ID로 회원가입하실 수 있습니다</string>
+    <string name="settings_app_user_sign_out">회원 탈퇴</string>
+    <string name="settings_app_user_sign_out_summary">클릭하면 회원에서 탈퇴하실 수 있습니다</string>
 
-    <!-- URL -->
-    <string name="bobplanet_about_url">http://bobplanet.kr/about.html</string>
-    <string name="bobplanet_privacy_url">http://bobplanet.kr/privacy.html</string>
-    
     <!-- Notification -->
     <string name="noti_default_title">밥플래닛 알림</string>
     <string name="noti_default_text">밥플래닛에서 공지말씀 드립니다</string>

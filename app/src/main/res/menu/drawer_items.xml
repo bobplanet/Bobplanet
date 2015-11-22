@@ -18,9 +18,9 @@
             android:title="@string/drawer_team" />
 
         <item
-            android:id="@+id/action_opensource"
+            android:id="@+id/action_license"
             android:icon="@drawable/ic_link"
-            android:title="@string/drawer_opensource" />
+            android:title="@string/drawer_license" />
 
         <item
             android:id="@+id/action_mail"

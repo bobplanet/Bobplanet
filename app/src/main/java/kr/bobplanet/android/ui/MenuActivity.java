@@ -37,8 +37,6 @@ import kr.bobplanet.backend.bobplanetApi.model.Menu;
  * 로그인 여부에 따른 flow
  * - 로그인유저: 투표 dialog -> uploadVote()
  * - 비로그인유저: 투표 dialog -> 로그인 dialog -> requestGoogleSignIn() -> onEvent() -> uploadVote()
- * <p>
- * TODO 화면상단의 up arrow를 눌렀을 때 DayViewActivity의 마지막 fragment로 돌아가야 함
  *
  * @author heonkyu.jin
  * @version 2015. 10. 10
@@ -47,46 +45,30 @@ public class MenuActivity extends BaseActivity implements Constants {
     @SuppressWarnings("unused")
     private static final String TAG = MenuActivity.class.getSimpleName();
 
-    private final ImageLoader imageLoader = App.getImageLoader();
-
     private Menu menu;
-
-    /**
-     * 유저가 매긴 점수
-     */
-    private int myScore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu_activity);
 
+        initToolbar();
         menu = EntityTranslator.parseEntity(Menu.class, getIntent().getStringExtra(KEY_MENU));
 
         initLayout();
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
     }
 
     /**
      * 화면 초기화.
      */
     private void initLayout() {
-        Toolbar toolbar = ButterKnife.findById(this, R.id.toolbar);
-        toolbar.setTitle(menu.getItem().getName());
-        setSupportActionBar(toolbar);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle(menu.getItem().getName());
 
         CollapsingToolbarLayout toolbar_layout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         toolbar_layout.setTitleEnabled(false);
 
         NetworkImageView iconView = ButterKnife.findById(this, R.id.image);
-        iconView.setImageUrl(menu.getItem().getImage(), imageLoader);
+        iconView.setImageUrl(menu.getItem().getImage(), App.getImageLoader());
 
         ViewPager viewPager = ButterKnife.findById(this, R.id.view_pager);
         PagerAdapter adapter = setupViewPagerAdapter();

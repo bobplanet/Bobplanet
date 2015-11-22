@@ -109,7 +109,8 @@
                     android:gravity="center_horizontal"
                     android:paddingTop="2dp"
                     android:textColor="@color/thumb_up"
-                    tools:text='"해장메뉴"' />
+                    android:textSize="@dimen/day_item_comment"
+                    tools:text='#해장메뉴' />
 
             </RelativeLayout>
 
@@ -137,7 +138,8 @@
                     android:gravity="center"
                     android:paddingTop="2dp"
                     android:textColor="@color/thumb_down"
-                    tools:text='"소금국"' />
+                    android:textSize="@dimen/day_item_comment"
+                    tools:text='#소금국' />
 
             </RelativeLayout>
 

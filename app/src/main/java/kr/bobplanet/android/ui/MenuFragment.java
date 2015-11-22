@@ -28,12 +28,12 @@ import kr.bobplanet.backend.bobplanetApi.model.Menu;
  * @version 2015. 10. 10
  */
 public class MenuFragment extends BaseFragment {
+    @SuppressWarnings("unused")
     private static final String TAG = MenuFragment.class.getSimpleName();
 
     private Menu menu;
-    private ItemStat itemStat;
 
-    private Card summaryCard;
+    MaterialListView materialListView;
 
     public MenuFragment() {
     }
@@ -45,10 +45,6 @@ public class MenuFragment extends BaseFragment {
         String menu_json = getActivity().getIntent().getStringExtra(KEY_MENU);
         menu = EntityTranslator.parseEntity(Menu.class, menu_json);
 
-        App.getApiProxy().loadItemStat(menu.getItem().getName(), itemStat -> {
-            this.itemStat = itemStat;
-            //if (summaryCard != null) summaryCard.
-        } );
         EventBus.getDefault().register(this);
     }
 
@@ -68,13 +64,17 @@ public class MenuFragment extends BaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        MaterialListView materialListView = ButterKnife.findById(view, R.id.material_listview);
+        materialListView = ButterKnife.findById(view, R.id.material_listview);
 
-        summaryCard = new Card.Builder(getContext())
+        Card summaryCard = new Card.Builder(getContext())
                 .withProvider(MenuSummaryCardProvider.class)
                 .setTitle(R.string.card_summary_label)
                 .setMenu(menu)
                 .endConfig().build();
+
+        App.getApiProxy().loadItemStat(menu.getItem().getName(), itemStat -> {
+            ((MenuSummaryCardProvider) summaryCard.getConfig()).setItemStat(itemStat);
+        });
 
         Card submenuCard = new Card.Builder(getContext())
                 .withProvider(SubmenuCardProvider.class)
@@ -86,6 +86,11 @@ public class MenuFragment extends BaseFragment {
         materialListView.addAll(summaryCard, submenuCard);
     }
 
+    @SuppressWarnings("unused")
     public void onEvent(ItemScoreChangeEvent event) {
+        if (event.isFor(menu)) {
+            event.apply(menu);
+            materialListView.getAdapter().notifyDataSetChanged();
+        }
     }
 }
