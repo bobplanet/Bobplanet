@@ -1,9 +1,9 @@
 <resources>
     <dimen name="day_item_image_height">100dp</dimen>
-    <dimen name="day_item_name">22sp</dimen>
+    <dimen name="day_item_name">20sp</dimen>
     <dimen name="day_item_signal">16dp</dimen>
-    <dimen name="day_item_submenu">13sp</dimen>
-    <dimen name="day_item_comment">13sp</dimen>
+    <dimen name="day_item_submenu">12sp</dimen>
+    <dimen name="day_item_comment">12sp</dimen>
 
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="app_bar_height">240dp</dimen>
