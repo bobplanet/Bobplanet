@@ -51,6 +51,13 @@ public class StartActivity extends BaseActivity {
         AnimationDrawable frameAnimation = (AnimationDrawable) imageView.getBackground();
         frameAnimation.start();
 
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
         // Google Play Services가 있는지 확인. 없을 경우 종료.
         if (!DeviceEnvironment.checkPlayServices(this)) {
             Toast.makeText(this, R.string.need_google_play_service, Toast.LENGTH_LONG).show();
@@ -59,7 +66,6 @@ public class StartActivity extends BaseActivity {
 
         initComponents.addAll(Arrays.asList(INIT_COMPONENTS));
 
-        EventBus.getDefault().register(this);
         App.getUserManager().loadDevice();
         App.getSignInManager().loadSecret();
     }

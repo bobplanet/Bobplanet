@@ -1,7 +1,10 @@
 package kr.bobplanet.android;
 
+import android.content.Intent;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
@@ -10,8 +13,11 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
+import de.greenrobot.event.EventBus;
 import kr.bobplanet.android.beacon.BeaconMonitor;
+import kr.bobplanet.android.event.NetworkExceptionEvent;
 import kr.bobplanet.android.signin.SignInManager;
+import kr.bobplanet.android.ui.BaseDialogBuilder;
 import kr.bobplanet.android.util.LruBitmapCache;
 
 /**
@@ -20,6 +26,7 @@ import kr.bobplanet.android.util.LruBitmapCache;
  * <p>
  * - 공용 유틸리티 로직 제공을 위해 Singleton 패턴 차용: App.getInstance()
  * - GA Tracker는 여러개 생성하면 PV가 n배로 잡히므로 이 Singleton 내에서 관리하는 게 맞음.
+ * - 네트웤 에러 발생시 ErrorActivity를 실행함.
  *
  * @author hkjinlee on 15. 9. 29..
  */
@@ -103,12 +110,15 @@ public class App extends MultiDexApplication {
         imageLoader = new ImageLoader(requestQueue, new LruBitmapCache());
 
         beaconMonitor = new BeaconMonitor(this);
+
+        EventBus.getDefault().register(this);
     }
 
     @Override
     public void onTerminate() {
         super.onTerminate();
 
+        EventBus.getDefault().unregister(this);
         mixpanel.flush();
     }
 
@@ -183,5 +193,18 @@ public class App extends MultiDexApplication {
      */
     public static ImageLoader getImageLoader() {
         return instance.imageLoader;
+    }
+
+
+    @SuppressWarnings("unused")
+    public void onEventMainThread(NetworkExceptionEvent event) {
+        Toast.makeText(this, R.string.network_error_text, Toast.LENGTH_LONG).show();
+
+/*
+        new BaseDialogBuilder(this, "ERROR")
+            .setTitle("error")
+            .setView(LayoutInflater.from(this).inflate(R.layout.error_dialog, null))
+            .show();
+*/
     }
 }
