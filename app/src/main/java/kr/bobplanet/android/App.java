@@ -129,7 +129,9 @@ public class App extends MultiDexApplication {
         Log.i(TAG, "Initializing Trackers");
         GoogleAnalytics ga = GoogleAnalytics.getInstance(this);
         tracker = ga.newTracker(R.xml.ga_config);
+        tracker.enableAdvertisingIdCollection(true);
         rollupTracker = ga.newTracker(R.xml.ga_rollup_config);
+        rollupTracker.enableAdvertisingIdCollection(true);
 
         mixpanel = MixpanelAPI.getInstance(this, getString(R.string.mixpanel_token));
     }
