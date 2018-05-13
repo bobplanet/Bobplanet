@@ -2,7 +2,6 @@ package kr.bobplanet.android.log;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 /**
  * 대화창을 띄우고 닫는 행위를 추적하기 위한 이벤트 객체.
@@ -36,10 +35,5 @@ public class DialogLog extends Log {
                 .setCategory(dialogType)
                 .setAction(action)
                 .build());
-    }
-
-    @Override
-    protected void dispatchMixpanel(MixpanelAPI mixpanel) {
-        mixpanel.track(dialogType);
     }
 }
