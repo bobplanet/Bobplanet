@@ -18,6 +18,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import hugo.weaving.DebugLog;
 import kr.bobplanet.android.App;
 import kr.bobplanet.android.R;
@@ -162,6 +164,7 @@ public class SettingsActivity extends BaseActivity {
             return super.onPreferenceTreeClick(screen, pref);
         }
 
+        @Subscribe
         @SuppressWarnings("unused")
         @DebugLog
         public void onEvent(UserAccountEvent event) {
