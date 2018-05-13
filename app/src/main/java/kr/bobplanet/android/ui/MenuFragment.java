@@ -10,7 +10,7 @@ import com.dexafree.materialList.card.Card;
 import com.dexafree.materialList.view.MaterialListView;
 
 import butterknife.ButterKnife;
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
 import kr.bobplanet.android.App;
 import kr.bobplanet.android.util.EntityTranslator;
 import kr.bobplanet.android.R;

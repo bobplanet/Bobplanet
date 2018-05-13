@@ -20,7 +20,10 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.ButterKnife;
-import de.greenrobot.event.EventBus;
+import butterknife.Unbinder;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import fr.castorflex.android.smoothprogressbar.SmoothProgressDrawable;
 import hugo.weaving.DebugLog;
 import kr.bobplanet.android.App;
@@ -92,6 +95,8 @@ public class DayFragment extends BaseFragment {
      */
     View emptyView;
 
+    private Unbinder unbinder;
+
     public DayFragment() {
     }
 
@@ -116,7 +121,7 @@ public class DayFragment extends BaseFragment {
         super.onCreateView(inflater, container, savedInstanceState);
 
         View view = inflater.inflate(R.layout.day_fragment, container, false);
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
 
         recyclerView = ButterKnife.findById(view, R.id.recycler_view);
         progressBar = ButterKnife.findById(view, R.id.progress_bar);
@@ -128,7 +133,7 @@ public class DayFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        unbinder.unbind();
     }
 
     @Override
@@ -243,6 +248,7 @@ public class DayFragment extends BaseFragment {
         }
     }
 
+    @Subscribe
     @SuppressWarnings("unused")
     @DebugLog
     public void onEvent(ItemScoreChangeEvent e) {

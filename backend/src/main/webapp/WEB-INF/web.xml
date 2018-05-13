@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5">
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+         http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">>
 	<!-- 서비스 전체적으로 Objectify를 사용하기 위한 필터 -->
     <filter>
         <filter-name>ObjectifyFilter</filter-name>
@@ -12,8 +16,8 @@
 	
 	<!-- AppEngine 기본 Servlet -->
     <servlet>
-        <servlet-name>SystemServiceServlet</servlet-name>
-        <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
+        <servlet-name>EndpointsServlet</servlet-name>
+        <servlet-class>com.google.api.server.spi.EndpointsServlet</servlet-class>
         <init-param>
             <param-name>services</param-name>
 			<!-- Endpoint 클래스가 늘어날 경우 여기에 ','로 구분하여 추가 필요 -->
@@ -27,8 +31,8 @@
         </init-param>
     </servlet>
     <servlet-mapping>
-        <servlet-name>SystemServiceServlet</servlet-name>
-        <url-pattern>/_ah/spi/*</url-pattern>
+        <servlet-name>EndpointsServlet</servlet-name>
+        <url-pattern>/_ah/api/*</url-pattern>
     </servlet-mapping>
 
 	<!-- 푸시메시지 발송 Servlet. cron에 의해 호출됨 -->

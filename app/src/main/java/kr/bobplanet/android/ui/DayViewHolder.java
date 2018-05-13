@@ -13,9 +13,9 @@ import com.google.common.collect.Lists;
 import java.util.Collections;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
 import kr.bobplanet.android.Constants;
 import kr.bobplanet.android.R;
 import kr.bobplanet.android.util.Util;
@@ -38,23 +38,23 @@ public class DayViewHolder extends BaseListAdapter.BaseViewHolder<Menu> implemen
 
     Menu menu;
 
-    @Bind(R.id.when)
+    @BindView(R.id.when)
     TextView when;
-    @Bind(R.id.image)
+    @BindView(R.id.image)
     NetworkImageView image;
-    @Bind(R.id.name)
+    @BindView(R.id.name)
     TextView name;
-    @Bind(R.id.signal)
+    @BindView(R.id.signal)
     ImageView signal;
-    @Bind(R.id.submenu)
+    @BindView(R.id.submenu)
     TextView submenu;
-    @Bind(R.id.button_thumb_up)
+    @BindView(R.id.button_thumb_up)
     Button buttonThumbUp;
-    @Bind(R.id.button_thumb_down)
+    @BindView(R.id.button_thumb_down)
     Button buttonThumbDown;
-    @Bind(R.id.thumb_up_comment)
+    @BindView(R.id.thumb_up_comment)
     TextView thumbUpComment;
-    @Bind(R.id.thumb_down_comment)
+    @BindView(R.id.thumb_down_comment)
     TextView thumbDownComment;
 
     public DayViewHolder(View itemView) {

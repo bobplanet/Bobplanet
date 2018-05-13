@@ -16,7 +16,9 @@ import java.util.Date;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import hugo.weaving.DebugLog;
 import kr.bobplanet.android.event.ItemScoreChangeEvent;
 import kr.bobplanet.android.event.UserAccountEvent;
@@ -172,6 +174,7 @@ public class VoteManager implements Constants {
      *
      * @param event
      */
+    @Subscribe
     @SuppressWarnings("unused")
     @DebugLog
     public void onEvent(UserAccountEvent event) {

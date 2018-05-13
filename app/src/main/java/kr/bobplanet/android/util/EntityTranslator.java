@@ -1,7 +1,7 @@
 package kr.bobplanet.android.util;
 
-import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.gson.GsonFactory;
 
 import java.io.IOException;
 
@@ -17,7 +17,7 @@ public class EntityTranslator {
     /**
      * 상호변환시 JSON factory.
      */
-    private static final JsonFactory jsonFactory = new AndroidJsonFactory();
+    private static final JsonFactory jsonFactory = new GsonFactory();
 
     /**
      * JSON을 객체로 변환.

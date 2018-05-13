@@ -17,7 +17,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
 import hugo.weaving.DebugLog;
 import kr.bobplanet.android.App;
 import kr.bobplanet.android.R;

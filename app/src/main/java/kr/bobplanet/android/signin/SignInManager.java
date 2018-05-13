@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
 import hugo.weaving.DebugLog;
 import kr.bobplanet.android.App;
 import kr.bobplanet.android.Constants;

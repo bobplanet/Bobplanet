@@ -1,9 +1,7 @@
 package kr.bobplanet.android;
 
-import android.content.Intent;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -11,13 +9,13 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
-import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import kr.bobplanet.android.beacon.BeaconMonitor;
 import kr.bobplanet.android.event.NetworkExceptionEvent;
 import kr.bobplanet.android.signin.SignInManager;
-import kr.bobplanet.android.ui.BaseDialogBuilder;
 import kr.bobplanet.android.util.LruBitmapCache;
 
 /**
@@ -74,11 +72,6 @@ public class App extends MultiDexApplication {
     private Tracker rollupTracker;
 
     /**
-     * Mixpanel 객체
-     */
-    private MixpanelAPI mixpanel;
-
-    /**
      * Volley의 RequestQueue.
      */
     private RequestQueue requestQueue;
@@ -119,7 +112,6 @@ public class App extends MultiDexApplication {
         super.onTerminate();
 
         EventBus.getDefault().unregister(this);
-        mixpanel.flush();
     }
 
     /**
@@ -131,7 +123,6 @@ public class App extends MultiDexApplication {
         tracker = ga.newTracker(R.xml.ga_config);
         rollupTracker = ga.newTracker(R.xml.ga_rollup_config);
 
-        mixpanel = MixpanelAPI.getInstance(this, getString(R.string.mixpanel_token));
     }
 
     /**
@@ -157,10 +148,6 @@ public class App extends MultiDexApplication {
 
     public static Tracker getRollupTracker() {
         return instance.rollupTracker;
-    }
-
-    public static MixpanelAPI getMixpanel() {
-        return instance.mixpanel;
     }
 
     public static BeaconMonitor getBeaconMonitor() {
@@ -195,7 +182,7 @@ public class App extends MultiDexApplication {
         return instance.imageLoader;
     }
 
-
+    @Subscribe
     @SuppressWarnings("unused")
     public void onEventMainThread(NetworkExceptionEvent event) {
         Toast.makeText(this, R.string.network_error_text, Toast.LENGTH_LONG).show();

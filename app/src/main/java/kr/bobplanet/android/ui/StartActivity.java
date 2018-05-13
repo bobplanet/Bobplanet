@@ -11,7 +11,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import hugo.weaving.DebugLog;
 import kr.bobplanet.android.App;
 import kr.bobplanet.android.util.DeviceEnvironment;
@@ -80,6 +82,7 @@ public class StartActivity extends BaseActivity {
      *
      * @param event
      */
+    @Subscribe
     @DebugLog
     @SuppressWarnings("unused")
     public void onEvent(InitCompleteEvent event) {

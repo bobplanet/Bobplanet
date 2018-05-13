@@ -10,7 +10,7 @@ import com.dexafree.materialList.card.provider.TextCardProvider;
 import java.util.Arrays;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import kr.bobplanet.android.R;
 import kr.bobplanet.backend.bobplanetApi.model.ItemStat;
@@ -27,13 +27,13 @@ public class MenuSummaryCardProvider extends TextCardProvider<MenuSummaryCardPro
     private Menu menu;
     private ItemStat itemStat;
 
-    @Bind(R.id.originValue)
+    @BindView(R.id.originValue)
     TextView originValue;
 
-    @Bind(R.id.caloriesValue)
+    @BindView(R.id.caloriesValue)
     TextView caloriesValue;
 
-    @Bind(R.id.countsValue)
+    @BindView(R.id.countsValue)
     TextView countsValue;
 
     public MenuSummaryCardProvider setMenu(Menu menu) {

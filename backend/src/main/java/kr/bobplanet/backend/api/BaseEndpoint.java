@@ -2,7 +2,6 @@ package kr.bobplanet.backend.api;
 
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiNamespace;
-import com.google.appengine.repackaged.com.google.common.util.Base64;
 
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;

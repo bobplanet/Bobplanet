@@ -33,8 +33,8 @@
 #    public <init>(java.lang.Throwable);
 #}
 # Don't warn for missing support classes
--dontwarn de.greenrobot.event.util.*$Support
--dontwarn de.greenrobot.event.util.*$SupportManagerFragment
+-dontwarn org.greenrobot.event.util.*$Support
+-dontwarn org.greenrobot.event.util.*$SupportManagerFragment
 
 # Google Cloud Endpoints가 사용하는 JSON 객체 이름은 그대로 유지
 -keepclassmembers class * {
@@ -62,6 +62,3 @@
 # Google Analytics로 전송되는 Activity나 Fragment 이름 유지
 -keep public class * extends android.app.Activity
 -keep public class * extends android.support.v4.app.Fragment
-
-# Mixpanel
--dontwarn com.mixpanel.**

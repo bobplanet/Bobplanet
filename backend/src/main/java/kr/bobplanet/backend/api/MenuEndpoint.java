@@ -2,6 +2,7 @@ package kr.bobplanet.backend.api;
 
 import com.google.api.server.spi.config.ApiClass;
 import com.google.api.server.spi.config.ApiMethod;
+import com.google.api.server.spi.config.Named;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Work;
 import com.googlecode.objectify.cmd.LoadType;
@@ -9,8 +10,6 @@ import com.googlecode.objectify.cmd.LoadType;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import javax.inject.Named;
 
 import kr.bobplanet.backend.model.ItemScore;
 import kr.bobplanet.backend.model.ItemStat;

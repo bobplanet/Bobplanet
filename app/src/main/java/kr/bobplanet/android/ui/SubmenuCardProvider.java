@@ -11,7 +11,7 @@ import com.dexafree.materialList.card.provider.TextCardProvider;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import kr.bobplanet.android.R;
 import kr.bobplanet.backend.bobplanetApi.model.Submenu;
@@ -59,9 +59,9 @@ public class SubmenuCardProvider extends TextCardProvider<SubmenuCardProvider> {
     }
 
     class SubmenuViewHolder extends BaseListAdapter.BaseViewHolder<Submenu> {
-        @Bind(R.id.thumbnail)
+        @BindView(R.id.thumbnail)
         NetworkImageView thumbnail;
-        @Bind(R.id.title)
+        @BindView(R.id.title)
         TextView title;
 
         public SubmenuViewHolder(View view) {

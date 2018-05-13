@@ -9,7 +9,9 @@ import com.google.android.gms.iid.InstanceID;
 
 import java.util.UUID;
 
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import hugo.weaving.DebugLog;
 import kr.bobplanet.android.event.UserAccountEvent;
 import kr.bobplanet.android.gcm.GcmEvent;
@@ -165,7 +167,7 @@ public class UserManager implements ApiProxy.ApiResultListener<UserDevice> {
      *
      * @param event GCM서버 등록 결과
      */
-    @SuppressWarnings("unused")
+    @Subscribe
     @DebugLog
     public void onEvent(GcmEvent event) {
         switch (event.getType()) {

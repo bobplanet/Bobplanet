@@ -4,12 +4,12 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+import com.google.api.client.json.gson.GsonFactory;
 
 import java.io.IOException;
 import java.util.List;
 
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
 import hugo.weaving.DebugLog;
 import kr.bobplanet.android.log.MeasureLog;
 import kr.bobplanet.android.event.NetworkExceptionEvent;
@@ -53,7 +53,7 @@ public class ApiProxy implements Constants {
      */
     protected ApiProxy(CacheManager cacheManager) {
         this.api = new BobplanetApi.Builder(
-                AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                AndroidHttp.newCompatibleTransport(), new GsonFactory(), null)
                 .setRootUrl(BACKEND_ROOT_URL).build();
         this.cacheManager = cacheManager;
     }
