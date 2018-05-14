@@ -1,0 +1,141 @@
+{
+  "project_info": {
+    "project_number": "603054087850",
+    "firebase_url": "https://kr-bobplanet.firebaseio.com",
+    "project_id": "kr-bobplanet"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:603054087850:android:aa0636345d379a8a",
+        "android_client_info": {
+          "package_name": "kr.bobplanet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "603054087850-5q5dce44sshilocn504hg84hhpoboa48.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "603054087850-5qgda69d0j99oja4q5cjbl0mr2cp5s7d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8quNstXOI-1D-vQBeT_bMGTMGVPQsJ68"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:603054087850:android:98cd7a1b5db598d0",
+        "android_client_info": {
+          "package_name": "kr.bobplanet.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "603054087850-5q5dce44sshilocn504hg84hhpoboa48.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "603054087850-5qgda69d0j99oja4q5cjbl0mr2cp5s7d.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "603054087850-2kjko3ai98mdk3j2igap589ovni27jbp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "kr.bobplanet.android",
+            "certificate_hash": "909fe4f381b5a567d6a19ce907ee213a8e9c0429"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8quNstXOI-1D-vQBeT_bMGTMGVPQsJ68"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "603054087850-5q5dce44sshilocn504hg84hhpoboa48.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:603054087850:android:629001503e785808",
+        "android_client_info": {
+          "package_name": "kr.bobplanet.android.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "603054087850-5q5dce44sshilocn504hg84hhpoboa48.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "603054087850-5qgda69d0j99oja4q5cjbl0mr2cp5s7d.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "603054087850-2e4d6q2t8992f9j6nedl8qp1ejr9ibaj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "kr.bobplanet.android.debug",
+            "certificate_hash": "a13ee7885f48b81d97a206a78895ff3dc135f7a2"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8quNstXOI-1D-vQBeT_bMGTMGVPQsJ68"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "603054087850-5q5dce44sshilocn504hg84hhpoboa48.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
