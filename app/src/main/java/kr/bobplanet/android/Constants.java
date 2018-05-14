@@ -60,8 +60,8 @@ public interface Constants {
      */
     String WEBVIEW_USERID = "bobp_userId";
 
-    Uri TEAM_URL = Uri.parse("http://bobplanet.kr/team.html");
-    Uri PRIVACY_URL = Uri.parse("http://bobplanet.kr/privacy.html");
-    Uri LICENSE_URL = Uri.parse("http://bobplanet.kr/license.html");
+    Uri TEAM_URL = Uri.parse("http://bobplanet.github.io/team.html");
+    Uri PRIVACY_URL = Uri.parse("http://bobplanet.github.io/privacy.html");
+    Uri LICENSE_URL = Uri.parse("http://bobplanet.github.io/license.html");
     Uri MAIL_URL = Uri.fromParts("mailto", "bobplanet.team@gmail.com", null);
 }
