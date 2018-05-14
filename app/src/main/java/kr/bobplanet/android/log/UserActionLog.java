@@ -1,7 +1,10 @@
 package kr.bobplanet.android.log;
 
+import android.os.Bundle;
+
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 /**
  * 사용자의 액션에 의해 일어나는 이벤트를 측정하기 위한 객체.
@@ -81,5 +84,15 @@ public final class UserActionLog extends Log {
         }
 
         tracker.send(builder.build());
+    }
+
+    @Override
+    protected void dispatchFirebase(FirebaseAnalytics firebase) {
+        Bundle bundle = new Bundle();
+        bundle.putString("category", this.category);
+        bundle.putString("name", this.label);
+        bundle.putLong("value", this.value);
+
+        firebase.logEvent("user_action", bundle);
     }
 }

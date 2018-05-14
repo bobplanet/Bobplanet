@@ -1,7 +1,10 @@
 package kr.bobplanet.android.log;
 
+import android.os.Bundle;
+
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 /**
  * 화면로딩시간, 네트웤 API latency 등 성능측정 로그를 전송하기 위한 이벤트 객체.
@@ -54,5 +57,15 @@ public class MeasureLog extends Log {
                 .setVariable(name)
                 .setValue(value)
                 .build());
+    }
+
+    @Override
+    protected void dispatchFirebase(FirebaseAnalytics firebase) {
+        Bundle bundle = new Bundle();
+        bundle.putString("category", this.category);
+        bundle.putString("name", this.name);
+        bundle.putLong("value", this.value);
+
+        firebase.logEvent("measure", bundle);
     }
 }

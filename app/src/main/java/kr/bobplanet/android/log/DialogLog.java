@@ -1,7 +1,10 @@
 package kr.bobplanet.android.log;
 
+import android.os.Bundle;
+
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 /**
  * 대화창을 띄우고 닫는 행위를 추적하기 위한 이벤트 객체.
@@ -35,5 +38,12 @@ public class DialogLog extends Log {
                 .setCategory(dialogType)
                 .setAction(action)
                 .build());
+    }
+
+    @Override
+    protected void dispatchFirebase(FirebaseAnalytics firebase) {
+        Bundle bundle = new Bundle();
+        bundle.putString("dialog", this.dialogType);
+        firebase.logEvent("dialog_display", bundle);
     }
 }

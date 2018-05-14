@@ -9,6 +9,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -72,6 +73,11 @@ public class App extends MultiDexApplication {
     private Tracker rollupTracker;
 
     /**
+     * Firebase Analytics 인스턴스
+     */
+    private FirebaseAnalytics firebase;
+
+    /**
      * Volley의 RequestQueue.
      */
     private RequestQueue requestQueue;
@@ -119,12 +125,14 @@ public class App extends MultiDexApplication {
      */
     private void initializeTracker() {
         Log.i(TAG, "Initializing Trackers");
+
         GoogleAnalytics ga = GoogleAnalytics.getInstance(this);
         tracker = ga.newTracker(R.xml.ga_config);
         tracker.enableAdvertisingIdCollection(true);
         rollupTracker = ga.newTracker(R.xml.ga_rollup_config);
         rollupTracker.enableAdvertisingIdCollection(true);
 
+        firebase = FirebaseAnalytics.getInstance(this);
     }
 
     /**
@@ -150,6 +158,10 @@ public class App extends MultiDexApplication {
 
     public static Tracker getRollupTracker() {
         return instance.rollupTracker;
+    }
+
+    public static FirebaseAnalytics getFirebaseAnalytics() {
+        return instance.firebase;
     }
 
     public static BeaconMonitor getBeaconMonitor() {
