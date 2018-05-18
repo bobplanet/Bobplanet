@@ -33,6 +33,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import hugo.weaving.DebugLog;
 import kr.bobplanet.android.App;
@@ -336,8 +337,9 @@ public class DayActivity extends BaseActivity implements NavigationView.OnNaviga
      * - 관련 View가 ViewPager 밑의 fragment 밑의 RecyclerView 밑에 있어서 그냥 EventBus로 간단히 구현함.
      * - startActivity()는 메인스레드(=UI스레드)에서 실행되어야 하는 것으로 보임.
      */
+    @Subscribe(threadMode = ThreadMode.MAIN)
     @SuppressWarnings("unused")
-    public void onEventMainThread(DayViewHolder.ViewClickEvent e) {
+    public void onEvent(DayViewHolder.ViewClickEvent e) {
         startMenuViewActivity(e.viewHolder);
     }
 

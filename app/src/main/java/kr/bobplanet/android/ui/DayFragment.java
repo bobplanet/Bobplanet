@@ -23,6 +23,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import fr.castorflex.android.smoothprogressbar.SmoothProgressDrawable;
 import hugo.weaving.DebugLog;
@@ -224,8 +225,9 @@ public class DayFragment extends BaseFragment {
         EventBus.getDefault().unregister(this);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     @SuppressWarnings("unused")
-    public void onEventMainThread(NetworkExceptionEvent e) {
+    public void onEvent(NetworkExceptionEvent e) {
         Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
     }
 

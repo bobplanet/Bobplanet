@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import kr.bobplanet.android.App;
 
 /**
@@ -54,8 +57,9 @@ public class BitmapLoader implements ImageLoader.ImageListener {
         EventBus.getDefault().post(new RequestEvent());
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     @SuppressWarnings("unused")
-    public void onEventMainThread(RequestEvent event) {
+    public void onEvent(RequestEvent event) {
         for (String imageUrl : imageUrls) {
             App.getImageLoader().get(imageUrl, this);
         }

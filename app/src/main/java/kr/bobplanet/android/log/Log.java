@@ -17,13 +17,13 @@ abstract public class Log {
     }
 
     protected void dispatch() {
-        Tracker tracker = App.getTracker();
-        Tracker rollup = App.getRollupTracker();
-
-        dispatchGA(tracker);
+/*
+        dispatchGA(App.getTracker());
         if (this instanceof Rollupable) {
-            dispatchGA(rollup);
+            dispatchGA(App.getRollupTracker());
         }
+*/
+        dispatchFirebase(App.getFirebase());
     }
 
     /**

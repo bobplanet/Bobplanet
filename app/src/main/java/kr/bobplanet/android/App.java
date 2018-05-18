@@ -13,6 +13,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import kr.bobplanet.android.beacon.BeaconMonitor;
 import kr.bobplanet.android.event.NetworkExceptionEvent;
@@ -160,7 +161,7 @@ public class App extends MultiDexApplication {
         return instance.rollupTracker;
     }
 
-    public static FirebaseAnalytics getFirebaseAnalytics() {
+    public static FirebaseAnalytics getFirebase() {
         return instance.firebase;
     }
 
@@ -196,9 +197,9 @@ public class App extends MultiDexApplication {
         return instance.imageLoader;
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     @SuppressWarnings("unused")
-    public void onEventMainThread(NetworkExceptionEvent event) {
+    public void onEvent(NetworkExceptionEvent event) {
         Toast.makeText(this, R.string.network_error_text, Toast.LENGTH_LONG).show();
 
 /*
