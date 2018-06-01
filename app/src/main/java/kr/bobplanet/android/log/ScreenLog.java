@@ -3,8 +3,10 @@ package kr.bobplanet.android.log;
 import android.app.Activity;
 import android.support.v4.app.Fragment;
 
+/*
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+*/
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 /**
@@ -38,11 +40,13 @@ public final class ScreenLog extends Log implements Rollupable {
         new ScreenLog(Category.FRAGMENT_VIEW, src.getClass().getSimpleName()).dispatch();
     }
 
+/*
     @Override
     protected void dispatchGA(Tracker tracker) {
         tracker.setScreenName(screenName);
         tracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
+*/
 
     /**
      * Firebase가 screenView는 자동으로 잡아주므로 별도 구현하지 않음

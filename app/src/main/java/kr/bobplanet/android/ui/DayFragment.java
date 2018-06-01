@@ -32,6 +32,7 @@ import kr.bobplanet.android.R;
 import kr.bobplanet.android.event.ItemScoreChangeEvent;
 import kr.bobplanet.android.event.MorningMenuToggleEvent;
 import kr.bobplanet.android.event.NetworkExceptionEvent;
+import kr.bobplanet.android.log.EcommerceLog;
 import kr.bobplanet.backend.bobplanetApi.model.DailyMenu;
 import kr.bobplanet.backend.bobplanetApi.model.ItemScore;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
@@ -193,6 +194,9 @@ public class DayFragment extends BaseFragment {
                     Lists.transform(menuList, (Menu menu) -> menu.getItem().getName()),
                     itemScores -> onItemScoresLoaded(itemScores.getItems())
             );
+
+            EcommerceLog.measureItemList(dailyMenu);
+
         } else {
             recyclerView.setVisibility(View.GONE);
             emptyView.setVisibility(View.VISIBLE);

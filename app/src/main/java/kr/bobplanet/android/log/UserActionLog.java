@@ -2,8 +2,8 @@ package kr.bobplanet.android.log;
 
 import android.os.Bundle;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
+//import com.google.android.gms.analytics.HitBuilders;
+//import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 /**
@@ -73,6 +73,7 @@ public final class UserActionLog extends Log {
         new UserActionLog(BEACON_SEEN, beaconAddress, (long) (distance * 100)).dispatch();
     }
 
+/*
     @Override
     protected void dispatchGA(Tracker tracker) {
         HitBuilders.EventBuilder builder = new HitBuilders.EventBuilder()
@@ -85,6 +86,7 @@ public final class UserActionLog extends Log {
 
         tracker.send(builder.build());
     }
+*/
 
     @Override
     protected void dispatchFirebase(FirebaseAnalytics firebase) {

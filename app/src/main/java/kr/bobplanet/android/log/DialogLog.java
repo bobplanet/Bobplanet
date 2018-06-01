@@ -2,8 +2,11 @@ package kr.bobplanet.android.log;
 
 import android.os.Bundle;
 
+
+/*
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+*/
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 /**
@@ -32,6 +35,7 @@ public class DialogLog extends Log {
         new DialogLog(dialogType, ACTION_CANCEL).dispatch();
     }
 
+/*
     @Override
     protected void dispatchGA(Tracker tracker) {
         tracker.send(new HitBuilders.EventBuilder()
@@ -39,11 +43,14 @@ public class DialogLog extends Log {
                 .setAction(action)
                 .build());
     }
+*/
 
     @Override
     protected void dispatchFirebase(FirebaseAnalytics firebase) {
         Bundle bundle = new Bundle();
-        bundle.putString("dialog", this.dialogType);
-        firebase.logEvent("dialog_display", bundle);
+        bundle.putString("eventCategory", this.dialogType);
+        bundle.putString("eventAction", this.action);
+
+        firebase.logEvent("dialog", bundle);
     }
 }

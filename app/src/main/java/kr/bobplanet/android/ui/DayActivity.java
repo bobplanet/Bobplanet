@@ -353,11 +353,13 @@ public class DayActivity extends BaseActivity implements NavigationView.OnNaviga
         Intent intent = new Intent(this, MenuActivity.class);
         intent.putExtra(KEY_MENU, menu.toString());
 
+        /*
         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
-                new Pair<>(viewHolder.image, viewHolder.image.getTransitionName())/*,
-                new Pair<View, String>(viewHolder.name, EXTRA_MENU_TITLE)*/);
-
+                new Pair<>(viewHolder.image, viewHolder.image.getTransitionName()),
+                new Pair<View, String>(viewHolder.name, EXTRA_MENU_TITLE));
         ActivityCompat.startActivity(this, intent, options.toBundle());
+        */
+        startActivity(intent);
     }
 
     /**

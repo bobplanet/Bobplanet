@@ -95,20 +95,21 @@ dependencies {
     implementation 'com.google.http-client:google-http-client-gson:1.23.0'
 
     // Analytics
-    implementation 'com.google.android.gms:play-services-analytics:15.0.2'
-    implementation 'com.google.android.gms:play-services-tagmanager:15.0.2'
-    implementation 'com.google.firebase:firebase-core:15.0.2'
-    implementation 'org.piwik.sdk:piwik-sdk:3.0.2'
+    //implementation 'com.google.android.gms:play-services-analytics:16.0.0'
+    implementation 'com.google.android.gms:play-services-tagmanager:16.0.0'
+    implementation 'com.google.firebase:firebase-core:16.0.0'
+    implementation 'com.google.firebase:firebase-analytics:16.0.0'
+    //implementation 'org.piwik.sdk:piwik-sdk:3.0.2'
 
     // Social Logins
     implementation 'com.google.android.gms:play-services-identity:15.0.1'
     implementation 'com.google.android.gms:play-services-plus:15.0.1'
     implementation 'com.facebook.android:facebook-android-sdk:4.5.0'
-    implementation 'com.commonsware.cwac:pager:0.2.4'
+    implementation 'com.commonsware.cwac:pager:0.2.6'
 
     // Custom UIs
-    implementation 'com.github.dexafree:materiallist:3.0.1'
-    implementation 'net.i2p.android.ext:floatingactionbutton:1.10.0'
+    implementation 'com.github.dexafree:materiallist:3.2.1'
+    implementation 'net.i2p.android.ext:floatingactionbutton:1.10.1'
     implementation 'com.github.castorflex.smoothprogressbar:library:1.1.0'
     api 'me.gujun.android.taggroup:library:1.4@aar'
     implementation 'com.github.jkwiecien:CountingTextView:1.0.10'

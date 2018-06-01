@@ -7,8 +7,8 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.Tracker;
+//import com.google.android.gms.analytics.GoogleAnalytics;
+//import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.greenrobot.eventbus.EventBus;
@@ -66,12 +66,12 @@ public class App extends MultiDexApplication {
     /**
      * Google Analytics 이용을 위한 Tracker 객체.
      */
-    private Tracker tracker;
+//    private Tracker tracker;
 
     /**
      * Google Analytics의 rollup 리포트를 위한 Tracker
      */
-    private Tracker rollupTracker;
+//    private Tracker rollupTracker;
 
     /**
      * Firebase Analytics 인스턴스
@@ -127,11 +127,13 @@ public class App extends MultiDexApplication {
     private void initializeTracker() {
         Log.i(TAG, "Initializing Trackers");
 
+/*
         GoogleAnalytics ga = GoogleAnalytics.getInstance(this);
         tracker = ga.newTracker(R.xml.ga_config);
         tracker.enableAdvertisingIdCollection(true);
         rollupTracker = ga.newTracker(R.xml.ga_rollup_config);
         rollupTracker.enableAdvertisingIdCollection(true);
+*/
 
         firebase = FirebaseAnalytics.getInstance(this);
     }
@@ -153,13 +155,13 @@ public class App extends MultiDexApplication {
     /**
      * @return
      */
-    public static Tracker getTracker() {
-        return instance.tracker;
-    }
+//    public static Tracker getTracker() {
+//        return instance.tracker;
+//    }
 
-    public static Tracker getRollupTracker() {
-        return instance.rollupTracker;
-    }
+//    public static Tracker getRollupTracker() {
+//        return instance.rollupTracker;
+//    }
 
     public static FirebaseAnalytics getFirebase() {
         return instance.firebase;

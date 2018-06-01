@@ -1,6 +1,6 @@
 package kr.bobplanet.android.log;
 
-import com.google.android.gms.analytics.Tracker;
+//import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import kr.bobplanet.android.App;
@@ -29,7 +29,7 @@ abstract public class Log {
     /**
      * 이벤트를 GA로 전송 요청
      */
-    abstract protected void dispatchGA(Tracker tracker);
+//    abstract protected void dispatchGA(Tracker tracker);
 
     /**
      * 이벤트를 Firebase로 전송 요청

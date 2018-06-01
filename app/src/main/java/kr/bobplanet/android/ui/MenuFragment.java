@@ -9,8 +9,9 @@ import android.view.ViewGroup;
 import com.dexafree.materialList.card.Card;
 import com.dexafree.materialList.view.MaterialListView;
 
-import butterknife.ButterKnife;
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import kr.bobplanet.android.App;
 import kr.bobplanet.android.util.EntityTranslator;
 import kr.bobplanet.android.R;
@@ -64,28 +65,29 @@ public class MenuFragment extends BaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        materialListView = ButterKnife.findById(view, R.id.material_listview);
+        materialListView = view.findViewById(R.id.material_listview);
 
         Card summaryCard = new Card.Builder(getContext())
-                .withProvider(MenuSummaryCardProvider.class)
+                .withProvider(new MenuSummaryCardProvider())
                 .setTitle(R.string.card_summary_label)
                 .setMenu(menu)
                 .endConfig().build();
+        materialListView.getAdapter().add(summaryCard);
 
         App.getApiProxy().loadItemStat(menu.getItem().getName(), itemStat -> {
-            ((MenuSummaryCardProvider) summaryCard.getConfig()).setItemStat(itemStat);
+            ((MenuSummaryCardProvider) summaryCard.getProvider()).setItemStat(itemStat);
         });
 
         Card submenuCard = new Card.Builder(getContext())
-                .withProvider(SubmenuCardProvider.class)
+                .withProvider(new SubmenuCardProvider())
                 .setTitle(R.string.card_submenu_label)
                 .setDescription(R.string.card_submenu_description)
                 .setSubmenu(menu.getSubmenu())
                 .endConfig().build();
-
-        materialListView.addAll(summaryCard, submenuCard);
+        materialListView.getAdapter().add(submenuCard);
     }
 
+    @Subscribe
     @SuppressWarnings("unused")
     public void onEvent(ItemScoreChangeEvent event) {
         if (event.isFor(menu)) {

@@ -5,9 +5,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.dexafree.materialList.card.Card;
-import com.dexafree.materialList.card.provider.TextCardProvider;
+import com.dexafree.materialList.card.CardProvider;
 
-import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -23,7 +22,7 @@ import kr.bobplanet.backend.bobplanetApi.model.Menu;
  * @author heonkyu.jin
  * @version 15. 10. 17
  */
-public class MenuSummaryCardProvider extends TextCardProvider<MenuSummaryCardProvider> {
+public class MenuSummaryCardProvider extends CardProvider<MenuSummaryCardProvider> {
     private Menu menu;
     private ItemStat itemStat;
 

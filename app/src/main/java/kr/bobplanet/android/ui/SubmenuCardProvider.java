@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
 import com.dexafree.materialList.card.Card;
-import com.dexafree.materialList.card.provider.TextCardProvider;
+import com.dexafree.materialList.card.CardProvider;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ import kr.bobplanet.backend.bobplanetApi.model.Submenu;
  * @author heonkyu.jin
  * @version 15. 10. 17
  */
-public class SubmenuCardProvider extends TextCardProvider<SubmenuCardProvider> {
+public class SubmenuCardProvider extends CardProvider<SubmenuCardProvider> {
 
     List<Submenu> submenuList;
 

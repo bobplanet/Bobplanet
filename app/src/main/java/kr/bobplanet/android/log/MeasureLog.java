@@ -2,9 +2,13 @@ package kr.bobplanet.android.log;
 
 import android.os.Bundle;
 
+/*
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+*/
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.analytics.FirebaseAnalytics.Param;
+import com.google.firebase.analytics.FirebaseAnalytics.Event;
 
 /**
  * 화면로딩시간, 네트웤 API latency 등 성능측정 로그를 전송하기 위한 이벤트 객체.
@@ -50,21 +54,29 @@ public class MeasureLog extends Log {
         new MeasureLog(API_LATENCY, apiName, value).dispatch();
     }
 
-    @Override
-    protected void dispatchGA(Tracker tracker) {
-        tracker.send(new HitBuilders.TimingBuilder()
-                .setCategory(category)
-                .setVariable(name)
-                .setValue(value)
-                .build());
-    }
+//    @Override
+//    protected void dispatchGA(Tracker tracker) {
+//        tracker.send(new HitBuilders.TimingBuilder()
+//                .setCategory(category)
+//                .setVariable(name)
+//                .setValue(value)
+//                .build());
+//    }
 
     @Override
     protected void dispatchFirebase(FirebaseAnalytics firebase) {
         Bundle bundle = new Bundle();
-        bundle.putString("category", this.category);
-        bundle.putString("name", this.name);
-        bundle.putLong("value", this.value);
+        bundle.putString("timingCategory", this.category);
+        bundle.putString("timingVar", this.name);
+        bundle.putLong("timingValue", this.value);
+
+        firebase.logEvent("timing", bundle);
+
+        bundle = new Bundle();
+        bundle.putString("eventCategory", this.category);
+        bundle.putString("eventAction", this.category);
+        bundle.putString("eventLabel", this.name);
+        bundle.putLong("eventValue", this.value);
 
         firebase.logEvent("measure", bundle);
     }
