@@ -22,6 +22,7 @@ import org.greenrobot.eventbus.Subscribe;
 import hugo.weaving.DebugLog;
 import kr.bobplanet.android.event.ItemScoreChangeEvent;
 import kr.bobplanet.android.event.UserAccountEvent;
+import kr.bobplanet.android.log.EcommerceLog;
 import kr.bobplanet.android.log.UserActionLog;
 import kr.bobplanet.android.ui.BaseActivity;
 import kr.bobplanet.android.ui.BaseDialogBuilder;
@@ -129,6 +130,8 @@ public class VoteManager implements Constants {
 
     @DebugLog
     private void voteOrRequestSignIn() {
+        EcommerceLog.measureItemPurchase(menu);
+
         if (userHasAccount) {
             uploadVote();
         } else {

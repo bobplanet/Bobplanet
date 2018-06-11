@@ -13,6 +13,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import kr.bobplanet.android.App;
+import kr.bobplanet.android.log.EcommerceLog;
 import kr.bobplanet.android.util.EntityTranslator;
 import kr.bobplanet.android.R;
 import kr.bobplanet.android.event.ItemScoreChangeEvent;
@@ -85,6 +86,13 @@ public class MenuFragment extends BaseFragment {
                 .setSubmenu(menu.getSubmenu())
                 .endConfig().build();
         materialListView.getAdapter().add(submenuCard);
+    }
+
+    @Override
+    public void onResume() {
+        EcommerceLog.measureItemView(menu);
+
+        super.onResume();
     }
 
     @Subscribe
