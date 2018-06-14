@@ -109,7 +109,7 @@ public class App extends MultiDexApplication {
         requestQueue = Volley.newRequestQueue(getApplicationContext());
         imageLoader = new ImageLoader(requestQueue, new LruBitmapCache());
 
-        beaconMonitor = new BeaconMonitor(this);
+        //beaconMonitor = new BeaconMonitor(this);
 
         EventBus.getDefault().register(this);
     }
