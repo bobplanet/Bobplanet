@@ -5,7 +5,8 @@ import android.os.Bundle;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Calendar;
+import java.text.SimpleDateFormat;
 
 import kr.bobplanet.backend.bobplanetApi.model.DailyMenu;
 import kr.bobplanet.backend.bobplanetApi.model.Menu;
@@ -28,6 +29,7 @@ public class EcommerceLog {
         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, menu.getItem().getName());
         bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, menu.getWhen());
         bundle.putDouble(FirebaseAnalytics.Param.PRICE, menu.getCalories());
+        bundle.putString(FirebaseAnalytics.Param.CURRENCY, "KRW");
     }
 
     private static class ItemListLog extends Log {
@@ -88,6 +90,8 @@ public class EcommerceLog {
 
             Bundle bundle = new Bundle();
             bundle.putBundle("items", product);
+            bundle.putString(FirebaseAnalytics.Param.TRANSACTION_ID,
+                    "BOB_" + new SimpleDateFormat("YYYYMMdd_HHmmss").format(Calendar.getInstance().getTime()));
             bundle.putDouble(FirebaseAnalytics.Param.VALUE, menu.getCalories());
 
             firebase.logEvent(FirebaseAnalytics.Event.ECOMMERCE_PURCHASE, bundle);
